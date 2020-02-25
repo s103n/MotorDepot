@@ -93,7 +93,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Context\AppContext.cs" />
+    <Compile Include="Context\ApplicationContext.cs" />
     <Compile Include="Context\DbInitializer.cs" />
     <Compile Include="Entities\AppUser.cs" />
     <Compile Include="Entities\Auto.cs" />
@@ -103,17 +103,18 @@
     <Compile Include="Entities\AutoStatus.cs" />
     <Compile Include="Entities\FlightStatus.cs" />
     <Compile Include="Entities\Status.cs" />
+    <Compile Include="Enums\Class1.cs" />
     <Compile Include="Identity\RoleManager.cs" />
     <Compile Include="Identity\UserManager.cs" />
+    <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\AutoRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

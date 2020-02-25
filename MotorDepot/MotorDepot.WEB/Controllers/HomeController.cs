@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MotorDepot.BLL.Services;
+using MotorDepot.WEB.Models;
 
 namespace MotorDepot.WEB.Controllers
 {
@@ -10,7 +12,12 @@ namespace MotorDepot.WEB.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            var y = new UserService().GetRoles();
+
+            var ok = y.Select(role => new RoleViewModel {Role = role.Name}).ToList();
+
+
+            return View(ok);
         }
 
         public ActionResult About()
