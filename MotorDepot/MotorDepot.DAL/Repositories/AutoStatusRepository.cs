@@ -11,10 +11,12 @@ namespace MotorDepot.DAL.Repositories
     public class AutoStatusRepository : IRepository<AutoStatus>
     {
         private readonly ApplicationContext _context;
+
         public AutoStatusRepository(ApplicationContext context)
         {
             _context = context;
         }
+
         public async Task AddAsync(AutoStatus item)
         {
             if (item == null)
