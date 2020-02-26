@@ -19,8 +19,8 @@ namespace MotorDepot.DAL.Repositories
         {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
-            if (item.AutoStatus == null)
-                throw new ArgumentNullException(nameof(item.AutoStatus));
+            if (item.Status == null)
+                throw new ArgumentNullException(nameof(item.Status));
 
             _context.Autos.Add(item);
 

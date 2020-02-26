@@ -11,13 +11,8 @@ namespace MotorDepot.WEB.Controllers
     public class HomeController : Controller
     {
         public ActionResult Index()
-        {
-            var y = new UserService().GetRoles();
-
-            var ok = y.Select(role => new RoleViewModel {Role = role.Name}).ToList();
-
-
-            return View(ok);
+        { 
+            return View();
         }
 
         public ActionResult About()

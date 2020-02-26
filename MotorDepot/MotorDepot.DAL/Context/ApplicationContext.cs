@@ -6,6 +6,10 @@ namespace MotorDepot.DAL.Context
 {
     public class ApplicationContext : IdentityDbContext<AppUser>
     {
+        public ApplicationContext() : base("MotorDepot")
+        {
+        }
+
         public ApplicationContext(string connectionString) : base(connectionString)
         {
         }
@@ -20,5 +24,7 @@ namespace MotorDepot.DAL.Context
         public DbSet<Auto> Autos { get; set; }
         public DbSet<Driver> Drivers { get; set; }
         public DbSet<Dispatcher> Dispatchers { get; set; }
+        public DbSet<AutoType> AutoTypes { get; set; }
+        public DbSet<AutoBrand> AutoBrands { get; set; }
     }
 }

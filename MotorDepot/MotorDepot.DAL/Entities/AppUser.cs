@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace MotorDepot.DAL.Entities
 {
-    public abstract class AppUser : IdentityUser
+    public class AppUser : IdentityUser
     {
         [Required]
         [StringLength(24, MinimumLength = 2)]
