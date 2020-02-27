@@ -11,8 +11,6 @@ namespace MotorDepot.DAL.Interfaces
         IRepository<Auto> AutoRepository { get; }
         IRepository<FlightStatus> FlightStatusRepository { get; }
         IRepository<Flight> FlightRepository { get; }
-        IRepository<Dispatcher> DispatcherRepository { get; }
-        IRepository<Driver> DriverRepository { get; }
         IRepository<AutoType> AutoTypeRepository { get; }
         IRepository<AutoBrand> AutoBrandRepository { get; }
         UserManager UserManager { get; }

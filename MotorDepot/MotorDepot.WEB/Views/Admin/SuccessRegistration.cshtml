@@ -5,7 +5,7 @@
         <p>
     </div>
     <div class="col-md-1">
-        <i class="fa fa-times-circle"></i>
+        <i class="fa fa-times-circle btn"></i>
     </div>
 </div>
 
@@ -13,7 +13,7 @@
 {
     <script>
         $('.fa-times-circle').click(function() {
-            $(this).closest('.alert').empty();
+            $(this).closest('.alert').dispose();
         });
     </script>
 }

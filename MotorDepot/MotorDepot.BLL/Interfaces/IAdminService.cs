@@ -1,6 +1,8 @@
-﻿namespace MotorDepot.BLL.Interfaces
+﻿using System;
+
+namespace MotorDepot.BLL.Interfaces
 {
-    public interface IAdminService
+    public interface IAdminService : IDisposable
     {
 
     }

@@ -21,8 +21,6 @@ namespace MotorDepot.DAL.Data
         public IRepository<Auto> AutoRepository => new AutoRepository(_context);
         public IRepository<FlightStatus> FlightStatusRepository => new FlightStatusRepository(_context);
         public IRepository<Flight> FlightRepository => new FlightRepository(_context);
-        public IRepository<Dispatcher> DispatcherRepository => new DispatcherRepository(_context);
-        public IRepository<Driver> DriverRepository => new DriverRepository(_context);
         public IRepository<AutoType> AutoTypeRepository => new AutoTypeRepository(_context);
         public IRepository<AutoBrand> AutoBrandRepository => new AutoBrandRepository(_context);
         public UserManager UserManager => new UserManager(new UserStore<AppUser>(_context));

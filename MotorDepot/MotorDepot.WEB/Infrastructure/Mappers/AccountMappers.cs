@@ -23,5 +23,14 @@ namespace MotorDepot.WEB.Infrastructure.Mappers
                     .ForMember("Role", opt => opt.MapFrom(x => "dispatcher"));
             }).CreateMapper().Map<DispatcherRegisterViewModel, UserDto>(model);
         }
+
+        public static UserDto ToUserDto(this LoginViewModel model)
+        {
+            return new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<LoginViewModel, UserDto>(); 
+
+            }).CreateMapper().Map<LoginViewModel, UserDto>(model);
+        }
     }
 }

@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using MotorDepot.BLL.Infrastructure;
 using MotorDepot.BLL.Interfaces;
 using MotorDepot.BLL.Models;
+using MotorDepot.DAL.Context;
+using MotorDepot.DAL.Data;
 using MotorDepot.DAL.Entities;
 using MotorDepot.DAL.Interfaces;
 
@@ -18,7 +20,7 @@ namespace MotorDepot.BLL.Services
             _database = unitOfWork;
         }
 
-        public async Task<OperationStatus> CreateAsync(UserDto userDto)
+        public async Task<OperationStatus> CreateAsync(UserDto userDto) //legacy method
         {
             if(userDto == null)
                 throw new ArgumentNullException(nameof(userDto));
@@ -47,6 +49,24 @@ namespace MotorDepot.BLL.Services
             await _database.SaveAsync();
 
             return new OperationStatus("", "Registration was being successful", true);
+        }
+
+        public async Task<OperationStatus> Login(UserDto userDto)
+        {
+            if(userDto == null)
+                throw new ArgumentNullException(nameof(userDto));
+
+            var user = await _database.UserManager.FindAsync(userDto.Email, userDto.Password);
+
+            if(user == null)
+                return new OperationStatus("", "Login or password are not correct", false);
+
+            return new OperationStatus("", "Success", true);
+        }
+
+        public static UserService Create()
+        {
+            return new UserService(new UnitOfWork(new ApplicationContext()));
         }
 
         public void Dispose()

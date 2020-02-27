@@ -22,8 +22,6 @@ namespace MotorDepot.DAL.Context
         public DbSet<FlightStatus> FlightStatuses { get; set; }
         public DbSet<AutoStatus> AutoStatuses { get; set; }
         public DbSet<Auto> Autos { get; set; }
-        public DbSet<Driver> Drivers { get; set; }
-        public DbSet<Dispatcher> Dispatchers { get; set; }
         public DbSet<AutoType> AutoTypes { get; set; }
         public DbSet<AutoBrand> AutoBrands { get; set; }
     }

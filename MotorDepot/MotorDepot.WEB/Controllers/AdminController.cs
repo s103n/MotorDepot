@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using MotorDepot.BLL.Infrastructure;
+﻿using MotorDepot.BLL.Infrastructure;
 using MotorDepot.BLL.Interfaces;
 using MotorDepot.WEB.Infrastructure.Mappers;
 using MotorDepot.WEB.Models;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace MotorDepot.WEB.Controllers
 {
@@ -42,7 +37,7 @@ namespace MotorDepot.WEB.Controllers
 
                 if (status.Success)
                     return View("Index", status);
-                
+
                 ModelState.AddModelError(status.Property, status.Message);
             }
 

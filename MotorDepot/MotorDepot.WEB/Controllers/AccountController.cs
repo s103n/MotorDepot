@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using MotorDepot.BLL.Interfaces;
+﻿using MotorDepot.BLL.Interfaces;
 using MotorDepot.WEB.Infrastructure.Mappers;
 using MotorDepot.WEB.Models;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace MotorDepot.WEB.Controllers
 {
@@ -24,9 +20,17 @@ namespace MotorDepot.WEB.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Login(int x)
+        public async Task<ActionResult> Login(LoginViewModel model)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                var status = await _userService.Login(model.ToUserDto());
+
+                if (status.Success) { }
+                    ///
+            }
+
+            return View(model);
         }
 
         public ActionResult Register()
@@ -39,14 +43,14 @@ namespace MotorDepot.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-               var status = await _userService.CreateAsync(registerViewModel.ToUserDto("driver"));
+                var status = await _userService.CreateAsync(registerViewModel.ToUserDto("driver"));
 
-               if (status.Success)
-               {
-                   return View("SuccessRegister");
-               }
-               
-               ModelState.AddModelError(status.Property, status.Message);
+                if (status.Success)
+                {
+                    return View("SuccessRegister");
+                }
+
+                ModelState.AddModelError(status.Property, status.Message);
             }
 
             return View(registerViewModel);

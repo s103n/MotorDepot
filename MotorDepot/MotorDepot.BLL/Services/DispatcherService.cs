@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using MotorDepot.BLL.Infrastructure;
 using MotorDepot.BLL.Infrastructure.Mappers;
 using MotorDepot.BLL.Interfaces;
 using MotorDepot.BLL.Models;
 using MotorDepot.DAL.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MotorDepot.BLL.Services
 {
@@ -50,6 +49,11 @@ namespace MotorDepot.BLL.Services
                 .Where(user => _database.UserManager.IsInRole(user.Id, "dispatcher"))
                 .ToList()
                 .ToUserDtos();
+        }
+
+        public void Dispose()
+        {
+            _database?.Dispose();
         }
     }
 }

@@ -46,8 +46,10 @@
 
         <div class="form-group">
             <h6>Password <i class="text-danger">*</i></h6>
-            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control w-75 d-inline" } })
-            <span class="fa fa-eye-slash btn mb-2"></span>
+            <div>
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control w-75 d-inline" } })
+                <span class="fa fa-eye-slash btn mb-2"></span>
+            </div>
             @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
         </div>
 

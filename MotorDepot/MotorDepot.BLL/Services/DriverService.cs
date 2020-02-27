@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MotorDepot.DAL.Context;
+using MotorDepot.DAL.Data;
 
 namespace MotorDepot.BLL.Services
 {
@@ -48,6 +50,11 @@ namespace MotorDepot.BLL.Services
                 .Where(user => _database.UserManager.IsInRole(user.Id, "driver"))
                 .AsEnumerable()
                 .ToUserDtos();
+        }
+
+        public void Dispose()
+        {
+            _database?.Dispose();
         }
     }
 }
