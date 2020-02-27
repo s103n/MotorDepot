@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
 using MotorDepot.BLL.Infrastructure;
 using MotorDepot.BLL.Interfaces;
 using MotorDepot.BLL.Models;
@@ -51,22 +54,18 @@ namespace MotorDepot.BLL.Services
             return new OperationStatus("", "Registration was being successful", true);
         }
 
-        public async Task<OperationStatus> Login(UserDto userDto)
+        public async Task<ClaimsIdentity> Authenticate(UserDto userDto)
         {
             if(userDto == null)
                 throw new ArgumentNullException(nameof(userDto));
 
             var user = await _database.UserManager.FindAsync(userDto.Email, userDto.Password);
 
-            if(user == null)
-                return new OperationStatus("", "Login or password are not correct", false);
+            if (user != null)
+                return await _database.UserManager.CreateIdentityAsync(user,
+                    DefaultAuthenticationTypes.ApplicationCookie);
 
-            return new OperationStatus("", "Success", true);
-        }
-
-        public static UserService Create()
-        {
-            return new UserService(new UnitOfWork(new ApplicationContext()));
+            return null;
         }
 
         public void Dispose()

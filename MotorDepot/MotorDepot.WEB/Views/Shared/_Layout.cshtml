@@ -9,12 +9,65 @@
     @Styles.Render("~/Content/font-awesome.min.css")
 </head>
 <body>
-<div class="container min-vh-100">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - мое приложение ASP.NET</p>
-        </footer>
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/Home/Index">Motor Depot</a>
+        <input class="form-control w-100" type="text" placeholder="Search" aria-label="Search">
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <p class="text-light d-inline">You are authorized as @User.Identity.Name</p>
+                    <a class="btn btn-light border border-dark d-inline" href="/Account/Logout">Sign out</a>
+                }
+                else
+                {
+                    <a class="btn btn-light border border-dark" href="/Account/Login">Sign in</a>
+                }
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-light">
+                <div class="position-fixed">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active text-muted font-weight-bold" href="/Admin/Dispatchers">
+                                <span class="fa fa-user"></span>
+                                Dispatchers <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link active text-muted font-weight-bold" href="#">
+                                <span class="fa fa-truck"></span>
+                                Drivers
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link active text-muted font-weight-bold" href="#">
+                                <span class="fa fa-automobile"></span>
+                                Automobiles
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link active text-muted font-weight-bold" href="#">
+                                <span class="fa fa-location-arrow"></span>
+                                Flights
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                @RenderBody()
+            </main>
+
+        </div>
     </div>
 
     @Scripts.Render("~/bundles/jquery")

@@ -1,7 +1,9 @@
-﻿using MotorDepot.BLL.Interfaces;
+﻿using Microsoft.Owin.Security;
+using MotorDepot.BLL.Interfaces;
 using MotorDepot.WEB.Infrastructure.Mappers;
 using MotorDepot.WEB.Models;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 
 namespace MotorDepot.WEB.Controllers
@@ -9,6 +11,8 @@ namespace MotorDepot.WEB.Controllers
     public class AccountController : Controller
     {
         private readonly IUserService _userService;
+        private IAuthenticationManager _authenticationManager
+        => HttpContext.GetOwinContext().Authentication;
         public AccountController(IUserService userService)
         {
             _userService = userService;
@@ -24,36 +28,30 @@ namespace MotorDepot.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                var status = await _userService.Login(model.ToUserDto());
+                var claim = await _userService.Authenticate(model.ToUserDto());
 
-                if (status.Success) { }
-                    ///
+                if (claim != null)
+                {
+                    _authenticationManager.SignOut();
+                    _authenticationManager.SignIn(new AuthenticationProperties
+                    {
+                        IsPersistent = true
+                    }, claim);
+
+                    return RedirectToAction("Index", "Home");
+                }
+
+                ModelState.AddModelError("", "E-mail or password are not correct.");
             }
 
             return View(model);
         }
 
-        public ActionResult Register()
+        public ActionResult Logout()
         {
-            return View();
-        }
+            _authenticationManager.SignOut();
 
-        [HttpPost]
-        public async Task<ActionResult> Register(RegisterViewModel registerViewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                var status = await _userService.CreateAsync(registerViewModel.ToUserDto("driver"));
-
-                if (status.Success)
-                {
-                    return View("SuccessRegister");
-                }
-
-                ModelState.AddModelError(status.Property, status.Message);
-            }
-
-            return View(registerViewModel);
+            return RedirectToAction("Login");
         }
     }
 }

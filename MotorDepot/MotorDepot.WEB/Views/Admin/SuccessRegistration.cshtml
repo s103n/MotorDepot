@@ -1,19 +1,7 @@
-﻿<div class="alert alert-success">
-    <div class="col-md-11">
-        <p>
-        New dispatcher was successfully registered.Check this out on dispatchers table.
-        <p>
-    </div>
-    <div class="col-md-1">
-        <i class="fa fa-times-circle btn"></i>
-    </div>
+﻿<div class="alert alert-success alert-dismissible fade show" role="alert">
+    New dispatcher was successfully registered.
+    Check this out on dispatchers table.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
 </div>
-
-@section scripts
-{
-    <script>
-        $('.fa-times-circle').click(function() {
-            $(this).closest('.alert').dispose();
-        });
-    </script>
-}
