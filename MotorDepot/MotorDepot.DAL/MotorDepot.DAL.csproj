@@ -121,6 +121,10 @@
     <Compile Include="Migrations\202002262101419_adding brand and type.designer.cs">
       <DependentUpon>202002262101419_adding brand and type.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202002271312536_DateTime.cs" />
+    <Compile Include="Migrations\202002271312536_DateTime.designer.cs">
+      <DependentUpon>202002271312536_DateTime.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AutoBrandRepository.cs" />
@@ -145,6 +149,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202002262101419_adding brand and type.resx">
       <DependentUpon>202002262101419_adding brand and type.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002271312536_DateTime.resx">
+      <DependentUpon>202002271312536_DateTime.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

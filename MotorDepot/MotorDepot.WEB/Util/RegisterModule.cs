@@ -9,6 +9,9 @@ namespace MotorDepot.WEB.Util
         public override void Load()
         {
             Bind<IUserService>().To<UserService>();
+            Bind<IDispatcherService>().To<DispatcherService>();
+            Bind<IDriverService>().To<DriverService>();
+            Bind<IAutoService>().To<AutoService>();
         }
     }
 }

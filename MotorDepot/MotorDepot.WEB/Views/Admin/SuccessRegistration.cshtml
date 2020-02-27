@@ -1,0 +1,19 @@
+﻿<div class="alert alert-success">
+    <div class="col-md-11">
+        <p>
+        New dispatcher was successfully registered.Check this out on dispatchers table.
+        <p>
+    </div>
+    <div class="col-md-1">
+        <i class="fa fa-times-circle"></i>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $('.fa-times-circle').click(function() {
+            $(this).closest('.alert').empty();
+        });
+    </script>
+}

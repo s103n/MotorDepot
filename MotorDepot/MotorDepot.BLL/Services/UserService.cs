@@ -41,7 +41,7 @@ namespace MotorDepot.BLL.Services
             var status = await _database.UserManager.CreateAsync(user, userDto.Password);
 
             if (status.Errors.Any())
-                return new OperationStatus("", /*"O-ops something happened"*/ status.Errors.FirstOrDefault(), false);
+                return new OperationStatus("", status.Errors.FirstOrDefault(), false);
 
             await _database.UserManager.AddToRoleAsync(user.Id, userDto.Role);
             await _database.SaveAsync();

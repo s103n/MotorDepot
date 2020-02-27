@@ -13,6 +13,6 @@ namespace MotorDepot.DAL.Entities
         [StringLength(24, MinimumLength = 2)]
         public string LastName { get; set; }
         public bool IsBlocked { get; set; } = false;
-        public DateTime LastSignUp { get; set; }
+        public DateTime? LastSignUp { get; set; }
     }
 }

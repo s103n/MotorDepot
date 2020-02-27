@@ -99,11 +99,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Infrastructure\Mappers\UserMappers.cs" />
     <Compile Include="Infrastructure\OperationStatus.cs" />
+    <Compile Include="Interfaces\IAdminService.cs" />
+    <Compile Include="Interfaces\IAutoService.cs" />
+    <Compile Include="Interfaces\IDispatcherService.cs" />
+    <Compile Include="Interfaces\IDriverService.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Models\AutoDto.cs" />
     <Compile Include="Models\UserDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AdminService.cs" />
+    <Compile Include="Services\AutoService.cs" />
+    <Compile Include="Services\DispatcherService.cs" />
+    <Compile Include="Services\DriverService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Util\UnitOfWorkModule.cs" />
   </ItemGroup>
@@ -119,7 +128,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BuisnessModels\" />
-    <Folder Include="Infrastructure\Mappers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
