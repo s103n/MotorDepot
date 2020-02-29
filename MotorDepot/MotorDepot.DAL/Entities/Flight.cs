@@ -7,7 +7,7 @@ namespace MotorDepot.DAL.Entities
     {
         public int Id { get; set; }
 
-        [StringLength(1024, ErrorMessage = "too many symbols", MinimumLength = 20)]
+        [StringLength(1024, ErrorMessage = "too many symbols in description", MinimumLength = 20)]
         public string Description { get; set; }
 
         [Required]
@@ -25,7 +25,7 @@ namespace MotorDepot.DAL.Entities
         public int StatusId { get; set; }
         public virtual FlightStatus Status { get; set; }
 
-        public int? DriverId { get; set; }
+        public string DriverId { get; set; }
         public virtual AppUser Driver { get; set; }
 
         public int? AutoId { get; set; }

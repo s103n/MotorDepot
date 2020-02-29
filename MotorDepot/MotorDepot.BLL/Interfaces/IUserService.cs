@@ -8,7 +8,6 @@ namespace MotorDepot.BLL.Interfaces
 {
     public interface IUserService : IDisposable
     {
-        Task<OperationStatus> CreateAsync(UserDto userDto);
         Task<ClaimsIdentity> Authenticate(UserDto userDto);
     }
 }

@@ -99,20 +99,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessModels\ReflectionGet.cs" />
+    <Compile Include="Infrastructure\Enums\FlightStatus.cs" />
+    <Compile Include="Infrastructure\Mappers\FlightMappers.cs" />
     <Compile Include="Infrastructure\Mappers\UserMappers.cs" />
     <Compile Include="Infrastructure\OperationStatus.cs" />
     <Compile Include="Interfaces\IAdminService.cs" />
     <Compile Include="Interfaces\IAutoService.cs" />
     <Compile Include="Interfaces\IDispatcherService.cs" />
     <Compile Include="Interfaces\IDriverService.cs" />
+    <Compile Include="Interfaces\IFlightService.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Models\AutoDto.cs" />
+    <Compile Include="Models\FlightDto.cs" />
     <Compile Include="Models\UserDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AdminService.cs" />
     <Compile Include="Services\AutoService.cs" />
     <Compile Include="Services\DispatcherService.cs" />
     <Compile Include="Services\DriverService.cs" />
+    <Compile Include="Services\FlightService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Util\UnitOfWorkModule.cs" />
   </ItemGroup>
@@ -126,9 +132,7 @@
       <Name>MotorDepot.DAL</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BuisnessModels\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

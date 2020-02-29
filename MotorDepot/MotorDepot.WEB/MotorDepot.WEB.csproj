@@ -178,6 +178,7 @@
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\FlightController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -186,6 +187,7 @@
     <Compile Include="Models\AlertViewModel.cs" />
     <Compile Include="Models\DispatcherRegisterViewModel.cs" />
     <Compile Include="Models\Enums\AlertType.cs" />
+    <Compile Include="Models\FlightViewModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Models\RoleViewModel.cs" />
@@ -348,6 +350,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Util\" />
+    <Folder Include="Views\Dispatcher\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -127,6 +127,10 @@
     <Compile Include="Migrations\202002271438433_Fixes.designer.cs">
       <DependentUpon>202002271438433_Fixes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202002291023418_StringId.cs" />
+    <Compile Include="Migrations\202002291023418_StringId.designer.cs">
+      <DependentUpon>202002291023418_StringId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AutoBrandRepository.cs" />
@@ -155,6 +159,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202002271438433_Fixes.resx">
       <DependentUpon>202002271438433_Fixes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002291023418_StringId.resx">
+      <DependentUpon>202002291023418_StringId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
