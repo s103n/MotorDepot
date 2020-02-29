@@ -8,21 +8,26 @@ using System.Web.Mvc;
 
 namespace MotorDepot.WEB.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly IUserService _userService;
-        private IAuthenticationManager _authenticationManager
-        => HttpContext.GetOwinContext().Authentication;
+        private IAuthenticationManager AuthenticationManager
+            => HttpContext.GetOwinContext().Authentication;
+
         public AccountController(IUserService userService)
         {
             _userService = userService;
         }
 
+        [AllowAnonymous]
         public ActionResult Login()
         {
             return View();
         }
 
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<ActionResult> Login(LoginViewModel model)
         {
@@ -32,8 +37,8 @@ namespace MotorDepot.WEB.Controllers
 
                 if (claim != null)
                 {
-                    _authenticationManager.SignOut();
-                    _authenticationManager.SignIn(new AuthenticationProperties
+                    AuthenticationManager.SignOut();
+                    AuthenticationManager.SignIn(new AuthenticationProperties
                     {
                         IsPersistent = true
                     }, claim);
@@ -49,7 +54,7 @@ namespace MotorDepot.WEB.Controllers
 
         public ActionResult Logout()
         {
-            _authenticationManager.SignOut();
+            AuthenticationManager.SignOut();
 
             return RedirectToAction("Login");
         }

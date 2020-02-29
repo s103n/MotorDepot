@@ -183,7 +183,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\Mappers\AccountMappers.cs" />
+    <Compile Include="Models\AlertViewModel.cs" />
     <Compile Include="Models\DispatcherRegisterViewModel.cs" />
+    <Compile Include="Models\Enums\AlertType.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Models\RoleViewModel.cs" />
@@ -230,6 +232,7 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="App_Code\Alert.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -336,10 +339,9 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Account\SuccessRegister.cshtml" />
     <Content Include="Views\Admin\AddDispatcher.cshtml" />
     <Content Include="Views\Admin\Dispatchers.cshtml" />
-    <Content Include="Views\Admin\SuccessRegistration.cshtml" />
+    <Content Include="Views\Shared\Alerts.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
   </ItemGroup>
