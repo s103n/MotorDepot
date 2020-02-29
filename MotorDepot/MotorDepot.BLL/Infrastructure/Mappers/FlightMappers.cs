@@ -27,5 +27,11 @@ namespace MotorDepot.BLL.Infrastructure.Mappers
                 .CreateMapper()
                 .Map<IEnumerable<Flight>, IEnumerable<FlightDto>>(models);
         }
+
+        public static FlightStatusDto ToFlightStatusDto(this FlightStatus status)
+        {
+            return new MapperConfiguration(cfg => cfg.CreateMap<FlightStatus, FlightStatusDto>())
+                .CreateMapper().Map<FlightStatus, FlightStatusDto>(status);
+        }
     }
 }

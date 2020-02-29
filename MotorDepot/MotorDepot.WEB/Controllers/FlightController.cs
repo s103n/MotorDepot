@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using MotorDepot.BLL.Interfaces;
+﻿using MotorDepot.BLL.Interfaces;
 using MotorDepot.WEB.Models;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace MotorDepot.WEB.Controllers
 {
+    [Authorize(Roles = "admin, dispatcher")]
     public class FlightController : Controller
     {
         private readonly IFlightService _flightService;
@@ -23,9 +20,9 @@ namespace MotorDepot.WEB.Controllers
             return View();
         }
 
-        public async Task<ActionResult> All()
+        public ActionResult All()
         {
-            return null;
+            return View(_flightService.GetAll());
         }
 
         public async Task<ActionResult> Requests()
@@ -35,6 +32,11 @@ namespace MotorDepot.WEB.Controllers
 
         [HttpPost]
         public async Task<ActionResult> Edit(FlightViewModel model)
+        {
+            return null;
+        }
+
+        public async Task<ActionResult> Display(int? id)
         {
             return null;
         }

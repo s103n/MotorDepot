@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace MotorDepot.DAL.Entities
+﻿namespace MotorDepot.DAL.Entities
 {
     public abstract class Status
     {

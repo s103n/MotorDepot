@@ -184,6 +184,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\Mappers\AccountMappers.cs" />
+    <Compile Include="Infrastructure\Mappers\FlightMappers.cs" />
     <Compile Include="Models\AlertViewModel.cs" />
     <Compile Include="Models\DispatcherRegisterViewModel.cs" />
     <Compile Include="Models\Enums\AlertType.cs" />

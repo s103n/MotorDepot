@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MotorDepot.DAL.Entities
@@ -7,19 +8,20 @@ namespace MotorDepot.DAL.Entities
     {
         public int Id { get; set; }
 
-        [StringLength(1024, ErrorMessage = "too many symbols in description", MinimumLength = 20)]
+        [StringLength(1024, MinimumLength = 20)]
         public string Description { get; set; }
 
-        [Required]
-        [StringLength(64, MinimumLength = 3)]
+        [Required, StringLength(64, MinimumLength = 3)]
         public string DeparturePlace { get; set; }
 
-        [Required]
-        [StringLength(64, MinimumLength = 3)]
+        [Required, StringLength(64, MinimumLength = 3)]
         public string ArrivalPlace { get; set; }
 
+        [Required]
+        public double Distance { get; set; } // distance from departure place to arrival in meters
+
         [DataType(DataType.Date)]
-        public DateTime Date { get; set; } = DateTime.Now;
+        public DateTime CreateDate { get; set; } = DateTime.Now;
 
         [Required]
         public int StatusId { get; set; }
@@ -30,5 +32,11 @@ namespace MotorDepot.DAL.Entities
 
         public int? AutoId { get; set; }
         public virtual Auto Auto { get; set; }
+        
+        [Required]
+        public string CreatorId { get; set; }
+        public virtual AppUser Creator { get; set; }
+
+        public virtual ICollection<FlightRequest> FlightRequests { get; set; }
     }
 }

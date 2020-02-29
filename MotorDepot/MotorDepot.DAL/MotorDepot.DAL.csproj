@@ -105,6 +105,8 @@
     <Compile Include="Entities\AutoType.cs" />
     <Compile Include="Entities\Flight.cs" />
     <Compile Include="Entities\AutoStatus.cs" />
+    <Compile Include="Entities\FlightRequest.cs" />
+    <Compile Include="Entities\FlightRequestStatus.cs" />
     <Compile Include="Entities\FlightStatus.cs" />
     <Compile Include="Entities\Status.cs" />
     <Compile Include="Identity\RoleManager.cs" />
@@ -130,6 +132,10 @@
     <Compile Include="Migrations\202002291023418_StringId.cs" />
     <Compile Include="Migrations\202002291023418_StringId.designer.cs">
       <DependentUpon>202002291023418_StringId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002292204098_MaybeFinalEntity.cs" />
+    <Compile Include="Migrations\202002292204098_MaybeFinalEntity.designer.cs">
+      <DependentUpon>202002292204098_MaybeFinalEntity.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -162,6 +168,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202002291023418_StringId.resx">
       <DependentUpon>202002291023418_StringId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002292204098_MaybeFinalEntity.resx">
+      <DependentUpon>202002292204098_MaybeFinalEntity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
