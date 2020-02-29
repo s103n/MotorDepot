@@ -143,6 +143,7 @@
     <Compile Include="Repositories\AutoRepository.cs" />
     <Compile Include="Repositories\AutoTypeRepository.cs" />
     <Compile Include="Repositories\FlightRepository.cs" />
+    <Compile Include="Repositories\FlightRequestRepository.cs" />
     <Compile Include="Repositories\FlightStatusRepository.cs" />
     <Compile Include="Repositories\AutoStatusRepository.cs" />
   </ItemGroup>

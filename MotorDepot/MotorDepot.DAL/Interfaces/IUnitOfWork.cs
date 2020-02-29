@@ -13,6 +13,7 @@ namespace MotorDepot.DAL.Interfaces
         IRepository<Flight> FlightRepository { get; }
         IRepository<AutoType> AutoTypeRepository { get; }
         IRepository<AutoBrand> AutoBrandRepository { get; }
+        IRepository<FlightRequest> FlightRequestRepository { get; }
         UserManager UserManager { get; }
         RoleManager RoleManager { get; }
         Task SaveAsync();

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using MotorDepot.DAL.Entities;
 
 namespace MotorDepot.DAL.Identity
 {

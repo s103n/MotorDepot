@@ -18,6 +18,7 @@ namespace MotorDepot.DAL.Context
         {
             Database.SetInitializer(new DbInitializer());
         }
+
         public DbSet<Flight> Flights { get; set; }
         public DbSet<FlightStatus> FlightStatuses { get; set; }
         public DbSet<AutoStatus> AutoStatuses { get; set; }
