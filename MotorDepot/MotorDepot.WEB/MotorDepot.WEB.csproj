@@ -186,8 +186,9 @@
     <Compile Include="Infrastructure\Mappers\AccountMappers.cs" />
     <Compile Include="Infrastructure\Mappers\FlightMappers.cs" />
     <Compile Include="Models\AlertViewModel.cs" />
-    <Compile Include="Models\DispatcherRegisterViewModel.cs" />
+    <Compile Include="Models\UserRegisterViewModel.cs" />
     <Compile Include="Models\Enums\AlertType.cs" />
+    <Compile Include="Models\FlightRequestViewModel.cs" />
     <Compile Include="Models\FlightViewModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
@@ -342,11 +343,13 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Admin\AddDispatcher.cshtml" />
+    <Content Include="Views\Admin\AddUser.cshtml" />
     <Content Include="Views\Admin\Dispatchers.cshtml" />
     <Content Include="Views\Shared\Alerts.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Flight\All.cshtml" />
+    <Content Include="Views\Flight\RequestFor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

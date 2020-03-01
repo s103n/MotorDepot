@@ -6,6 +6,8 @@ using MotorDepot.BLL.Models;
 using MotorDepot.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -48,6 +50,24 @@ namespace MotorDepot.BLL.Services
                 .Where(user => _database.UserManager.IsInRole(user.Id, "driver"))
                 .AsEnumerable()
                 .ToUserDtos();
+        }
+
+        public async Task SendFlightRequest(FlightRequestDto flightRequest)
+        {
+            if(flightRequest == null)
+                throw new ArgumentNullException(nameof(flightRequest));
+
+            await _database.FlightRequestRepository.AddAsync(flightRequest.ToFlightRequest());
+        }
+
+        public async Task<UserDto> GetDriverById(string id)
+        {
+            if(string.IsNullOrEmpty(id))
+                throw new ArgumentException(nameof(id));
+
+            var user = await _database.UserManager.FindByIdAsync(id);
+
+            return user.ToUserDto();
         }
 
         public void Dispose()

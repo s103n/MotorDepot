@@ -100,7 +100,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessModels\ReflectionGet.cs" />
+    <Compile Include="Infrastructure\Enums\AutoStatus.cs" />
+    <Compile Include="Infrastructure\Enums\AutoType.cs" />
+    <Compile Include="Infrastructure\Enums\FlightRequestStatus.cs" />
     <Compile Include="Infrastructure\Enums\FlightStatus.cs" />
+    <Compile Include="Infrastructure\Mappers\AutoMappers.cs" />
     <Compile Include="Infrastructure\Mappers\FlightMappers.cs" />
     <Compile Include="Infrastructure\Mappers\UserMappers.cs" />
     <Compile Include="Infrastructure\OperationStatus.cs" />
@@ -112,6 +116,7 @@
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Models\AutoDto.cs" />
     <Compile Include="Models\FlightDto.cs" />
+    <Compile Include="Models\FlightRequestDto.cs" />
     <Compile Include="Models\FlightStatusDto.cs" />
     <Compile Include="Models\UserDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

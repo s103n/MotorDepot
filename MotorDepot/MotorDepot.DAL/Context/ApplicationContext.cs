@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNet.Identity.EntityFramework;
 using MotorDepot.DAL.Entities;
 using System.Data.Entity;
 
@@ -27,5 +28,26 @@ namespace MotorDepot.DAL.Context
         public DbSet<AutoBrand> AutoBrands { get; set; }
         public DbSet<FlightRequest> FlightRequests { get; set; }
         public DbSet<FlightRequestStatus> FlightRequestStatuses { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<FlightRequestStatus>()
+                .Property(s => s.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+
+            modelBuilder.Entity<AutoType>()
+                .Property(s => s.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+
+            modelBuilder.Entity<AutoStatus>()
+                .Property(s => s.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+
+            modelBuilder.Entity<FlightStatus>()
+                .Property(s => s.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

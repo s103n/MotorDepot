@@ -32,33 +32,56 @@
             <nav class="col-md-2 d-none d-md-block bg-light">
                 <div class="position-fixed">
                     <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active text-muted font-weight-bold" href="/Admin/Dispatchers">
-                                <span class="fa fa-user"></span>
-                                Dispatchers <span class="sr-only">(current)</span>
-                            </a>
-                        </li>
+                        @if (User.IsInRole("admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link active text-muted font-weight-bold" href="/Admin/Dispatchers">
+                                    <span class="fa fa-user"></span>
+                                    Dispatchers <span class="sr-only">(current)</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link active text-muted font-weight-bold" href="#">
+                                    <span class="fa fa-truck"></span>
+                                    Drivers
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link active text-muted font-weight-bold" href="#">
+                                    <span class="fa fa-automobile"></span>
+                                    Automobiles
+                                </a>
+                            </li>
+                        }
 
                         <li class="nav-item">
-                            <a class="nav-link active text-muted font-weight-bold" href="#">
-                                <span class="fa fa-truck"></span>
-                                Drivers
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link active text-muted font-weight-bold" href="#">
-                                <span class="fa fa-automobile"></span>
-                                Automobiles
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link active text-muted font-weight-bold" href="#">
+                            <a class="nav-link active text-muted font-weight-bold" href="/Flight/All">
                                 <span class="fa fa-location-arrow"></span>
                                 Flights
                             </a>
                         </li>
+
+                        @if (User.IsInRole("dispatcher") || User.IsInRole("admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link active text-muted font-weight-bold" href="#">
+                                    <span class="fa fa-location-arrow"></span>
+                                    Requests for flight
+                                </a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("driver"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link active text-muted font-weight-bold" href="#">
+                                    <span class="fa fa-location-arrow"></span>
+                                    My flights
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </nav>

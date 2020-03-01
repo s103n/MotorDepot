@@ -23,6 +23,12 @@ namespace MotorDepot.BLL.Infrastructure.Mappers
             }).CreateMapper().Map<UserDto, AppUser>(userDto);
         }
 
+        public static UserDto ToUserDto(this AppUser user)
+        {
+            return new MapperConfiguration(cfg => cfg.CreateMap<AppUser, UserDto>())
+                .CreateMapper().Map<AppUser, UserDto>(user);
+        }
+
         public static IEnumerable<UserDto> ToUserDtos(this IEnumerable<AppUser> appUsers)
         {
             return AppUserToUserDto.CreateMapper()

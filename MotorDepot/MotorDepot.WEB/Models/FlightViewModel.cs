@@ -5,6 +5,8 @@ namespace MotorDepot.WEB.Models
 {
     public class FlightViewModel
     {
+        public int Id { get; set; }
+
         [Required]
         [StringLength(50, MinimumLength = 2)]
         public string DeparturePlace { get; set; }

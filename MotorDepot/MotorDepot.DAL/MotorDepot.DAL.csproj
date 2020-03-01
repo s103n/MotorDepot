@@ -103,12 +103,17 @@
     <Compile Include="Entities\Auto.cs" />
     <Compile Include="Entities\AutoBrand.cs" />
     <Compile Include="Entities\AutoType.cs" />
+    <Compile Include="Entities\Abstract\BaseEnumEntity.cs" />
+    <Compile Include="Entities\Enums\AutoStatusEnum.cs" />
+    <Compile Include="Entities\Enums\AutoTypeEnum.cs" />
+    <Compile Include="Entities\Enums\FlightRequestStatusEnum.cs" />
     <Compile Include="Entities\Flight.cs" />
     <Compile Include="Entities\AutoStatus.cs" />
     <Compile Include="Entities\FlightRequest.cs" />
     <Compile Include="Entities\FlightRequestStatus.cs" />
     <Compile Include="Entities\FlightStatus.cs" />
-    <Compile Include="Entities\Status.cs" />
+    <Compile Include="Entities\Enums\FlightStatusEnum.cs" />
+    <Compile Include="Entities\Abstract\IColorEntity.cs" />
     <Compile Include="Identity\RoleManager.cs" />
     <Compile Include="Identity\UserManager.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
@@ -137,6 +142,10 @@
     <Compile Include="Migrations\202002292204098_MaybeFinalEntity.designer.cs">
       <DependentUpon>202002292204098_MaybeFinalEntity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202003011038541_LookupTables.cs" />
+    <Compile Include="Migrations\202003011038541_LookupTables.designer.cs">
+      <DependentUpon>202003011038541_LookupTables.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AutoBrandRepository.cs" />
@@ -151,9 +160,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Enums\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202002251817296_InitialCreate.resx">
       <DependentUpon>202002251817296_InitialCreate.cs</DependentUpon>
@@ -172,6 +179,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202002292204098_MaybeFinalEntity.resx">
       <DependentUpon>202002292204098_MaybeFinalEntity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003011038541_LookupTables.resx">
+      <DependentUpon>202003011038541_LookupTables.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,0 +1,56 @@
+﻿@model IEnumerable<MotorDepot.WEB.Models.FlightViewModel>
+
+@{
+    ViewBag.Title = "All flights";
+}
+
+<h2>All available flights</h2>
+
+<table class="table">
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeparturePlace)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ArrivalPlace)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateDate)
+            </td>
+            <td>
+                <div style="background-color: @item.StatusColor">
+                    @Html.DisplayFor(modelItem => item.Status)
+                </div>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AutoName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AutoNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DriverEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DriverName)
+            </td>
+            <td>
+                @if (User.IsInRole("driver"))
+                {
+                    @Html.ActionLink("Request this flight", "RequestFor", new { flightId = item.Id })
+                }
+                else
+                {
+                    @Html.ActionLink("Edit", "Edit", new { flightId = item.Id })
+                    @Html.ActionLink("SetStatus", "SetStatus", new { flightId = item.Id })
+                    @Html.ActionLink("Details", "Details", new { flightId = item.Id })
+                    @Html.ActionLink("Delete", "Delete", new { flightId = item.Id })
+                }
+            </td>
+        </tr>
+    }
+
+</table>

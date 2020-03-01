@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using MotorDepot.DAL.Entities.Enums;
 
 namespace MotorDepot.DAL.Entities
 {
@@ -27,11 +28,11 @@ namespace MotorDepot.DAL.Entities
         public virtual AutoBrand Brand { get; set; }
 
         [Required]
-        public int AutoTypeId { get; set; }
+        public AutoTypeEnum AutoTypeId { get; set; }
         public virtual AutoType Type { get; set; }
 
         [Required]
-        public int StatusId { get; set; }
+        public AutoStatusEnum StatusId { get; set; }
         public virtual AutoStatus Status { get; set; }
 
         public virtual ICollection<Flight> Flights { get; set; }

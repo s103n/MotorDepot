@@ -1,5 +1,4 @@
-﻿using MotorDepot.DAL.Entities;
-using MotorDepot.DAL.Migrations;
+﻿using MotorDepot.DAL.Migrations;
 
 namespace MotorDepot.BLL.Models
 {

@@ -1,5 +1,4 @@
-﻿using MotorDepot.BLL.Infrastructure;
-using MotorDepot.BLL.Infrastructure.Enums;
+﻿using MotorDepot.BLL.Infrastructure.Enums;
 using MotorDepot.BLL.Models;
 using System;
 using System.Collections.Generic;
@@ -15,6 +14,6 @@ namespace MotorDepot.BLL.Interfaces
         Task EditAsync(FlightDto flightDto);
         Task<FlightDto> GetByIdAsync(int? id);
         Task<FlightDto> GetAsync(object property);
-        Task<OperationStatus> SetStatus(FlightStatus status, int? flightId);
+        Task SetStatus(FlightStatus status, int? flightId);
     }
 }

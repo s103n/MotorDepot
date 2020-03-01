@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using MotorDepot.DAL.Entities.Enums;
 
 namespace MotorDepot.DAL.Entities
 {
@@ -24,7 +25,7 @@ namespace MotorDepot.DAL.Entities
         public DateTime CreateDate { get; set; } = DateTime.Now;
 
         [Required]
-        public int StatusId { get; set; }
+        public FlightStatusEnum StatusId { get; set; }
         public virtual FlightStatus Status { get; set; }
 
         public string DriverId { get; set; }

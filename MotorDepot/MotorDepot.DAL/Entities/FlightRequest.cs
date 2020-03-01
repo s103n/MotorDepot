@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using MotorDepot.DAL.Entities.Enums;
 
 namespace MotorDepot.DAL.Entities
 {
@@ -15,7 +16,7 @@ namespace MotorDepot.DAL.Entities
         public virtual AppUser Dispatcher { get; set; }
 
         [Required]
-        public int FlightRequestStatusId { get; set; }
+        public FlightRequestStatusEnum FlightRequestStatusId { get; set; }
         public virtual FlightRequestStatus Status { get; set; }
 
         public int? FlightId { get; set; }
@@ -36,7 +37,7 @@ namespace MotorDepot.DAL.Entities
         public double BootVolume { get; set; }
 
         [Required]
-        public int AutoTypeId { get; set; }
+        public AutoTypeEnum AutoTypeId { get; set; }
         public virtual AutoType AutoType { get; set; }
     }
 }

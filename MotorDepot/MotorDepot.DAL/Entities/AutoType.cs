@@ -1,15 +1,11 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using MotorDepot.DAL.Entities.Enums;
+using System.Collections.Generic;
+using MotorDepot.DAL.Entities.Abstract;
 
 namespace MotorDepot.DAL.Entities
 {
-    public class AutoType
+    public class AutoType : BaseEnumEntity<AutoTypeEnum>
     {
-        public int Id { get; set; }
-
-        [Required, StringLength(32, MinimumLength = 2)]
-        public string Name { get; set; }
-
         public virtual ICollection<Auto> Autos { get; }
     }
 }

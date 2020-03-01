@@ -11,9 +11,10 @@ namespace MotorDepot.WEB.Controllers
     public class AdminController : Controller
     {
         private readonly IDispatcherService _dispatcherService;
-
-        public AdminController(IDispatcherService dispatcherService)
+        private readonly IDriverService _driverService;
+        public AdminController(IDispatcherService dispatcherService, IDriverService driverService)
         {
+            _driverService = driverService;
             _dispatcherService = dispatcherService;
         }
 
@@ -25,15 +26,15 @@ namespace MotorDepot.WEB.Controllers
 
         public ActionResult AddDispatcher()
         {
-            return View();
+            return View("AddUser");
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddDispatcher(DispatcherRegisterViewModel model)
+        public async Task<ActionResult> AddDispatcher(UserRegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var status = await _dispatcherService.CreateDispatcher(model.ToUserDto());
+                var status = await _dispatcherService.CreateDispatcher(model.ToUserDto("dispatcher"));
 
                 if (status.Success)
                     return View("Index", status);
@@ -41,12 +42,34 @@ namespace MotorDepot.WEB.Controllers
                 ModelState.AddModelError(status.Property, status.Message);
             }
 
-            return View(model);
+            return View("AddUser", model);
         }
 
         public ActionResult Dispatchers()
         {
             return View(_dispatcherService.GetDispatchers());
+        }
+
+        public ActionResult AddDriver()
+        {
+            return View("AddUser");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddDriver(UserRegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var status = await _driverService.CreateDriver(model.ToUserDto("driver"));
+
+                if (status.Success)
+                    return View("Index", status);
+
+                ModelState.AddModelError(status.Property, status.Message);
+            }
+
+            return View("AddUser", model);
         }
     }
 }

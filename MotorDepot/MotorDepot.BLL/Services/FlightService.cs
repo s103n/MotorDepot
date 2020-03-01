@@ -1,9 +1,9 @@
 ﻿using MotorDepot.BLL.BusinessModels;
-using MotorDepot.BLL.Infrastructure;
 using MotorDepot.BLL.Infrastructure.Mappers;
 using MotorDepot.BLL.Interfaces;
 using MotorDepot.BLL.Models;
 using MotorDepot.DAL.Entities;
+using MotorDepot.DAL.Entities.Enums;
 using MotorDepot.DAL.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,21 +41,13 @@ namespace MotorDepot.BLL.Services
             return item?.ToFlightDto();
         }
 
-        public async Task<OperationStatus> SetStatus(FlightStatus status, int? flightId)
+        public async Task SetStatus(FlightStatus status, int? flightId)
         {
-            if (flightId == null)
-                return new OperationStatus("", "Unknown flight", false);
-
             var flight = await _database.FlightRepository.FindAsync(f => f.Id == flightId);
 
-            if (flight == null)
-                return new OperationStatus("", "Unknown flight", false);
-
-            flight.StatusId = (int)status;
+            flight.StatusId = (FlightStatusEnum)status;
 
             await _database.FlightRepository.UpdateAsync(flight);
-
-            return new OperationStatus("", "Status was updated", true);
         }
 
         public IEnumerable<FlightDto> GetAll(bool deleted = false)
@@ -67,8 +59,8 @@ namespace MotorDepot.BLL.Services
                 return flights.AsEnumerable().ToFlightDtos();
             }
 
-            return flights.Where(flight => flight.StatusId == (int)FlightStatus.Deleted)
-                .AsEnumerable()
+            return flights.Where(flight => flight.StatusId != FlightStatusEnum.Deleted)
+                .ToList()
                 .ToFlightDtos();
         }
 
@@ -92,7 +84,7 @@ namespace MotorDepot.BLL.Services
             if (flight == null)
                 return;
 
-            flight.StatusId = (int)FlightStatus.Deleted;
+            flight.StatusId = FlightStatusEnum.Deleted;
 
             await _database.FlightRepository.UpdateAsync(flight);
         }
