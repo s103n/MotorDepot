@@ -113,7 +113,6 @@
     <Compile Include="Entities\FlightRequestStatus.cs" />
     <Compile Include="Entities\FlightStatus.cs" />
     <Compile Include="Entities\Enums\FlightStatusEnum.cs" />
-    <Compile Include="Entities\Abstract\IColorEntity.cs" />
     <Compile Include="Identity\RoleManager.cs" />
     <Compile Include="Identity\UserManager.cs" />
     <Compile Include="Infrastructure\ValidationErrors.cs" />

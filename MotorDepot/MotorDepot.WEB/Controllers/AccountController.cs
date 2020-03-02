@@ -40,7 +40,7 @@ namespace MotorDepot.WEB.Controllers
                     AuthenticationManager.SignOut();
                     AuthenticationManager.SignIn(new AuthenticationProperties
                     {
-                        IsPersistent = true
+                        IsPersistent = true //todo
                     }, claim);
 
                     return RedirectToAction("Index", "Home");
