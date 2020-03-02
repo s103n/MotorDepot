@@ -115,9 +115,10 @@
     <Compile Include="Interfaces\IFlightService.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Models\AutoDto.cs" />
+    <Compile Include="Models\DispatcherDto.cs" />
+    <Compile Include="Models\DriverDto.cs" />
     <Compile Include="Models\FlightDto.cs" />
     <Compile Include="Models\FlightRequestDto.cs" />
-    <Compile Include="Models\FlightStatusDto.cs" />
     <Compile Include="Models\UserDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AdminService.cs" />

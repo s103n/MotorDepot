@@ -2,9 +2,11 @@
 using MotorDepot.DAL.Entities;
 using MotorDepot.DAL.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using MotorDepot.DAL.Infrastructure;
 
 namespace MotorDepot.DAL.Repositories
 {
@@ -17,14 +19,14 @@ namespace MotorDepot.DAL.Repositories
             _context = context;
         }
 
-        public async Task AddAsync(AutoBrand item)
+        public async Task<ValidationErrors> AddAsync(AutoBrand item)
         {
             if(item == null)
                 throw new ArgumentNullException(nameof(item));
 
             _context.AutoBrands.Add(item);
 
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(AutoBrand item)
@@ -47,11 +49,11 @@ namespace MotorDepot.DAL.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<AutoBrand> FindAsync(Predicate<AutoBrand> predicate)
+        public async Task<AutoBrand> FindAsync(int? id)
         {
-            return await _context.AutoBrands.FirstOrDefaultAsync(abrand => predicate(abrand));
+            return await _context.AutoBrands.FindAsync(id);
         }
 
-        public IQueryable<AutoBrand> GetAll() => _context.AutoBrands;
+        public IEnumerable<AutoBrand> GetAll() => _context.AutoBrands;
     }
 }

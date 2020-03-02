@@ -4,9 +4,8 @@ using MotorDepot.DAL.Entities.Enums;
 
 namespace MotorDepot.DAL.Entities
 {
-    public class FlightRequestStatus : BaseEnumEntity<FlightRequestStatusEnum>, IColorEntity
+    public class FlightRequestStatus : BaseEnumEntity<FlightRequestStatusEnum>
     {
         public virtual ICollection<FlightRequest> Requests { get; set; }
-        public string Color { get; set; }
     }
 }

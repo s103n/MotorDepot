@@ -8,9 +8,9 @@ namespace MotorDepot.BLL.Models
     {
         public int Id { get; set; }
 
-        public UserDto Driver { get; set; }
+        public DriverDto Driver { get; set; }
 
-        public UserDto Dispatcher { get; set; }
+        public DispatcherDto Dispatcher { get; set; }
 
         public FlightRequestStatus Status { get; set; }
 

@@ -19,7 +19,7 @@ namespace MotorDepot.BLL.Infrastructure.Mappers
             return new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<UserDto, AppUser>()
-                    .ForMember("UserName", opt => opt.MapFrom(x => userDto.Email));
+                .ForMember("UserName", opt => opt.MapFrom(x => userDto.Email));
             }).CreateMapper().Map<UserDto, AppUser>(userDto);
         }
 
@@ -33,6 +33,36 @@ namespace MotorDepot.BLL.Infrastructure.Mappers
         {
             return AppUserToUserDto.CreateMapper()
                 .Map<IEnumerable<AppUser>, IEnumerable<UserDto>>(appUsers);
+        }
+
+        public static DriverDto ToDriverDto(this AppUser user)
+        {
+            return new MapperConfiguration(cfg => cfg.CreateMap<AppUser, DriverDto>())
+                .CreateMapper().Map<AppUser, DriverDto>(user);
+        }
+
+        public static DispatcherDto ToDispatcherDto(this AppUser user)
+        {
+            return new MapperConfiguration(cfg => cfg.CreateMap<AppUser, DispatcherDto>())
+                .CreateMapper().Map<AppUser, DispatcherDto>(user);
+        }
+
+        public static AppUser ToAppUser(this DriverDto driver)
+        {
+            return new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<DriverDto, AppUser>();
+                })
+                .CreateMapper().Map<DriverDto, AppUser>(driver);
+        }
+
+        public static AppUser ToAppUser(this DispatcherDto dispatcher)
+        {
+            return new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<DispatcherDto, AppUser>();
+                })
+                .CreateMapper().Map<DispatcherDto, AppUser>(dispatcher);
         }
     }
 }

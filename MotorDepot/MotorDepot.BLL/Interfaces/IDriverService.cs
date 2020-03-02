@@ -10,7 +10,7 @@ namespace MotorDepot.BLL.Interfaces
     {
         Task<OperationStatus> CreateDriver(UserDto userDto);
         IEnumerable<UserDto> GetDrivers();
-        Task SendFlightRequest(FlightRequestDto flightRequest);
+        Task<OperationStatus> SendFlightRequest(FlightRequestDto flightRequest);
         Task<UserDto> GetDriverById(string id);
     }
 }

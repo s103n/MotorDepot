@@ -28,15 +28,16 @@ namespace MotorDepot.BLL.BusinessModels
             {
                 if (EntityProperties.Any(p => p.Name == prop.Name))
                 {
-                    var item = await repository.FindAsync(p =>
-                        _type.GetProperty(prop.Name, BindingFlags.Public)?.GetValue(p, null)
-                        ==
-                        prop.GetValue(ObjectType, null)
-                    );
+                    //var item = await repository.FindAsync(p =>
+                    //    _type.GetProperty(prop.Name, BindingFlags.Public)?.GetValue(p, null)
+                    //    ==
+                    //    prop.GetValue(ObjectType, null)
+                    //);
 
-                    if (item == null) continue;
+                    //if (item == null) continue;
 
-                    return item;
+                    //return item;
+                    return null;
                 }
             }
 

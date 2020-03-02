@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity.Infrastructure.Design;
-using MotorDepot.BLL.Infrastructure.Enums;
+﻿using MotorDepot.BLL.Infrastructure.Enums;
+using System.Collections.Generic;
 
 namespace MotorDepot.BLL.Models
 {
     public class AutoDto
     {
+        public int Id { get; set; }
         public string Model { get; set; }
         public string Numbers { get; set; }
         public int EnginePower { get; set; }

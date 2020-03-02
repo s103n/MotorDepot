@@ -191,8 +191,6 @@
     <Compile Include="Models\FlightRequestViewModel.cs" />
     <Compile Include="Models\FlightViewModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
-    <Compile Include="Models\RegisterViewModel.cs" />
-    <Compile Include="Models\RoleViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

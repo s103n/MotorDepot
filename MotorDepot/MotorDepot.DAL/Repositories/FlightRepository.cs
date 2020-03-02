@@ -2,9 +2,11 @@
 using MotorDepot.DAL.Entities;
 using MotorDepot.DAL.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using MotorDepot.DAL.Infrastructure;
 
 namespace MotorDepot.DAL.Repositories
 {
@@ -17,14 +19,14 @@ namespace MotorDepot.DAL.Repositories
             _context = context;
         }
 
-        public async Task AddAsync(Flight item)
+        public async Task<ValidationErrors> AddAsync(Flight item)
         {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
 
             _context.Flights.Add(item);
 
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(Flight item)
@@ -47,11 +49,14 @@ namespace MotorDepot.DAL.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Flight> FindAsync(Predicate<Flight> predicate)
+        public async Task<Flight> FindAsync(int? id)
         {
-            return await _context.Flights.FirstOrDefaultAsync(flight => predicate(flight));
+            return await _context.Flights.FindAsync(id);
         }
 
-        public IQueryable<Flight> GetAll() => _context.Flights;
+        public IEnumerable<Flight> GetAll()
+        {
+            return _context.Flights;
+        }
     }
 }

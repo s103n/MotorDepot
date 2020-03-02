@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using MotorDepot.BLL.Models;
 using MotorDepot.WEB.Models;
-using WebGrease.Css.Extensions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MotorDepot.WEB.Infrastructure.Mappers
 {
@@ -14,12 +13,10 @@ namespace MotorDepot.WEB.Infrastructure.Mappers
             return new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<FlightDto, FlightViewModel>()
-                    .ForMember("Status", opt => opt.MapFrom(x => model.Status.Name))
-                    .ForMember("StatusColor", opt => opt.MapFrom(x => model.Status.Color))
-                    .ForMember("AutoName", opt => opt.MapFrom(x => model.Auto.Model))
-                    .ForMember("AutoNumber", opt => opt.MapFrom(x => model.Auto.Numbers))
-                    .ForMember("DriverEmail", opt => opt.MapFrom(x => model.Driver.Email))
-                    .ForMember("DriverName", opt => opt.MapFrom(x => $"{model.Driver.FirstName} {model.Driver.LastName}"));
+                    .ForMember("AutoName", opt => opt.MapFrom(x => x.Auto.Model))
+                    .ForMember("AutoNumbers", opt => opt.MapFrom(x => x.Auto.Numbers))
+                    .ForMember("DriverEmail", opt => opt.MapFrom(x => x.Driver.Email))
+                    .ForMember("DriverName", opt => opt.MapFrom(x => $"{x.Driver.FirstName} {x.Driver.LastName}"));
             }).CreateMapper().Map<FlightDto, FlightViewModel>(model);
         }
 
@@ -29,7 +26,7 @@ namespace MotorDepot.WEB.Infrastructure.Mappers
         }
 
         public static FlightRequestDto ToFlightRequestDto(this FlightRequestViewModel model,
-            UserDto driver, UserDto dispatcher, FlightDto flight)
+            DriverDto driver, DispatcherDto dispatcher, FlightDto flight)
         {
             return new MapperConfiguration(cfg =>
             {

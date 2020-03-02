@@ -26,7 +26,7 @@ namespace MotorDepot.WEB.Models
         public int EnginePower { get; set; }
 
         [Required]
-        public int EngineCapacity { get; set; }
+        public double EngineCapacity { get; set; }
 
         [Required]
         public double BootVolume { get; set; }

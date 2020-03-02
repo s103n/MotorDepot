@@ -43,7 +43,7 @@ namespace MotorDepot.BLL.Services
 
         public async Task SetStatus(FlightStatus status, int? flightId)
         {
-            var flight = await _database.FlightRepository.FindAsync(f => f.Id == flightId);
+            var flight = await _database.FlightRepository.FindAsync(flightId);
 
             flight.StatusId = (FlightStatusEnum)status;
 
@@ -69,7 +69,7 @@ namespace MotorDepot.BLL.Services
             if (id == null)
                 return null;
 
-            var flight = await _database.FlightRepository.FindAsync(p => p.Id == id);
+            var flight = await _database.FlightRepository.FindAsync(id);
 
             return flight.ToFlightDto();
         }
@@ -79,7 +79,7 @@ namespace MotorDepot.BLL.Services
             if (id == null)
                 return;
 
-            var flight = await _database.FlightRepository.FindAsync(p => p.Id == id);
+            var flight = await _database.FlightRepository.FindAsync(id);
 
             if (flight == null)
                 return;

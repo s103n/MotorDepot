@@ -6,6 +6,9 @@ namespace MotorDepot.WEB
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        //TODO Переписать всю валидацию из веба в уровень доступа к данным
+        //TODO Переписать все под ValidationErrors и OperationStatus
+        //TODO Продолжать по заданию
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();

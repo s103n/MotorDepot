@@ -61,14 +61,24 @@ namespace MotorDepot.WEB.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RequestFor(FlightRequestViewModel model)
         {
+            var driverId = User.Identity.GetUserId();
             var driver = await _driverService.GetDriverById(User.Identity.GetUserId());
+
             var requestedFlight = await _flightService.GetByIdAsync(model.RequestedFlightId);
 
             model.Status = FlightRequestStatus.InQueue;
 
-            await _driverService.SendFlightRequest(model.ToFlightRequestDto(driver, null, requestedFlight));
+            var status = await _driverService.SendFlightRequest(model.ToFlightRequestDto(
+                driver.ToDriverDto(driverId), 
+                null, 
+                requestedFlight));
 
-            return RedirectToAction("Index", "Home");
+            if(status.Success)
+                return RedirectToAction("Index", "Home");
+
+            ModelState.AddModelError(status.Property, status.Message);
+
+            return View(model);
         } 
     }
 }

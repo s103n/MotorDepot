@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using MotorDepot.BLL.Infrastructure.Enums;
 
 namespace MotorDepot.WEB.Models
 {
@@ -17,10 +18,9 @@ namespace MotorDepot.WEB.Models
         [DataType(DataType.DateTime)]
         public DateTime CreateDate { get; set; }
         [Required]
-        public string Status { get; set; }
-        public string StatusColor { get; set; }
+        public FlightStatus Status { get; set; }
         public string AutoName { get; set; }
-        public string AutoNumber { get; set; }
+        public string AutoNumbers { get; set; }
         public string DriverEmail { get; set; }
         public string DriverName { get; set; }
     }

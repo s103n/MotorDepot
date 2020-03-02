@@ -2,6 +2,9 @@
 using Microsoft.AspNet.Identity.EntityFramework;
 using MotorDepot.DAL.Entities;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
+using System.Threading.Tasks;
+using MotorDepot.DAL.Infrastructure;
 
 namespace MotorDepot.DAL.Context
 {
@@ -48,6 +51,20 @@ namespace MotorDepot.DAL.Context
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             base.OnModelCreating(modelBuilder);
+        }
+
+        public new async Task<ValidationErrors> SaveChangesAsync()
+        {
+            try
+            {
+                await base.SaveChangesAsync();
+
+                return new ValidationErrors();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                return new ValidationErrors(ex.EntityValidationErrors);
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AutoMapper;
 using MotorDepot.BLL.Models;
 using MotorDepot.DAL.Entities;
+using FlightStatus = MotorDepot.BLL.Infrastructure.Enums.FlightStatus;
 
 namespace MotorDepot.BLL.Infrastructure.Mappers
 {
@@ -27,16 +28,12 @@ namespace MotorDepot.BLL.Infrastructure.Mappers
             return new MapperConfiguration(cfg =>
                 {
                     cfg.CreateMap<Flight, FlightDto>()
-                        .ForMember("Auto", opt => opt.MapFrom(x => x.Auto))
+                        .ForMember("Status", opt => opt.MapFrom(x => (FlightStatus) x.StatusId))
+                        .ForMember("Auto", opt => opt.MapFrom(x => x.Auto.ToAutoDto()))
+                        .ForMember("Driver", opt => opt.MapFrom(x => x.Driver.ToDriverDto()));
                 })
                 .CreateMapper()
                 .Map<IEnumerable<Flight>, IEnumerable<FlightDto>>(models);
-        }
-
-        public static FlightStatusDto ToFlightStatusDto(this FlightStatus status)
-        {
-            return new MapperConfiguration(cfg => cfg.CreateMap<FlightStatus, FlightStatusDto>())
-                .CreateMapper().Map<FlightStatus, FlightStatusDto>(status);
         }
 
         public static FlightRequest ToFlightRequest(this FlightRequestDto request)
@@ -44,8 +41,12 @@ namespace MotorDepot.BLL.Infrastructure.Mappers
             return new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<FlightRequestDto, FlightRequest>()
-                    //.ForMember("DriverId", opt => opt.MapFrom(x => request.Driver.Id))
-                    //.ForMember("DispatcherId", opt => opt.MapFrom(x => request.Dispatcher.Id))
+                    .ForMember("Driver", opt => opt.Ignore())
+                    .ForMember("Dispatcher", opt => opt.Ignore())
+                    .ForMember("Status", opt => opt.Ignore())
+                    .ForMember("AutoType", opt => opt.Ignore())
+                    .ForMember("DriverId", opt => opt.MapFrom(x => request.Driver.Id))
+                    .ForMember("DispatcherId", opt => opt.MapFrom(x => request.Dispatcher.Id))
                     .ForMember("FlightRequestStatusId", opt => opt.MapFrom(x => (int) request.Status))
                     .ForMember("FlightId", opt => opt.MapFrom(x => request.RequestedFlight.Id))
                     .ForMember("AutoTypeId", opt => opt.MapFrom(x => (int) request.AutoType));

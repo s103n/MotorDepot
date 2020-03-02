@@ -23,5 +23,23 @@ namespace MotorDepot.WEB.Infrastructure.Mappers
 
             }).CreateMapper().Map<LoginViewModel, UserDto>(model);
         }
+
+        public static DriverDto ToDriverDto(this UserDto user, string id)
+        {
+            return new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<UserDto, DriverDto>()
+                    .ForMember("Id", opt => opt.MapFrom(x => id));
+            }).CreateMapper().Map<UserDto, DriverDto>(user);
+        }
+
+        public static DispatcherDto ToDispatcher(this UserDto user, string id)
+        {
+            return new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<UserDto, DispatcherDto>()
+                    .ForMember("Id", opt => opt.MapFrom(x => id));
+            }).CreateMapper().Map<UserDto, DispatcherDto>(user);
+        }
     }
 }

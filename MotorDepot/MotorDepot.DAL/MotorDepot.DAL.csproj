@@ -116,6 +116,8 @@
     <Compile Include="Entities\Abstract\IColorEntity.cs" />
     <Compile Include="Identity\RoleManager.cs" />
     <Compile Include="Identity\UserManager.cs" />
+    <Compile Include="Infrastructure\ValidationErrors.cs" />
+    <Compile Include="Infrastructure\ValidationResult.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="Migrations\202002251817296_InitialCreate.cs" />
@@ -146,15 +148,16 @@
     <Compile Include="Migrations\202003011038541_LookupTables.designer.cs">
       <DependentUpon>202003011038541_LookupTables.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202003021513271_DeleteColor.cs" />
+    <Compile Include="Migrations\202003021513271_DeleteColor.designer.cs">
+      <DependentUpon>202003021513271_DeleteColor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AutoBrandRepository.cs" />
     <Compile Include="Repositories\AutoRepository.cs" />
-    <Compile Include="Repositories\AutoTypeRepository.cs" />
     <Compile Include="Repositories\FlightRepository.cs" />
     <Compile Include="Repositories\FlightRequestRepository.cs" />
-    <Compile Include="Repositories\FlightStatusRepository.cs" />
-    <Compile Include="Repositories\AutoStatusRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -182,6 +185,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202003011038541_LookupTables.resx">
       <DependentUpon>202003011038541_LookupTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003021513271_DeleteColor.resx">
+      <DependentUpon>202003021513271_DeleteColor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -4,9 +4,8 @@ using MotorDepot.DAL.Entities.Abstract;
 
 namespace MotorDepot.DAL.Entities
 {
-    public class AutoStatus : BaseEnumEntity<AutoStatusEnum>, IColorEntity
+    public class AutoStatus : BaseEnumEntity<AutoStatusEnum> 
     {
         public ICollection<Auto> Autos { get; set; }
-        public string Color { get; set; }
     }
 }
