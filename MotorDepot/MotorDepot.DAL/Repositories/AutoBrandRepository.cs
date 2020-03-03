@@ -1,7 +1,6 @@
 ﻿using MotorDepot.DAL.Context;
 using MotorDepot.DAL.Entities;
 using MotorDepot.DAL.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Threading.Tasks;
@@ -38,11 +37,14 @@ namespace MotorDepot.DAL.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task FindAsync(int? id)
+        public async Task<AutoBrand> FindAsync(int? id)
         {
-            await _context.AutoBrands.FindAsync(id);
+            return await _context.AutoBrands.FindAsync(id);
         }
 
-        public IEnumerable<AutoBrand> GetAll() => _context.AutoBrands;
+        public async Task<IEnumerable<AutoBrand>> GetAllAsync()
+        {
+            return await _context.AutoBrands.ToListAsync();
+        } 
     }
 }

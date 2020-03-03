@@ -7,7 +7,9 @@ using MotorDepot.DAL.Entities.Enums;
 using MotorDepot.DAL.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using MotorDepot.BLL.Infrastructure;
 using FlightStatus = MotorDepot.BLL.Infrastructure.Enums.FlightStatus;
 
 namespace MotorDepot.BLL.Services
@@ -21,72 +23,101 @@ namespace MotorDepot.BLL.Services
             _database = unitOfWork;
         }
 
-        public async Task CreateAsync(FlightDto flightDto)
+        public async Task<OperationStatus> CreateAsync(FlightDto flightDto)
         {
+            if(flightDto == null)
+                return new OperationStatus("Flight is null", HttpStatusCode.BadRequest);
+
             var flight = flightDto.ToFlight();
 
             await _database.FlightRepository.AddAsync(flight);
+
+            return new OperationStatus("Ok", HttpStatusCode.OK);
         }
 
-        public async Task EditAsync(FlightDto flightDto)
+        public async Task<OperationStatus> EditAsync(FlightDto flightDto)
         {
+            if(flightDto == null)
+                return new OperationStatus("Flight is null", HttpStatusCode.BadRequest);
+
             await _database.FlightRepository.UpdateAsync(flightDto.ToFlight());
+
+            return new OperationStatus("Ok", HttpStatusCode.OK);
         }
 
-        public async Task<FlightDto> GetAsync(object property)
+        public async Task<OperationStatus<FlightDto>> GetAsync(object property)
         {
-            var refGet = new ReflectionGet<Flight>(property);
-            var item = await refGet.GetItem(_database.FlightRepository);
+            if(property == null)
+                return new OperationStatus<FlightDto>("Properties don't exist", HttpStatusCode.BadRequest, null);
 
-            return item?.ToFlightDto();
+            var refGet = new ReflectionGet<Flight>(property);
+            var item = await refGet.GetItemAsync(_database.FlightRepository);
+
+            return new OperationStatus<FlightDto>("Ok", HttpStatusCode.OK, item.ToFlightDto());
         }
 
-        public async Task SetStatus(FlightStatus status, int? flightId)
+        public async Task<OperationStatus> SetStatus(FlightStatus status, int? flightId)
         {
             var flight = await _database.FlightRepository.FindAsync(flightId);
+
+            if(flight == null)
+                return new OperationStatus("Flight is not exists", HttpStatusCode.NotFound);
 
             flight.StatusId = (FlightStatusEnum)status;
 
             await _database.FlightRepository.UpdateAsync(flight);
+
+            return new OperationStatus("Ok", HttpStatusCode.OK);
         }
 
-        public IEnumerable<FlightDto> GetAll(bool deleted = false)
+        public async Task<OperationStatus<IEnumerable<FlightDto>>> GetAllAsync(bool deleted = false)
         {
-            var flights = _database.FlightRepository.GetAll();
+            var flights = await _database.FlightRepository.GetAllAsync();
 
             if (deleted)
             {
-                return flights.AsEnumerable().ToFlightDtos();
+                return new OperationStatus<IEnumerable<FlightDto>>(
+                    "Ok",
+                    HttpStatusCode.OK,
+                    flights.ToFlightDtos());
             }
 
-            return flights.Where(flight => flight.StatusId != FlightStatusEnum.Deleted)
+            return new OperationStatus<IEnumerable<FlightDto>>(
+                "Ok", 
+                HttpStatusCode.OK, 
+                flights.Where(flight => flight.StatusId != FlightStatusEnum.Deleted)
                 .ToList()
-                .ToFlightDtos();
+                .ToFlightDtos());
         }
 
-        public async Task<FlightDto> GetByIdAsync(int? id)
+        public async Task<OperationStatus<FlightDto>> GetByIdAsync(int? id)
         {
             if (id == null)
-                return null;
+                return new OperationStatus<FlightDto>("Id is empty", HttpStatusCode.BadRequest, null);
 
             var flight = await _database.FlightRepository.FindAsync(id);
 
-            return flight.ToFlightDto();
+            if(flight == null)
+                return new OperationStatus<FlightDto>("Flight does not exist", HttpStatusCode.BadRequest, null);
+
+            return new OperationStatus<FlightDto>("Ok", HttpStatusCode.OK, flight.ToFlightDto());
         }
 
-        public async Task RemoveAsync(int? id)
+        public async Task<OperationStatus> RemoveAsync(int? id)
         {
             if (id == null)
-                return;
+                return new OperationStatus("Id is empty", HttpStatusCode.BadRequest);
 
             var flight = await _database.FlightRepository.FindAsync(id);
 
             if (flight == null)
-                return;
+                return new OperationStatus("Flight does not exist", HttpStatusCode.BadRequest);
 
             flight.StatusId = FlightStatusEnum.Deleted;
 
             await _database.FlightRepository.UpdateAsync(flight);
+
+            return new OperationStatus("Ok", HttpStatusCode.OK);
         }
 
         public void Dispose()

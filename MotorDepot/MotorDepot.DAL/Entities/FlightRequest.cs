@@ -1,6 +1,5 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using MotorDepot.DAL.Entities.Enums;
+﻿using MotorDepot.DAL.Entities.Enums;
+using System;
 
 namespace MotorDepot.DAL.Entities
 {

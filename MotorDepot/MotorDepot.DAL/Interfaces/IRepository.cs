@@ -8,7 +8,7 @@ namespace MotorDepot.DAL.Interfaces
         Task AddAsync(T item);
         Task DeleteAsync(T item);
         Task UpdateAsync(T item);
-        Task FindAsync(int? id);
-        IEnumerable<T> GetAll();
+        Task<T> FindAsync(int? id);
+        Task<IEnumerable<T>> GetAllAsync();
     }
 }

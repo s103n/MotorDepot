@@ -1,4 +1,5 @@
-﻿using MotorDepot.BLL.Infrastructure;
+﻿using System.Net;
+using MotorDepot.BLL.Infrastructure;
 using MotorDepot.BLL.Interfaces;
 using MotorDepot.WEB.Infrastructure.Mappers;
 using MotorDepot.WEB.Models;
@@ -18,12 +19,6 @@ namespace MotorDepot.WEB.Controllers
             _dispatcherService = dispatcherService;
         }
 
-        // GET: Admin
-        public ActionResult Index()
-        {
-            return View(new OperationStatus("", "", false));
-        }
-
         public ActionResult AddDispatcher()
         {
             return View("AddUser");
@@ -36,10 +31,10 @@ namespace MotorDepot.WEB.Controllers
             {
                 var status = await _dispatcherService.CreateDispatcher(model.ToUserDto("dispatcher"));
 
-                if (status.Success)
-                    return View("Index", status);
+                if (status.Code == HttpStatusCode.OK)
+                    return View("~/Views/Home/Index.cshtml");
 
-                ModelState.AddModelError(status.Property, status.Message);
+                ModelState.AddModelError("", status.Message);
             }
 
             return View("AddUser", model);
@@ -63,10 +58,10 @@ namespace MotorDepot.WEB.Controllers
             {
                 var status = await _driverService.CreateDriver(model.ToUserDto("driver"));
 
-                if (status.Success)
+                if (status.Code == HttpStatusCode.OK)
                     return View("Index", status);
 
-                ModelState.AddModelError(status.Property, status.Message);
+                ModelState.AddModelError("", status.Message);
             }
 
             return View("AddUser", model);

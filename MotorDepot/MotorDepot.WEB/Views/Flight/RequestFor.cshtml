@@ -1,10 +1,10 @@
-﻿@model MotorDepot.WEB.Models.FlightRequestViewModel
+﻿@model MotorDepot.WEB.Models.FlightRequestCreateViewModel
 
 @{
     ViewBag.Title = "Request for flight";
 }
 
-<h2>Request for flight №@Model.RequestedFlightId</h2>
+<h2>Request for flight #@Model.RequestedFlightId</h2>
 <hr />
 
 @using (Html.BeginForm())
@@ -12,6 +12,7 @@
     @Html.AntiForgeryToken()
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <input type="hidden" name="RequestedFlightId" value="@Model.RequestedFlightId"/>
 
     <div class="form-group">
         <h6>Engine power in horsepower* (e.x. 132)</h6>

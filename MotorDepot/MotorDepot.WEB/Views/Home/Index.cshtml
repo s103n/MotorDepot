@@ -1,5 +1,6 @@
-﻿
+﻿@model IEnumerable<MotorDepot.WEB.Models.AlertViewModel>
 @{
     ViewBag.Title = "Home Page";
 }
 
+@Alert.RenderAll(Model)

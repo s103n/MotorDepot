@@ -108,10 +108,11 @@
     <Compile Include="Infrastructure\Mappers\FlightMappers.cs" />
     <Compile Include="Infrastructure\Mappers\UserMappers.cs" />
     <Compile Include="Infrastructure\OperationStatus.cs" />
-    <Compile Include="Interfaces\IAdminService.cs" />
+    <Compile Include="Infrastructure\ValidationStatus.cs" />
     <Compile Include="Interfaces\IAutoService.cs" />
     <Compile Include="Interfaces\IDispatcherService.cs" />
     <Compile Include="Interfaces\IDriverService.cs" />
+    <Compile Include="Interfaces\IFlightRequestService.cs" />
     <Compile Include="Interfaces\IFlightService.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Models\AutoDto.cs" />
@@ -121,10 +122,10 @@
     <Compile Include="Models\FlightRequestDto.cs" />
     <Compile Include="Models\UserDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\AdminService.cs" />
     <Compile Include="Services\AutoService.cs" />
     <Compile Include="Services\DispatcherService.cs" />
     <Compile Include="Services\DriverService.cs" />
+    <Compile Include="Services\FlightRequestService.cs" />
     <Compile Include="Services\FlightService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Util\UnitOfWorkModule.cs" />

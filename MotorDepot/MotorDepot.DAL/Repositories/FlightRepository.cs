@@ -37,14 +37,14 @@ namespace MotorDepot.DAL.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task FindAsync(int? id)
+        public async Task<Flight> FindAsync(int? id)
         {
-            await _context.Flights.FindAsync(id);
+            return await _context.Flights.FindAsync(id);
         }
 
-        public IEnumerable<Flight> GetAll()
+        public async Task<IEnumerable<Flight>> GetAllAsync()
         {
-            return _context.Flights;
+            return await _context.Flights.ToListAsync();
         }
     }
 }

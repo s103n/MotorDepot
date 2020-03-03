@@ -1,0 +1,52 @@
+﻿@model MotorDepot.WEB.Models.FlightRequestDetailsViewModel
+
+@{
+    ViewBag.Title = "ConfirmRequest";
+}
+
+<h2>Confirm request for flight</h2>
+
+<div>
+    <hr />
+
+    <div class="container">
+        <fieldset class="border rounded p-2">
+            <legend class="w-auto">
+                <h4>Flight #@Model.RequestedFlightId was requested by @Model.DriverName at @Model.Date</h4>
+            </legend>
+            <div class="m-2">
+                <h6 class="d-inline">Driver email: </h6>
+                <span>@Model.DriverEmail</span>
+            </div>
+            <div class="m-2">
+                <h6 class="d-inline">Engine capacity: </h6>
+                <span>@Model.EngineCapacity cm³</span>
+            </div>
+            <div class="m-2">
+                <h6 class="d-inline">Engine power: </h6>
+                <span>@Model.EnginePower horsepower</span>
+            </div>
+            <div class="m-2">
+                <h6 class="d-inline">Min boot volume: </h6>
+                <span>@Model.BootVolume liters</span>
+            </div>
+            <div class="m-2">
+                <h6 class="d-inline">Auto type: </h6>
+                <span>@Model.AutoType</span>
+            </div>
+            <div class="m-2">
+                <h6 class="d-inline">Description for request: </h6>
+                <span>@Model.Description</span>
+            </div>
+        </fieldset>
+        @using (Html.BeginForm())
+        {
+            <div class="m-3">
+                <button class="btn btn-danger d-inline col-3 offset-md-2" type="submit" 
+                        name="isAccepted" value="false">Cancel</button>
+                <button class="btn btn-success d-inline col-3 offset-md-2" type="submit" 
+                        name="isAccepted" value="true">Accept</button>
+            </div>
+        }
+    </div>
+</div>

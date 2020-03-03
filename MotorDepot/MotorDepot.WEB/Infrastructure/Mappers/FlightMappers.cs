@@ -3,6 +3,7 @@ using MotorDepot.BLL.Models;
 using MotorDepot.WEB.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 
 namespace MotorDepot.WEB.Infrastructure.Mappers
 {
@@ -25,16 +26,41 @@ namespace MotorDepot.WEB.Infrastructure.Mappers
             return models.Select(x => x.ToFlightVm());
         }
 
-        public static FlightRequestDto ToFlightRequestDto(this FlightRequestViewModel model,
+        public static FlightRequestDto ToFlightRequestDto(this FlightRequestCreateViewModel model,
             DriverDto driver, DispatcherDto dispatcher, FlightDto flight)
         {
             return new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<FlightRequestViewModel, FlightRequestDto>()
+                cfg.CreateMap<FlightRequestCreateViewModel, FlightRequestDto>()
                     .ForMember("Driver", opt => opt.MapFrom(x => driver))
                     .ForMember("Dispatcher", opt => opt.MapFrom(x => dispatcher))
                     .ForMember("RequestedFlight", opt => opt.MapFrom(x => flight));
-            }).CreateMapper().Map<FlightRequestViewModel, FlightRequestDto>(model);
+            }).CreateMapper().Map<FlightRequestCreateViewModel, FlightRequestDto>(model);
+        }
+
+        public static FlightRequestDisplayViewModel ToDisplayViewModel(this FlightRequestDto model)
+        {
+            return new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<FlightRequestDto, FlightRequestDisplayViewModel>()
+                    .ForMember("DriverName", opt => opt.MapFrom(x => $"{x.Driver.FirstName} {x.Driver.LastName}"));
+            }).CreateMapper().Map<FlightRequestDto, FlightRequestDisplayViewModel>(model);
+        }
+
+        public static IEnumerable<FlightRequestDisplayViewModel> ToDisplayViewModels(
+            this IEnumerable<FlightRequestDto> models)
+        {
+            return models.Select(x => x.ToDisplayViewModel());
+        }
+
+        public static FlightRequestDetailsViewModel ToDetailsViewModel(this FlightRequestDto model)
+        {
+            return new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<FlightRequestDto, FlightRequestDetailsViewModel>()
+                    .ForMember("DriverName", opt => opt.MapFrom(x => $"{x.Driver.FirstName} {x.Driver.LastName}"))
+                    .ForMember("DriverEmail", opt => opt.MapFrom(x => x.Driver.Email));
+            }).CreateMapper().Map<FlightRequestDto, FlightRequestDetailsViewModel>(model);
         }
     }
 }

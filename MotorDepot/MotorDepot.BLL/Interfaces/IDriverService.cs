@@ -8,9 +8,9 @@ namespace MotorDepot.BLL.Interfaces
 {
     public interface IDriverService : IDisposable
     {
-        Task<OperationStatus> CreateDriver(UserDto userDto);
-        IEnumerable<UserDto> GetDrivers();
+        Task<OperationStatus> CreateDriver(UserDto driver);
+        OperationStatus<IEnumerable<UserDto>> GetDrivers();
         Task<OperationStatus> SendFlightRequest(FlightRequestDto flightRequest);
-        Task<UserDto> GetDriverById(string id);
+        Task<OperationStatus<UserDto>> GetDriverById(string id);
     }
 }

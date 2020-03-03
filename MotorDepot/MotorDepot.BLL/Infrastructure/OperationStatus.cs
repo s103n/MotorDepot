@@ -1,16 +1,32 @@
-﻿namespace MotorDepot.BLL.Infrastructure
+﻿using System.Net;
+
+namespace MotorDepot.BLL.Infrastructure
 {
+    //IOperationStatus
+    public sealed class OperationStatus<T> where T : class
+    {
+        public T Value { get; }
+        public string Message { get; }
+        public HttpStatusCode Code { get; }
+
+        public OperationStatus(string message, HttpStatusCode code, T value)
+        {
+            Message = message;
+            Code = code;
+            Value = value;
+        }
+    }
+
     public sealed class OperationStatus
     {
-        public string Property { get; }
         public string Message { get; }
-        public bool Success { get; }
+        public HttpStatusCode Code { get; set; }
 
-        public OperationStatus(string property, string message, bool success)
+
+        public OperationStatus(string message, HttpStatusCode code)
         {
-            Property = property;
             Message = message;
-            Success = success;
+            Code = code;
         }
     }
 }

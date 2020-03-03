@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MotorDepot.BLL.Infrastructure;
+﻿using MotorDepot.BLL.Infrastructure;
 using MotorDepot.BLL.Interfaces;
 using MotorDepot.BLL.Models;
 using MotorDepot.DAL.Interfaces;
+using System;
+using System.Threading.Tasks;
 
 namespace MotorDepot.BLL.Services
 {
@@ -19,12 +16,12 @@ namespace MotorDepot.BLL.Services
             _database = unitOfWork;
         }
 
-        public Task<OperationStatus> CreateAuto(AutoDto autoDto)
+        public async Task<OperationStatus<AutoDto>> CreateAuto(AutoDto autoDto)
         {
             throw new NotImplementedException();
         }
 
-        public Task EditAuto(AutoDto autoDto)
+        public async Task EditAuto(AutoDto autoDto)
         {
             throw new NotImplementedException();
         }

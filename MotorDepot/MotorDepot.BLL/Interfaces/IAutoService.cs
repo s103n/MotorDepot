@@ -7,7 +7,7 @@ namespace MotorDepot.BLL.Interfaces
 {
     public interface IAutoService : IDisposable
     {
-        Task<OperationStatus> CreateAuto(AutoDto autoDto);
+        Task<OperationStatus<AutoDto>> CreateAuto(AutoDto autoDto);
         Task EditAuto(AutoDto autoDto);
     }
 }

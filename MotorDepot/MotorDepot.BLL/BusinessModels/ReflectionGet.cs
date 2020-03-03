@@ -22,22 +22,24 @@ namespace MotorDepot.BLL.BusinessModels
         private IEnumerable<PropertyInfo> ObjectProperties => new List<PropertyInfo>(ObjectType.GetProperties());
         private IEnumerable<PropertyInfo> EntityProperties => new List<PropertyInfo>(_type.GetProperties());
 
-        public async Task<T> GetItem(IRepository<T> repository)
+        public async Task<T> GetItemAsync(IRepository<T> repository)
         {
+            var items = (await repository.GetAllAsync()).ToList();
+
             foreach (var prop in ObjectProperties)
             {
                 if (EntityProperties.Any(p => p.Name == prop.Name))
                 {
-                    //var item = await repository.FindAsync(p =>
-                    //    _type.GetProperty(prop.Name, BindingFlags.Public)?.GetValue(p, null)
-                    //    ==
-                    //    prop.GetValue(ObjectType, null)
-                    //);
+                    var item = items.FirstOrDefault
+                    (p =>
+                        _type.GetProperty(prop.Name, BindingFlags.Public)?.GetValue(p, null)
+                        ==
+                        prop.GetValue(ObjectType, null)
+                    );
 
-                    //if (item == null) continue;
+                    if (item == null) continue;
 
-                    //return item;
-                    return null;
+                    return item;
                 }
             }
 

@@ -34,6 +34,7 @@ namespace MotorDepot.App_Start
             kernel.Bind<IDriverService>().To<DriverService>();
             kernel.Bind<IAutoService>().To<AutoService>();
             kernel.Bind<IFlightService>().To<FlightService>();
+            kernel.Bind<IFlightRequestService>().To<FlightRequestService>();
 
             return kernel;
         }
