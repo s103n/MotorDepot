@@ -1,8 +1,7 @@
-﻿using System.Net;
-using MotorDepot.BLL.Infrastructure;
-using MotorDepot.BLL.Interfaces;
+﻿using MotorDepot.BLL.Interfaces;
 using MotorDepot.WEB.Infrastructure.Mappers;
 using MotorDepot.WEB.Models;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -29,12 +28,15 @@ namespace MotorDepot.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                var status = await _dispatcherService.CreateDispatcher(model.ToUserDto("dispatcher"));
+                var operation = await _dispatcherService.CreateDispatcher(model.ToUserDto("dispatcher"));
 
-                if (status.Code == HttpStatusCode.OK)
+                if (operation.Success)
+                {
+                    //todo alert
                     return View("~/Views/Home/Index.cshtml");
+                }
 
-                ModelState.AddModelError("", status.Message);
+                ModelState.AddModelError("", operation.Message);
             }
 
             return View("AddUser", model);
@@ -42,7 +44,14 @@ namespace MotorDepot.WEB.Controllers
 
         public ActionResult Dispatchers()
         {
-            return View(_dispatcherService.GetDispatchers());
+            var operation = _dispatcherService.GetDispatchers();
+
+            if (operation.Success)
+            {
+                return View(operation.Value);
+            }
+
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
         public ActionResult AddDriver()
@@ -56,15 +65,25 @@ namespace MotorDepot.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                var status = await _driverService.CreateDriver(model.ToUserDto("driver"));
+                var operation = await _driverService.CreateDriver(model.ToUserDto("driver"));
 
-                if (status.Code == HttpStatusCode.OK)
-                    return View("Index", status);
+                if (operation.Success)
+                {
+                    //todo alert
+                    return View("~/Views/Home/Index.cshtml");
+                }
 
-                ModelState.AddModelError("", status.Message);
+                ModelState.AddModelError("", operation.Message);
             }
 
             return View("AddUser", model);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _dispatcherService.Dispose();
+            _driverService.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

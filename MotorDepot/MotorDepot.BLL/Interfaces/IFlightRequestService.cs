@@ -9,7 +9,7 @@ namespace MotorDepot.BLL.Interfaces
 {
     public interface IFlightRequestService : IDisposable
     {
-        Task<OperationStatus> SetRequestStatus(int? requestId, string creatorId, FlightRequestStatus status);
+        Task<OperationStatus> ConfirmRequest(int requestId, string creatorId, FlightRequestStatus status);
         Task<OperationStatus<FlightRequestDto>> GetRequestByIdAsync(int? requestId);
         Task<OperationStatus<IEnumerable<FlightRequestDto>>> GetFlightRequestsAsync();
     }

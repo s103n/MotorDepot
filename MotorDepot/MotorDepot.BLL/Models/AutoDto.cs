@@ -11,9 +11,8 @@ namespace MotorDepot.BLL.Models
         public int EnginePower { get; set; }
         public double EngineCapacity { get; set; }
         public double BootVolumeMax { get; set; }
-        public string AutoBrand { get; set; }
+        public AutoBrandDto Brand { get; set; }
         public AutoType Type { get; set; }
         public AutoStatus Status { get; set; }
-        public ICollection<FlightDto> Flights { get; set; }
     }
 }

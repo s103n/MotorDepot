@@ -29,53 +29,51 @@ namespace MotorDepot.BLL.Services
             var sameUser = await _database.UserManager.FindByEmailAsync(userDto.Email);
 
             if (sameUser != null)
-                return new OperationStatus(
-                    "User with same e-mail address is exists", 
-                    HttpStatusCode.BadRequest);
+                return new OperationStatus("User with same e-mail address is exists", false);
 
-            var user = userDto.ToAppUser();
+            var user = userDto.ToEntity();
             var status = await _database.UserManager.CreateAsync(user, userDto.Password);
 
             if (!status.Succeeded)
-                return new OperationStatus(status.Errors.First(), HttpStatusCode.BadRequest);
+                return new OperationStatus(status.Errors.First(), false);
 
             await _database.UserManager.AddToRoleAsync(user.Id, userDto.Role);
             await _database.SaveAsync();
 
-            return new OperationStatus("Registration was being successful", HttpStatusCode.OK);
+            return new OperationStatus("Registration was being successful", HttpStatusCode.OK, true);
         }
 
         public OperationStatus<IEnumerable<UserDto>> GetDrivers()
         {
-            return new OperationStatus<IEnumerable<UserDto>>(
-                "Drivers",
-                HttpStatusCode.OK,
-                _database.UserManager.Users
+            var users = _database.UserManager.Users
                 .Where(user => _database.UserManager.IsInRole(user.Id, "driver"))
                 .AsEnumerable()
-                .ToUserDtos());
+                .ToDto();
+
+            return new OperationStatus<IEnumerable<UserDto>>("", users, true);
         }
 
         public async Task<OperationStatus> SendFlightRequest(FlightRequestDto flightRequest)
         {
             if (flightRequest == null)
-                return new OperationStatus("Flight request is null", HttpStatusCode.BadRequest);
+                throw new ArgumentNullException(nameof(flightRequest));
 
-            await _database.FlightRequestRepository.AddAsync(flightRequest.ToFlightRequest());
+            await _database.FlightRequestRepository.AddAsync(flightRequest.ToEntity());
 
-            return new OperationStatus(
-                $"Request for flight #{flightRequest.RequestedFlight.Id} was sent", 
-                HttpStatusCode.OK);
+            return new OperationStatus("", true);
         }
 
         public async Task<OperationStatus<UserDto>> GetDriverById(string id)
         {
-            if (string.IsNullOrEmpty(id))
-                return new OperationStatus<UserDto>("Id is empty", HttpStatusCode.BadRequest, null);
+            if (id == null)
+                throw new ArgumentNullException(nameof(id));
 
             var user = await _database.UserManager.FindByIdAsync(id);
 
-            return new OperationStatus<UserDto>("Driver received", HttpStatusCode.OK, user.ToUserDto());
+            if(user == null)
+                return new OperationStatus<UserDto>("Driver doesn't exist.", HttpStatusCode.BadRequest, false);
+
+            return new OperationStatus<UserDto>("", user.ToUserDto(), true);
         }
 
         public void Dispose()

@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using MotorDepot.BLL.Infrastructure.Enums;
 using MotorDepot.BLL.Interfaces;
 using MotorDepot.WEB.Infrastructure.Mappers;
@@ -20,19 +19,22 @@ namespace MotorDepot.WEB.Controllers
         private readonly IUserService _userService;
         private readonly IDispatcherService _dispatcherService;
         private readonly IFlightRequestService _flightRequestService;
+        private readonly IAutoService _autoService;
         private readonly List<AlertViewModel> _alerts = new List<AlertViewModel>();
 
         public FlightController(IFlightService flightService,
             IDriverService driverService,
             IUserService userService,
             IDispatcherService dispatcherService,
-            IFlightRequestService flightRequestService)
+            IFlightRequestService flightRequestService,
+            IAutoService autoService)
         {
             _flightService = flightService;
             _driverService = driverService;
             _userService = userService;
             _dispatcherService = dispatcherService;
             _flightRequestService = flightRequestService;
+            _autoService = autoService;
         }
 
         public ActionResult Index()
@@ -45,7 +47,7 @@ namespace MotorDepot.WEB.Controllers
         {
             var flightOperation = await _flightService.GetAllAsync();
 
-            return View(flightOperation.Value.ToFlightVm());
+            return View(flightOperation.Value.ToDisplayViewModel());
         }
 
         [Authorize(Roles = "dispatcher, admin")]
@@ -53,7 +55,7 @@ namespace MotorDepot.WEB.Controllers
         {
             var flightOperation = await _flightRequestService.GetFlightRequestsAsync();
 
-            if (flightOperation.Code == HttpStatusCode.OK)
+            if (flightOperation.Success)
             {
                 return View(flightOperation.Value.ToDisplayViewModels());
             }
@@ -65,37 +67,60 @@ namespace MotorDepot.WEB.Controllers
         public async Task<ActionResult> ConfirmRequest(int? requestId)
         {
             var requestOperation = await _flightRequestService.GetRequestByIdAsync(requestId);
+            var autoOperation = await _autoService.GetAutosByTypeAsync(requestOperation.Value.AutoType);
 
-            if (requestOperation.Code == HttpStatusCode.OK)
+            if (requestOperation.Success && autoOperation.Success)
             {
-                return View(requestOperation.Value.ToDetailsViewModel());
+                var acceptViewModel = new FlightRequestAcceptViewModel
+                {
+                    Request = requestOperation.Value.ToDetailsViewModel(),
+                    Auto = autoOperation.Value.ToSetViewModels()
+                };
+
+                return View(acceptViewModel);
             }
 
-            return new HttpNotFoundResult();
+            if (!requestOperation.Success)
+                return new HttpStatusCodeResult(requestOperation.Code, requestOperation.Message);
+
+            return new HttpStatusCodeResult(autoOperation.Code, autoOperation.Message);
         }
 
         [HttpPost]
         [Authorize(Roles = "dispatcher, admin")]
-        public async Task<ActionResult> ConfirmRequest(int? requestId, bool isAccepted)
+        public async Task<ActionResult> ConfirmRequest(
+            int requestId,
+            int flightId,
+            int? autoId,
+            string driverEmail,
+            bool isAccepted)
         {
             var status = isAccepted ? FlightRequestStatus.Accepted : FlightRequestStatus.Canceled;
 
-            var requestOperation = await _flightRequestService.SetRequestStatus(
+            var requestOperation = await _flightRequestService.ConfirmRequest(
                 requestId,
                 User.Identity.GetUserId(),
                 status);
 
-            if (requestOperation.Code == HttpStatusCode.OK)
+            var flightOperation = await _flightService.SetDriverWithAuto(flightId, (int)autoId, driverEmail);
+
+            if (requestOperation.Success && flightOperation.Success)
             {
                 _alerts.Clear();
                 _alerts.Add(new AlertViewModel(
                     $"Request #{requestId} was {status.ToString().ToLower()}",
                     AlertType.Success));
+                _alerts.Add(new AlertViewModel(
+                    $"Flight #{flightId} was occupied by driver {driverEmail} with auto #{autoId}",
+                    AlertType.Success));
 
                 return View("~/Views/Home/Index.cshtml", _alerts);
             }
 
-            return new HttpStatusCodeResult(requestOperation.Code);
+            if(!requestOperation.Success)
+                return new HttpStatusCodeResult(requestOperation.Code, requestOperation.Message);
+
+            return new HttpStatusCodeResult(flightOperation.Code, flightOperation.Message);
         }
 
         [HttpPost]
@@ -112,10 +137,15 @@ namespace MotorDepot.WEB.Controllers
         [Authorize(Roles = "driver")]
         public async Task<ActionResult> RequestFor(int? flightId)
         {
-            if (flightId == null || await _flightService.GetByIdAsync(flightId) == null)
-                return new HttpNotFoundResult();
+            var operation = await _flightService.GetByIdAsync(flightId);
+            //add autoType in viewBag
 
-            return View(new FlightRequestCreateViewModel { RequestedFlightId = (int)flightId });
+            if (operation.Success)
+            {
+                return View(new FlightRequestCreateViewModel {RequestedFlightId = (int) flightId});
+            }
+
+            return new HttpStatusCodeResult(operation.Code, operation.Message);
         }
 
         [HttpPost]
@@ -127,29 +157,36 @@ namespace MotorDepot.WEB.Controllers
 
             model.Status = FlightRequestStatus.InQueue;
 
-            if (driverOperation.Code == HttpStatusCode.OK
-                && requestedFlightOperation.Code == HttpStatusCode.OK)
+            if (driverOperation.Success && requestedFlightOperation.Success)
             {
-                var status = await _driverService.SendFlightRequest(model.ToFlightRequestDto(
-                    driverOperation.Value.ToDriverDto(User.Identity.GetUserId()),
-                    null,
-                    requestedFlightOperation.Value));
+                var operation = await _driverService.SendFlightRequest(model.ToDto());
 
-                if (status.Code == HttpStatusCode.OK)
+                if (operation.Success)
                 {
                     _alerts.Clear();
-                    _alerts.Add(new AlertViewModel(status.Message, AlertType.Success));
+                    _alerts.Add(new AlertViewModel(operation.Message, AlertType.Success));
 
                     return View("~/Views/Home/Index.cshtml", _alerts);
                 }
 
-                ModelState.AddModelError("", status.Message);
+                return new HttpStatusCodeResult(operation.Code, operation.Message);
             }
 
-            ModelState.AddModelError("", driverOperation.Message);
-            ModelState.AddModelError("", requestedFlightOperation.Message);
+            if(!driverOperation.Success)
+                return new HttpStatusCodeResult(driverOperation.Code, driverOperation.Message);
 
-            return View(model);
+            return new HttpStatusCodeResult(requestedFlightOperation.Code, requestedFlightOperation.Message);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _autoService.Dispose();
+            _dispatcherService.Dispose();
+            _driverService.Dispose();
+            _flightService.Dispose();
+            _flightRequestService.Dispose();
+            _userService.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

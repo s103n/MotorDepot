@@ -8,7 +8,7 @@ namespace MotorDepot.BLL.Interfaces
 {
     public interface IDispatcherService : IDisposable
     {
-        Task<OperationStatus<UserDto>> CreateDispatcher(UserDto userDto);
+        Task<OperationStatus> CreateDispatcher(UserDto userDto);
         OperationStatus<IEnumerable<UserDto>> GetDispatchers();
     }
 }

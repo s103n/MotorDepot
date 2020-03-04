@@ -178,14 +178,19 @@
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AutoController.cs" />
     <Compile Include="Controllers\FlightController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\Mappers\AccountMappers.cs" />
+    <Compile Include="Infrastructure\Mappers\AutoMappers.cs" />
     <Compile Include="Infrastructure\Mappers\FlightMappers.cs" />
     <Compile Include="Models\AlertViewModel.cs" />
+    <Compile Include="Models\AutoCreateViewModel.cs" />
+    <Compile Include="Models\AutoSetViewModel.cs" />
+    <Compile Include="Models\FlightRequestAcceptViewModel.cs" />
     <Compile Include="Models\FlightRequestDetailsViewModel.cs" />
     <Compile Include="Models\FlightRequestDisplayViewModel.cs" />
     <Compile Include="Models\UserRegisterViewModel.cs" />
@@ -351,6 +356,7 @@
     <Content Include="Views\Flight\RequestFor.cshtml" />
     <Content Include="Views\Flight\Requests.cshtml" />
     <Content Include="Views\Flight\ConfirmRequest.cshtml" />
+    <Content Include="Views\Auto\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

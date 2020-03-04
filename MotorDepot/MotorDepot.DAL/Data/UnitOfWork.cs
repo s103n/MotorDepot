@@ -1,12 +1,12 @@
-﻿using System.Data.Entity.Validation;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
 using MotorDepot.DAL.Context;
 using MotorDepot.DAL.Entities;
-using MotorDepot.DAL.Interfaces;
-using MotorDepot.DAL.Repositories;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Identity.EntityFramework;
 using MotorDepot.DAL.Identity;
 using MotorDepot.DAL.Infrastructure;
+using MotorDepot.DAL.Interfaces;
+using MotorDepot.DAL.Repositories;
+using System;
+using System.Threading.Tasks;
 
 namespace MotorDepot.DAL.Data
 {
@@ -31,9 +31,33 @@ namespace MotorDepot.DAL.Data
             return await _context.SaveChangesAsync();
         }
 
+        #region DisposedPattern
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                    AutoRepository.Dispose();
+                    FlightRepository.Dispose();
+                    AutoBrandRepository.Dispose();
+                    FlightRequestRepository.Dispose();
+                    UserManager.Dispose();
+                    RoleManager.Dispose();
+                    _context.Dispose();
+                }
+            }
+            disposed = true;
+        }
+
         public void Dispose()
         {
-            _context.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
+        #endregion
     }
 }

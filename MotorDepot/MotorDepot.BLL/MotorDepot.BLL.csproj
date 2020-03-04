@@ -99,6 +99,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessModels\EnumParser.cs" />
     <Compile Include="BusinessModels\ReflectionGet.cs" />
     <Compile Include="Infrastructure\Enums\AutoStatus.cs" />
     <Compile Include="Infrastructure\Enums\AutoType.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Interfaces\IFlightRequestService.cs" />
     <Compile Include="Interfaces\IFlightService.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
+    <Compile Include="Models\AutoBrandDto.cs" />
     <Compile Include="Models\AutoDto.cs" />
     <Compile Include="Models\DispatcherDto.cs" />
     <Compile Include="Models\DriverDto.cs" />

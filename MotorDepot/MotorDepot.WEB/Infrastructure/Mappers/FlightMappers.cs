@@ -3,13 +3,12 @@ using MotorDepot.BLL.Models;
 using MotorDepot.WEB.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
 
 namespace MotorDepot.WEB.Infrastructure.Mappers
 {
     public static class FlightMappers
     {
-        public static FlightViewModel ToFlightVm(this FlightDto model)
+        public static FlightViewModel ToDisplayViewModel(this FlightDto model)
         {
             return new MapperConfiguration(cfg =>
             {
@@ -21,20 +20,19 @@ namespace MotorDepot.WEB.Infrastructure.Mappers
             }).CreateMapper().Map<FlightDto, FlightViewModel>(model);
         }
 
-        public static IEnumerable<FlightViewModel> ToFlightVm(this IEnumerable<FlightDto> models)
+        public static IEnumerable<FlightViewModel> ToDisplayViewModel(this IEnumerable<FlightDto> models)
         {
-            return models.Select(x => x.ToFlightVm());
+            return models.Select(x => x.ToDisplayViewModel());
         }
 
-        public static FlightRequestDto ToFlightRequestDto(this FlightRequestCreateViewModel model,
-            DriverDto driver, DispatcherDto dispatcher, FlightDto flight)
+        public static FlightRequestDto ToDto(this FlightRequestCreateViewModel model)
         {
             return new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<FlightRequestCreateViewModel, FlightRequestDto>()
-                    .ForMember("Driver", opt => opt.MapFrom(x => driver))
-                    .ForMember("Dispatcher", opt => opt.MapFrom(x => dispatcher))
-                    .ForMember("RequestedFlight", opt => opt.MapFrom(x => flight));
+                    .ForMember("Driver", opt => opt.MapFrom(x => new DriverDto { Id = model.DriverId }))
+                    .ForMember("Dispatcher", opt => opt.MapFrom(x => new DispatcherDto()))
+                    .ForMember("RequestedFlight", opt => opt.MapFrom(x => new FlightDto { Id = model.RequestedFlightId }));
             }).CreateMapper().Map<FlightRequestCreateViewModel, FlightRequestDto>(model);
         }
 

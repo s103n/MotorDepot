@@ -33,7 +33,7 @@ namespace MotorDepot.WEB.Infrastructure.Mappers
             }).CreateMapper().Map<UserDto, DriverDto>(user);
         }
 
-        public static DispatcherDto ToDispatcher(this UserDto user, string id)
+        public static DispatcherDto ToDispatcherDto(this UserDto user, string id)
         {
             return new MapperConfiguration(cfg =>
             {

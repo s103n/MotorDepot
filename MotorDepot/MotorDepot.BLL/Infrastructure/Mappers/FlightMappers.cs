@@ -13,40 +13,32 @@ namespace MotorDepot.BLL.Infrastructure.Mappers
 {
     public static class FlightMappers
     {
-        public static Flight ToFlight(this FlightDto model)
+        public static Flight ToEntity(this FlightDto model)
         {
             return new MapperConfiguration(cfg => cfg.CreateMap<FlightDto, Flight>())
                 .CreateMapper()
                 .Map<FlightDto, Flight>(model);
         }
 
-        public static FlightDto ToFlightDto(this Flight model)
+        public static FlightDto ToDto(this Flight model)
         {
             return new MapperConfiguration(cfg =>
                 {
                     cfg.CreateMap<Flight, FlightDto>()
                         .ForMember("Status", opt => opt.MapFrom(x => (FlightStatus)x.StatusId))
-                        .ForMember("Auto", opt => opt.MapFrom(x => x.Auto.ToAutoDto()))
+                        .ForMember("Auto", opt => opt.MapFrom(x => x.Auto.ToDto()))
                         .ForMember("Driver", opt => opt.MapFrom(x => x.Driver.ToDriverDto()));
                 })
                 .CreateMapper()
                 .Map<Flight, FlightDto>(model);
         }
 
-        public static IEnumerable<FlightDto> ToFlightDtos(this IEnumerable<Flight> models)
+        public static IEnumerable<FlightDto> ToDto(this IEnumerable<Flight> models)
         {
-            return new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<Flight, FlightDto>()
-                        .ForMember("Status", opt => opt.MapFrom(x => (FlightStatus) x.StatusId))
-                        .ForMember("Auto", opt => opt.MapFrom(x => x.Auto.ToAutoDto()))
-                        .ForMember("Driver", opt => opt.MapFrom(x => x.Driver.ToDriverDto()));
-                })
-                .CreateMapper()
-                .Map<IEnumerable<Flight>, IEnumerable<FlightDto>>(models);
+            return models.Select(x => x.ToDto());
         }
 
-        public static FlightRequest ToFlightRequest(this FlightRequestDto request)
+        public static FlightRequest ToEntity(this FlightRequestDto request)
         {
             return new MapperConfiguration(cfg =>
             {
@@ -58,28 +50,28 @@ namespace MotorDepot.BLL.Infrastructure.Mappers
                     .ForMember("RequestedFlight", opt => opt.Ignore())
                     .ForMember("DriverId", opt => opt.MapFrom(x => request.Driver.Id))
                     .ForMember("DispatcherId", opt => opt.MapFrom(x => request.Dispatcher.Id))
-                    .ForMember("FlightRequestStatusId", opt => opt.MapFrom(x => (int) request.Status))
+                    .ForMember("FlightRequestStatusId", opt => opt.MapFrom(x => (int)request.Status))
                     .ForMember("FlightId", opt => opt.MapFrom(x => request.RequestedFlight.Id))
-                    .ForMember("AutoTypeId", opt => opt.MapFrom(x => (int) request.AutoType));
+                    .ForMember("AutoTypeId", opt => opt.MapFrom(x => (int)request.AutoType));
             }).CreateMapper().Map<FlightRequestDto, FlightRequest>(request);
         }
 
-        public static FlightRequestDto ToFlightRequestDto(this FlightRequest request)
+        public static FlightRequestDto ToDto(this FlightRequest request)
         {
             return new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<FlightRequest, FlightRequestDto>()
                     .ForMember("Driver", opt => opt.MapFrom(x => x.Driver.ToDriverDto()))
                     .ForMember("Dispatcher", opt => opt.MapFrom(x => x.Dispatcher.ToDispatcherDto()))
-                    .ForMember("Status", opt => opt.MapFrom(x => (FlightRequestStatus) x.FlightRequestStatusId))
-                    .ForMember("RequestedFlight", opt => opt.MapFrom(x => x.RequestedFlight.ToFlightDto()))
-                    .ForMember("AutoType", opt => opt.MapFrom(x => (AutoType) x.AutoTypeId));
+                    .ForMember("Status", opt => opt.MapFrom(x => (FlightRequestStatus)x.FlightRequestStatusId))
+                    .ForMember("RequestedFlight", opt => opt.MapFrom(x => x.RequestedFlight.ToDto()))
+                    .ForMember("AutoType", opt => opt.MapFrom(x => (AutoType)x.AutoTypeId));
             }).CreateMapper().Map<FlightRequest, FlightRequestDto>(request);
         }
 
-        public static IEnumerable<FlightRequestDto> ToFlightRequestDto(this IEnumerable<FlightRequest> requests)
+        public static IEnumerable<FlightRequestDto> ToDto(this IEnumerable<FlightRequest> requests)
         {
-            return requests.Select(x => x.ToFlightRequestDto());
+            return requests.Select(x => x.ToDto());
         }
     }
 }

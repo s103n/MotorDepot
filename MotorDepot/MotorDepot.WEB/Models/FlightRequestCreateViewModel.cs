@@ -9,8 +9,6 @@ namespace MotorDepot.WEB.Models
         [Required]
         public string DriverId { get; set; }
 
-        public string DispatcherId { get; set; }
-
         [Required]
         public FlightRequestStatus Status { get; set; }
 

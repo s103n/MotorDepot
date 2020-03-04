@@ -47,5 +47,10 @@ namespace MotorDepot.DAL.Repositories
         {
             return await _context.Autos.ToListAsync();
         }
+
+        public void Dispose()
+        {
+            _context?.Dispose();
+        }
     }
 }

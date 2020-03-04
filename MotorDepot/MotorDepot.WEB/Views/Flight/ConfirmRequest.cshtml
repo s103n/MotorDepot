@@ -1,4 +1,4 @@
-﻿@model MotorDepot.WEB.Models.FlightRequestDetailsViewModel
+﻿@model MotorDepot.WEB.Models.FlightRequestAcceptViewModel
 
 @{
     ViewBag.Title = "ConfirmRequest";
@@ -8,45 +8,132 @@
 
 <div>
     <hr />
-
     <div class="container">
         <fieldset class="border rounded p-2">
-            <legend class="w-auto">
-                <h4>Flight #@Model.RequestedFlightId was requested by @Model.DriverName at @Model.Date</h4>
+            <legend class="w-auto font-weight-bold">
+                Flight #@Model.Request.RequestedFlightId was requested
+                by @Model.Request.DriverName at @Model.Request.Date
             </legend>
             <div class="m-2">
                 <h6 class="d-inline">Driver email: </h6>
-                <span>@Model.DriverEmail</span>
+                <span>@Model.Request.DriverEmail</span>
             </div>
             <div class="m-2">
                 <h6 class="d-inline">Engine capacity: </h6>
-                <span>@Model.EngineCapacity cm³</span>
+                <span>@Model.Request.EngineCapacity cm³</span>
             </div>
             <div class="m-2">
                 <h6 class="d-inline">Engine power: </h6>
-                <span>@Model.EnginePower horsepower</span>
+                <span>@Model.Request.EnginePower horsepower</span>
             </div>
             <div class="m-2">
                 <h6 class="d-inline">Min boot volume: </h6>
-                <span>@Model.BootVolume liters</span>
+                <span>@Model.Request.BootVolume liters</span>
             </div>
             <div class="m-2">
                 <h6 class="d-inline">Auto type: </h6>
-                <span>@Model.AutoType</span>
+                <span>@Model.Request.AutoType</span>
             </div>
             <div class="m-2">
                 <h6 class="d-inline">Description for request: </h6>
-                <span>@Model.Description</span>
+                <span>@Model.Request.Description</span>
             </div>
+            <div class="m-2">
+                <h6 class="d-inline">Set an auto: </h6>
+                <span id="Auto"></span>
+                <input type="hidden" name="autoId" />
+            </div>
+            <h5>All automobiles with auto type: [@Model.Request.AutoType]</h5>
+            <table class="table">
+                <tr>
+                    <th>
+                        Model
+                    </th>
+                    <th>
+                        Numbers
+                    </th>
+                    <th>
+                        Auto Brand
+                    </th>
+                    <th>
+                        Engine capacity
+                    </th>
+                    <th>
+                        Boot volume max
+                    </th>
+                    <th>
+                        Engine power
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model.Auto)
+                {
+                    <tr>
+                        <td class="model">
+                            @item.Model
+                        </td>
+                        <td class="numbers">
+                            @item.Numbers
+                        </td>
+                        <td class="brand">
+                            @item.AutoBrand
+                        </td>
+                        <td>
+                            @item.EngineCapacity
+                        </td>
+                        <td>
+                            @item.BootVolumeMax
+                        </td>
+                        <td>
+                            @item.EnginePower
+                        </td>
+                        <td>
+                            <i style="visibility:hidden">@item.Id</i>
+                            <a class="btn btn-success btn-auto">Add auto to request</a>
+                        </td>
+                    </tr>
+                }
+
+            </table>
         </fieldset>
         @using (Html.BeginForm())
         {
+            <input type="hidden" name="requestId" value="@Model.Request.Id" />
+            <input type="hidden" id="idResult" name="autoId" value="" />
+            <input type="hidden" name="flightId" value="@Model.Request.RequestedFlightId" />
+            <input type="hidden" name="driverEmail" value="@Model.Request.DriverEmail" />
             <div class="m-3">
-                <button class="btn btn-danger d-inline col-3 offset-md-2" type="submit" 
-                        name="isAccepted" value="false">Cancel</button>
-                <button class="btn btn-success d-inline col-3 offset-md-2" type="submit" 
-                        name="isAccepted" value="true">Accept</button>
+                <button class="btn btn-danger d-inline col-3 offset-md-2" type="submit"
+                        name="isAccepted" value="false">
+                    Cancel
+                </button>
+                <button class="btn btn-success d-inline col-3 offset-md-2" type="submit"
+                        name="isAccepted" value="true">
+                    Accept
+                </button>
             </div>
         }
     </div>
 </div>
+
+@section scripts
+{
+    <script>
+        $(function () {
+            $('.btn-auto').click(function () {
+                var trow = $(this).closest('tr');
+                var id = $(this).prev().text();
+                var model = trow.find('.model').text();
+                var brand = trow.find('.brand').text();
+                var numbers = trow.find('.numbers').text();
+
+                $('#idResult').val(id);
+
+                $('#Auto').text(function () {
+                    return `${brand} ${model}, numbers: ${numbers}`;
+                });
+            });
+        });
+    </script>
+}

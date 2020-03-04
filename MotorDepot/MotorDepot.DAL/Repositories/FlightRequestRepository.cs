@@ -1,4 +1,5 @@
-﻿using MotorDepot.DAL.Context;
+﻿using System;
+using MotorDepot.DAL.Context;
 using MotorDepot.DAL.Entities;
 using MotorDepot.DAL.Interfaces;
 using System.Collections.Generic;
@@ -45,6 +46,11 @@ namespace MotorDepot.DAL.Repositories
         public async Task<IEnumerable<FlightRequest>> GetAllAsync()
         {
             return await _context.FlightRequests.ToListAsync();
+        }
+
+        public void Dispose()
+        {
+            _context.Dispose();
         }
     }
 }

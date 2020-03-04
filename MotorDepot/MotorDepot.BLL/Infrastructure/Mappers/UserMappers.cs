@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using MotorDepot.BLL.Models;
 using MotorDepot.DAL.Entities;
@@ -7,14 +8,7 @@ namespace MotorDepot.BLL.Infrastructure.Mappers
 {
     public static class UserMappers
     {
-
-        private static readonly MapperConfiguration AppUserToUserDto = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<AppUser, UserDto>()
-                    .ForMember("Role", opt => opt.MapFrom(x => ""));
-            });
-
-        public static AppUser ToAppUser(this UserDto userDto)
+        public static AppUser ToEntity(this UserDto userDto)
         {
             return new MapperConfiguration(cfg =>
             {
@@ -29,10 +23,9 @@ namespace MotorDepot.BLL.Infrastructure.Mappers
                 .CreateMapper().Map<AppUser, UserDto>(user);
         }
 
-        public static IEnumerable<UserDto> ToUserDtos(this IEnumerable<AppUser> appUsers)
+        public static IEnumerable<UserDto> ToDto(this IEnumerable<AppUser> appUsers)
         {
-            return AppUserToUserDto.CreateMapper()
-                .Map<IEnumerable<AppUser>, IEnumerable<UserDto>>(appUsers);
+            return appUsers.Select(x => x.ToUserDto());
         }
 
         public static DriverDto ToDriverDto(this AppUser user)
@@ -47,7 +40,7 @@ namespace MotorDepot.BLL.Infrastructure.Mappers
                 .CreateMapper().Map<AppUser, DispatcherDto>(user);
         }
 
-        public static AppUser ToAppUser(this DriverDto driver)
+        public static AppUser ToEntity(this DriverDto driver)
         {
             return new MapperConfiguration(cfg =>
                 {
@@ -56,7 +49,7 @@ namespace MotorDepot.BLL.Infrastructure.Mappers
                 .CreateMapper().Map<DriverDto, AppUser>(driver);
         }
 
-        public static AppUser ToAppUser(this DispatcherDto dispatcher)
+        public static AppUser ToEntity(this DispatcherDto dispatcher)
         {
             return new MapperConfiguration(cfg =>
                 {

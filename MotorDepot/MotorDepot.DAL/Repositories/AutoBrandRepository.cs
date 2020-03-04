@@ -45,6 +45,11 @@ namespace MotorDepot.DAL.Repositories
         public async Task<IEnumerable<AutoBrand>> GetAllAsync()
         {
             return await _context.AutoBrands.ToListAsync();
-        } 
+        }
+
+        public void Dispose()
+        {
+            _context?.Dispose();
+        }
     }
 }

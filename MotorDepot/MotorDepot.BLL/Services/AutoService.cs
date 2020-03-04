@@ -1,9 +1,17 @@
 ﻿using MotorDepot.BLL.Infrastructure;
+using MotorDepot.BLL.Infrastructure.Enums;
+using MotorDepot.BLL.Infrastructure.Mappers;
 using MotorDepot.BLL.Interfaces;
 using MotorDepot.BLL.Models;
 using MotorDepot.DAL.Interfaces;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using MotorDepot.BLL.BusinessModels;
+using MotorDepot.DAL.Entities.Enums;
 
 namespace MotorDepot.BLL.Services
 {
@@ -16,14 +24,50 @@ namespace MotorDepot.BLL.Services
             _database = unitOfWork;
         }
 
-        public async Task<OperationStatus<AutoDto>> CreateAuto(AutoDto autoDto)
+        public async Task<OperationStatus> CreateAutoAsync(AutoDto autoDto)
         {
-            throw new NotImplementedException();
+            if (autoDto == null)
+                throw new ArgumentNullException(nameof(autoDto));
+
+            autoDto.Status = AutoStatus.Usable;
+
+            await _database.AutoRepository.AddAsync(autoDto.ToEntity());
+
+            return new OperationStatus("", true);
         }
 
-        public async Task EditAuto(AutoDto autoDto)
+        public async Task<OperationStatus> EditAutoAsync(AutoDto autoDto)
         {
-            throw new NotImplementedException();
+            if(autoDto == null)
+                throw new ArgumentNullException(nameof(autoDto));
+
+            await _database.AutoRepository.UpdateAsync(autoDto.ToEntity());
+
+            return new OperationStatus("", true);
+        }
+
+        public async Task<OperationStatus<IEnumerable<AutoDto>>> GetAutosByTypeAsync(AutoType type) // to object property
+        {
+            var items = (await _database.AutoRepository.GetAllAsync())
+                .ToList()
+                .Where(x => x.AutoTypeId == (AutoTypeEnum)type)
+                .ToDto();
+
+            return new OperationStatus<IEnumerable<AutoDto>>("", items, true);
+        }
+
+        public async Task<OperationStatus<IEnumerable<AutoBrandDto>>> GetBrandsAsync()
+        {
+            var brands = await _database.AutoBrandRepository.GetAllAsync();
+            
+            return new OperationStatus<IEnumerable<AutoBrandDto>>("Ok", brands.ToDto(), true);
+        }
+
+        public OperationStatus<IEnumerable> GetAutoTypes()
+        {
+            var parser = new EnumParser<AutoType>().Parse();
+
+            return new OperationStatus<IEnumerable>("", parser, true);
         }
 
         public void Dispose()

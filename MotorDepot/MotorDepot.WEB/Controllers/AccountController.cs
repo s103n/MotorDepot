@@ -58,5 +58,11 @@ namespace MotorDepot.WEB.Controllers
 
             return RedirectToAction("Login");
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            _userService.Dispose();
+            base.Dispose(disposing);
+        }
     }
 }

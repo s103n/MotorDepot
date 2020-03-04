@@ -16,5 +16,6 @@ namespace MotorDepot.BLL.Interfaces
         Task<OperationStatus<FlightDto>> GetByIdAsync(int? id);
         Task<OperationStatus<FlightDto>> GetAsync(object property);
         Task<OperationStatus> SetStatus(FlightStatus status, int? flightId);
+        Task<OperationStatus> SetDriverWithAuto(int flightId, int autoId, string driverId);
     }
 }

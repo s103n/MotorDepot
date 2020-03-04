@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using System;
+using Microsoft.AspNet.Identity;
 using MotorDepot.BLL.Infrastructure;
 using MotorDepot.BLL.Infrastructure.Mappers;
 using MotorDepot.BLL.Interfaces;
@@ -20,49 +21,35 @@ namespace MotorDepot.BLL.Services
             _database = unitOfWork;
         }
 
-        public async Task<OperationStatus<UserDto>> CreateDispatcher(UserDto userDto)
+        public async Task<OperationStatus> CreateDispatcher(UserDto userDto)
         {
             if (userDto == null)
-                return new OperationStatus<UserDto>(
-                    "User is empty",
-                    HttpStatusCode.BadRequest,
-                    null);
+                throw new ArgumentNullException(nameof(userDto));
 
             var sameUser = await _database.UserManager.FindByEmailAsync(userDto.Email);
 
             if (sameUser != null)
-                return new OperationStatus<UserDto>(
-                    "User with same e-mail address is exists",
-                    HttpStatusCode.BadRequest,
-                    userDto);
+                return new OperationStatus("Dispatcher with same e-mail address is already exists", false);
 
-            var user = userDto.ToAppUser();
+            var user = userDto.ToEntity();
             var status = await _database.UserManager.CreateAsync(user, userDto.Password);
 
             if (!status.Succeeded)
-                return new OperationStatus<UserDto>(
-                    status.Errors.First(),
-                    HttpStatusCode.BadRequest,
-                    userDto);
+                return new OperationStatus(status.Errors.First(), false);
 
             await _database.UserManager.AddToRoleAsync(user.Id, userDto.Role);
             await _database.SaveAsync();
 
-            return new OperationStatus<UserDto>(
-                "Registration was being successful",
-                HttpStatusCode.OK,
-                userDto);
+            return new OperationStatus("Registration was being successful", true);
         }
 
         public OperationStatus<IEnumerable<UserDto>> GetDispatchers()
         {
-            return new OperationStatus<IEnumerable<UserDto>>(
-                "Ok",
-                HttpStatusCode.OK,
-                _database.UserManager.Users
+            var dispatchers = _database.UserManager.Users
                 .Where(user => _database.UserManager.IsInRole(user.Id, "dispatcher"))
                 .AsEnumerable()
-                .ToUserDtos());
+                .ToDto();
+            return new OperationStatus<IEnumerable<UserDto>>("", dispatchers, true);
         }
 
         public void Dispose()
