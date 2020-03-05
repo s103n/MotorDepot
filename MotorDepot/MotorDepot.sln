@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotorDepot.DAL", "MotorDepo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotorDepot.BLL", "MotorDepot.BLL\MotorDepot.BLL.csproj", "{B71728F0-2666-49C8-8850-F7CE9951DA53}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotorDepot.Shared", "MotorDepot.Shared\MotorDepot.Shared.csproj", "{0279C9EE-E4EC-4443-B4DD-661A6C424060}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{B71728F0-2666-49C8-8850-F7CE9951DA53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B71728F0-2666-49C8-8850-F7CE9951DA53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B71728F0-2666-49C8-8850-F7CE9951DA53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0279C9EE-E4EC-4443-B4DD-661A6C424060}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0279C9EE-E4EC-4443-B4DD-661A6C424060}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0279C9EE-E4EC-4443-B4DD-661A6C424060}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0279C9EE-E4EC-4443-B4DD-661A6C424060}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

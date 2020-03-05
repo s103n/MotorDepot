@@ -104,12 +104,14 @@
             <input type="hidden" name="flightId" value="@Model.Request.RequestedFlightId" />
             <input type="hidden" name="driverEmail" value="@Model.Request.DriverEmail" />
             <div class="m-3">
-                <button class="btn btn-danger d-inline col-3 offset-md-2" type="submit"
-                        name="isAccepted" value="false">
+                <button class="btn btn-danger d-inline col-3 offset-md-2 btn-disabled" type="submit"
+                        name="isAccepted" value="false" title="Choose car before you'll confirm the request"
+                        disabled>
                     Cancel
                 </button>
-                <button class="btn btn-success d-inline col-3 offset-md-2" type="submit"
-                        name="isAccepted" value="true">
+                <button class="btn btn-success d-inline col-3 offset-md-2 btn-disabled" type="submit"
+                        name="isAccepted" value="true" title="Choose car before you'll confirm the request"
+                        disabled>
                     Accept
                 </button>
             </div>
@@ -120,8 +122,8 @@
 @section scripts
 {
     <script>
-        $(function () {
-            $('.btn-auto').click(function () {
+        $(function() {
+            $('.btn-auto').click(function() {
                 var trow = $(this).closest('tr');
                 var id = $(this).prev().text();
                 var model = trow.find('.model').text();
@@ -130,9 +132,11 @@
 
                 $('#idResult').val(id);
 
-                $('#Auto').text(function () {
+                $('#Auto').text(function() {
                     return `${brand} ${model}, numbers: ${numbers}`;
                 });
+
+                $('.btn-disabled').removeAttr('disabled');
             });
         });
     </script>

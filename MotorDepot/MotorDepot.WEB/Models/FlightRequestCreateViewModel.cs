@@ -1,4 +1,4 @@
-﻿using MotorDepot.BLL.Infrastructure.Enums;
+﻿using MotorDepot.Shared.Enums;
 using System;
 using System.ComponentModel.DataAnnotations;
 

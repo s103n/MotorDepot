@@ -1,6 +1,5 @@
 ﻿using System;
-using MotorDepot.BLL.Infrastructure.Enums;
-using FlightRequestStatus = MotorDepot.BLL.Infrastructure.Enums.FlightRequestStatus;
+using MotorDepot.Shared.Enums;
 
 namespace MotorDepot.BLL.Models
 {

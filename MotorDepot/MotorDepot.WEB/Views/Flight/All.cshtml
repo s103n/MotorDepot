@@ -4,10 +4,50 @@
     ViewBag.Title = "All flights";
 }
 
-<h2>All available flights</h2>
+@if (User.IsInRole("driver"))
+{
+    <h2>All available flights</h2>
+}
+else
+{
+    <h2>All flights</h2>
+}
+
+@if (!User.IsInRole("driver"))
+{
+    <div>
+        @Html.ActionLink("Create new flight", "Create")
+    </div>
+}
 
 <table class="table">
-
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DeparturePlace)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ArrivalPlace)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AutoName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AutoNumbers)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DriverEmail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DriverName)
+        </th>
+        <th></th>
+    </tr>
     @foreach (var item in Model)
     {
         <tr>
@@ -43,9 +83,8 @@
                 }
                 else
                 {
-                    @Html.ActionLink("Edit", "Edit", new { flightId = item.Id })
-                    @Html.ActionLink("SetStatus", "SetStatus", new { flightId = item.Id })
-                    @Html.ActionLink("Details", "Details", new { flightId = item.Id })
+                    @Html.ActionLink("Edit", "Edit", new { flightId = item.Id }) <i>|</i>
+                    @Html.ActionLink("Details", "Details", new { flightId = item.Id }) <i>|</i>
                     @Html.ActionLink("Delete", "Delete", new { flightId = item.Id })
                 }
             </td>

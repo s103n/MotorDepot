@@ -2,8 +2,15 @@
 
 namespace MotorDepot.BLL.Infrastructure
 {
+    public interface IOperationStatus
+    {
+        string Message { get; }
+        HttpStatusCode Code { get; }
+        bool Success { get; }
+    }
     //IOperationStatus
-    public sealed class OperationStatus<T> where T : class
+    public sealed class OperationStatus<T> : IOperationStatus
+        where T : class
     {
         public T Value { get; }
         public string Message { get; }
@@ -39,7 +46,7 @@ namespace MotorDepot.BLL.Infrastructure
         }
     }
 
-    public sealed class OperationStatus
+    public sealed class OperationStatus : IOperationStatus
     {
         public string Message { get; }
         public HttpStatusCode Code { get; }

@@ -101,10 +101,6 @@
   <ItemGroup>
     <Compile Include="BusinessModels\EnumParser.cs" />
     <Compile Include="BusinessModels\ReflectionGet.cs" />
-    <Compile Include="Infrastructure\Enums\AutoStatus.cs" />
-    <Compile Include="Infrastructure\Enums\AutoType.cs" />
-    <Compile Include="Infrastructure\Enums\FlightRequestStatus.cs" />
-    <Compile Include="Infrastructure\Enums\FlightStatus.cs" />
     <Compile Include="Infrastructure\Mappers\AutoMappers.cs" />
     <Compile Include="Infrastructure\Mappers\FlightMappers.cs" />
     <Compile Include="Infrastructure\Mappers\UserMappers.cs" />
@@ -140,6 +136,10 @@
     <ProjectReference Include="..\MotorDepot.DAL\MotorDepot.DAL.csproj">
       <Project>{60013435-998b-4e99-9589-14321132968e}</Project>
       <Name>MotorDepot.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MotorDepot.Shared\MotorDepot.Shared.csproj">
+      <Project>{0279c9ee-e4ec-4443-b4dd-661a6c424060}</Project>
+      <Name>MotorDepot.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

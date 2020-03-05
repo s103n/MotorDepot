@@ -1,6 +1,6 @@
-﻿using System;
+﻿using MotorDepot.Shared.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
-using MotorDepot.BLL.Infrastructure.Enums;
 
 namespace MotorDepot.WEB.Models
 {

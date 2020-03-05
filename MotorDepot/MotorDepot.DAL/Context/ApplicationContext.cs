@@ -4,6 +4,7 @@ using MotorDepot.DAL.Entities;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Threading.Tasks;
+using MotorDepot.DAL.Entities.Lookup;
 using MotorDepot.DAL.Infrastructure;
 
 namespace MotorDepot.DAL.Context
@@ -24,29 +25,29 @@ namespace MotorDepot.DAL.Context
         }
 
         public DbSet<Flight> Flights { get; set; }
-        public DbSet<FlightStatus> FlightStatuses { get; set; }
-        public DbSet<AutoStatus> AutoStatuses { get; set; }
+        public DbSet<FlightStatusLookup> FlightStatusLookups { get; set; }
+        public DbSet<AutoStatusLookup> AutoStatusLookups { get; set; }
         public DbSet<Auto> Autos { get; set; }
-        public DbSet<AutoType> AutoTypes { get; set; }
+        public DbSet<AutoTypeLookup> AutoTypeLookups { get; set; }
         public DbSet<AutoBrand> AutoBrands { get; set; }
         public DbSet<FlightRequest> FlightRequests { get; set; }
-        public DbSet<FlightRequestStatus> FlightRequestStatuses { get; set; }
+        public DbSet<FlightRequestStatusLookup> FlightRequestStatusLookups { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<FlightRequestStatus>()
+            modelBuilder.Entity<FlightRequestStatusLookup>()
                 .Property(s => s.Id)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
-            modelBuilder.Entity<AutoType>()
+            modelBuilder.Entity<AutoTypeLookup>()
                 .Property(s => s.Id)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
-            modelBuilder.Entity<AutoStatus>()
+            modelBuilder.Entity<AutoStatusLookup>()
                 .Property(s => s.Id)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
-            modelBuilder.Entity<FlightStatus>()
+            modelBuilder.Entity<FlightStatusLookup>()
                 .Property(s => s.Id)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 

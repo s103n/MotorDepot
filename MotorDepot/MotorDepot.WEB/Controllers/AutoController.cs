@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using MotorDepot.WEB.Infrastructure;
 
 namespace MotorDepot.WEB.Controllers
 {
@@ -28,24 +29,32 @@ namespace MotorDepot.WEB.Controllers
             ViewBag.AutoBrands = new SelectList(brandOperation.Value, "Id", "Name");
             ViewBag.AutoTypes = new SelectList(typesOperation.Value, "Id", "Name");
 
-            return View();
+            if(brandOperation.Success && typesOperation.Success)
+                return View();
+
+            return new HttpOperationStatusResult(brandOperation, typesOperation);
         }
 
         [HttpPost]
         public async Task<ActionResult> Create(AutoCreateViewModel auto)
         {
-            var operation = await _autoService.CreateAutoAsync(auto.ToDto());
-
-            if (operation.Success)
+            if (ModelState.IsValid)
             {
-                _alerts.Add(new AlertViewModel(
-                    $"Auto with numbers [{auto.Numbers}] was created",
-                    AlertType.Success));
+                var operation = await _autoService.CreateAutoAsync(auto.ToDto());
 
-                return View("~/Views/Home/Index.cshtml", _alerts);
+                if (operation.Success)
+                {
+                    _alerts.Add(new AlertViewModel(
+                        $"Auto with numbers [{auto.Numbers}] was created",
+                        AlertType.Success));
+
+                    return View("~/Views/Home/Index.cshtml", _alerts);
+                }
+
+                return new HttpOperationStatusResult(operation);
             }
-            
-            return RedirectToAction("Create");
+
+            return View(auto);
         }
 
         protected override void Dispose(bool disposing)

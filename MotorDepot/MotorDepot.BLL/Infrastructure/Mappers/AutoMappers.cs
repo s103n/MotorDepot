@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
 using MotorDepot.BLL.Models;
 using MotorDepot.DAL.Entities;
-using MotorDepot.DAL.Entities.Enums;
 using System.Collections.Generic;
 using System.Linq;
-using AutoStatus = MotorDepot.BLL.Infrastructure.Enums.AutoStatus;
-using AutoType = MotorDepot.BLL.Infrastructure.Enums.AutoType;
 
 namespace MotorDepot.BLL.Infrastructure.Mappers
 {
@@ -17,8 +14,8 @@ namespace MotorDepot.BLL.Infrastructure.Mappers
             {
                 cfg.CreateMap<Auto, AutoDto>()
                     .ForMember("Brand", opt => opt.MapFrom(x => x.Brand.ToDto()))
-                    .ForMember("Type", opt => opt.MapFrom(x => (AutoType) x.AutoTypeId))
-                    .ForMember("Status", opt => opt.MapFrom(x => (AutoStatus) x.StatusId));
+                    .ForMember("Type", opt => opt.MapFrom(x => x.AutoTypeLookupId))
+                    .ForMember("Status", opt => opt.MapFrom(x => x.AutoStatusLookupId));
             }).CreateMapper().Map<Auto, AutoDto>(auto);
         }
 
@@ -32,8 +29,8 @@ namespace MotorDepot.BLL.Infrastructure.Mappers
             return new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<AutoDto, Auto>()
-                    .ForMember("AutoTypeId", opt => opt.MapFrom(x => (AutoTypeEnum)x.Type))
-                    .ForMember("StatusId", opt => opt.MapFrom(x => (AutoStatusEnum)x.Status))
+                    .ForMember("AutoTypeLookupId", opt => opt.MapFrom(x => x.Type))
+                    .ForMember("AutoStatusLookupId", opt => opt.MapFrom(x => x.Status))
                     .ForMember("AutoBrandId", opt => opt.MapFrom(x => x.Brand.Id))
                     .ForMember("Status", opt => opt.Ignore())
                     .ForMember("Brand", opt => opt.Ignore())

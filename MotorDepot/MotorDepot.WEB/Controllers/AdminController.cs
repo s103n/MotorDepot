@@ -1,9 +1,11 @@
-﻿using MotorDepot.BLL.Interfaces;
+﻿using System.Collections.Generic;
+using MotorDepot.BLL.Interfaces;
+using MotorDepot.WEB.Infrastructure;
 using MotorDepot.WEB.Infrastructure.Mappers;
 using MotorDepot.WEB.Models;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using MotorDepot.WEB.Models.Enums;
 
 namespace MotorDepot.WEB.Controllers
 {
@@ -32,11 +34,14 @@ namespace MotorDepot.WEB.Controllers
 
                 if (operation.Success)
                 {
-                    //todo alert
-                    return View("~/Views/Home/Index.cshtml");
+                    var alerts = new List<AlertViewModel>
+                    {
+                        new AlertViewModel("Dispatcher was created", AlertType.Success)
+                    };
+                    return View("~/Views/Home/Index.cshtml", alerts);
                 }
 
-                ModelState.AddModelError("", operation.Message);
+                return new HttpOperationStatusResult(operation);
             }
 
             return View("AddUser", model);
@@ -51,7 +56,7 @@ namespace MotorDepot.WEB.Controllers
                 return View(operation.Value);
             }
 
-            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            return new HttpOperationStatusResult(operation);
         }
 
         public ActionResult AddDriver()
@@ -69,11 +74,14 @@ namespace MotorDepot.WEB.Controllers
 
                 if (operation.Success)
                 {
-                    //todo alert
-                    return View("~/Views/Home/Index.cshtml");
+                    var alerts = new List<AlertViewModel>
+                    {
+                        new AlertViewModel("Driver was created", AlertType.Success)
+                    };
+                    return View("~/Views/Home/Index.cshtml", alerts);
                 }
 
-                ModelState.AddModelError("", operation.Message);
+                return new HttpOperationStatusResult(operation);
             }
 
             return View("AddUser", model);

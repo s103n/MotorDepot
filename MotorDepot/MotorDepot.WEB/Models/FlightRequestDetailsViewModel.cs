@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using MotorDepot.BLL.Infrastructure.Enums;
+using MotorDepot.Shared.Enums;
 
 namespace MotorDepot.WEB.Models
 {

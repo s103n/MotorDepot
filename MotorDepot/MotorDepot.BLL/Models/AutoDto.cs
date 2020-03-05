@@ -1,5 +1,4 @@
-﻿using MotorDepot.BLL.Infrastructure.Enums;
-using System.Collections.Generic;
+﻿using MotorDepot.Shared.Enums;
 
 namespace MotorDepot.BLL.Models
 {

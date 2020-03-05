@@ -1,5 +1,6 @@
-﻿using MotorDepot.DAL.Entities.Enums;
-using System;
+﻿using System;
+using MotorDepot.DAL.Entities.Lookup;
+using MotorDepot.Shared.Enums;
 
 namespace MotorDepot.DAL.Entities
 {
@@ -10,8 +11,8 @@ namespace MotorDepot.DAL.Entities
         public virtual AppUser Driver { get; set; }
         public string DispatcherId { get; set; }
         public virtual AppUser Dispatcher { get; set; }
-        public FlightRequestStatusEnum FlightRequestStatusId { get; set; }
-        public virtual FlightRequestStatus Status { get; set; }
+        public FlightRequestStatus FlightRequestStatusLookupId { get; set; }
+        public virtual FlightRequestStatusLookup Status { get; set; }
         public int? FlightId { get; set; }
         public virtual Flight RequestedFlight { get; set; }
         public string Description { get; set; }
@@ -19,7 +20,7 @@ namespace MotorDepot.DAL.Entities
         public int EnginePower { get; set; }
         public int EngineCapacity { get; set; }
         public double BootVolume { get; set; }
-        public AutoTypeEnum AutoTypeId { get; set; }
-        public virtual AutoType AutoType { get; set; }
+        public AutoType AutoTypeId { get; set; }
+        public virtual AutoTypeLookup AutoType { get; set; }
     }
 }

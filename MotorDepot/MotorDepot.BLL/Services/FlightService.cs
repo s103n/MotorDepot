@@ -1,17 +1,16 @@
-﻿using System;
-using MotorDepot.BLL.BusinessModels;
+﻿using MotorDepot.BLL.Infrastructure;
 using MotorDepot.BLL.Infrastructure.Mappers;
 using MotorDepot.BLL.Interfaces;
 using MotorDepot.BLL.Models;
-using MotorDepot.DAL.Entities;
-using MotorDepot.DAL.Entities.Enums;
 using MotorDepot.DAL.Interfaces;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using MotorDepot.BLL.Infrastructure;
-using FlightStatus = MotorDepot.BLL.Infrastructure.Enums.FlightStatus;
+using MotorDepot.BLL.BusinessModels;
+using MotorDepot.Shared.Enums;
 
 namespace MotorDepot.BLL.Services
 {
@@ -26,9 +25,10 @@ namespace MotorDepot.BLL.Services
 
         public async Task<OperationStatus> CreateAsync(FlightDto flightDto)
         {
-            if(flightDto == null)
+            if (flightDto == null)
                 throw new ArgumentNullException(nameof(flightDto));
 
+            flightDto.Status = FlightStatus.Free;
             var flight = flightDto.ToEntity();
 
             await _database.FlightRepository.AddAsync(flight);
@@ -38,36 +38,29 @@ namespace MotorDepot.BLL.Services
 
         public async Task<OperationStatus> EditAsync(FlightDto flightDto)
         {
-            if(flightDto == null)
+            if (flightDto == null)
                 throw new ArgumentNullException(nameof(flightDto));
 
-            await _database.FlightRepository.UpdateAsync(flightDto.ToEntity());
+            var flight = (await _database.FlightRepository.FindAsync(flightDto.Id))
+                .ToDto()
+                .ToEditWith(flightDto);
+    
+            await _database.FlightRepository.UpdateAsync(flight.ToEntity());
 
             return new OperationStatus("", true);
         }
 
-        public async Task<OperationStatus<FlightDto>> GetAsync(object property)
-        {
-            if(property == null)
-                throw new ArgumentNullException(nameof(property));
-
-            var refGet = new ReflectionGet<Flight>(property);
-            var item = await refGet.GetItemAsync(_database.FlightRepository);
-
-            return new OperationStatus<FlightDto>("", item.ToDto(), true);
-        }
-
         public async Task<OperationStatus> SetStatus(FlightStatus status, int? flightId)
         {
-            if(flightId == null)
+            if (flightId == null)
                 throw new ArgumentNullException(nameof(flightId));
 
             var flight = await _database.FlightRepository.FindAsync(flightId);
 
-            if(flight == null)
+            if (flight == null)
                 return new OperationStatus("Flight doesn't exist", HttpStatusCode.NotFound, false);
 
-            flight.StatusId = (FlightStatusEnum)status;
+            flight.FlightStatusLookupId = status;
 
             await _database.FlightRepository.UpdateAsync(flight);
 
@@ -80,16 +73,23 @@ namespace MotorDepot.BLL.Services
             var auto = await _database.AutoRepository.FindAsync(autoId);
             var driver = await _database.UserManager.FindByEmailAsync(driverEmail);
 
-            if(auto == null || flight == null || driver == null)
+            if (auto == null || flight == null || driver == null)
                 return new OperationStatus("Flight, auto or driver doesn't exist", HttpStatusCode.NotFound, false);
 
             flight.AutoId = autoId;
             flight.DriverId = driver.Id;
-            flight.StatusId = FlightStatusEnum.Occupied;
+            flight.FlightStatusLookupId = FlightStatus.Occupied;
 
             await _database.FlightRepository.UpdateAsync(flight);
 
             return new OperationStatus("", true);
+        }
+
+        public OperationStatus<IEnumerable> GetFlightStatuses()
+        {
+            var statuses = new EnumParser<FlightStatus>().Parse();
+
+            return new OperationStatus<IEnumerable>("", statuses, true);
         }
 
         public async Task<OperationStatus<IEnumerable<FlightDto>>> GetAllAsync(bool deleted = false)
@@ -97,13 +97,11 @@ namespace MotorDepot.BLL.Services
             var flights = (await _database.FlightRepository.GetAllAsync()).ToList();
 
             if (deleted)
-            {
                 return new OperationStatus<IEnumerable<FlightDto>>("", flights.ToDto(), true);
-            }
 
-            var items = flights.Where(flight => flight.StatusId != FlightStatusEnum.Deleted)
-                .ToList()
-                .ToDto();
+            var items = flights.Where(flight => flight.FlightStatusLookupId != FlightStatus.Deleted)
+            .ToList()
+            .ToDto();
 
             return new OperationStatus<IEnumerable<FlightDto>>("", items, true);
         }
@@ -115,7 +113,7 @@ namespace MotorDepot.BLL.Services
 
             var flight = await _database.FlightRepository.FindAsync(id);
 
-            if(flight == null)
+            if (flight == null)
                 return new OperationStatus<FlightDto>("Flight doesn't exist", HttpStatusCode.NotFound, false);
 
             return new OperationStatus<FlightDto>("", flight.ToDto(), true);
@@ -131,7 +129,7 @@ namespace MotorDepot.BLL.Services
             if (flight == null)
                 return new OperationStatus("Flight does not exist", HttpStatusCode.NotFound, false);
 
-            flight.StatusId = FlightStatusEnum.Deleted;
+            flight.FlightStatusLookupId = FlightStatus.Deleted;
 
             await _database.FlightRepository.UpdateAsync(flight);
 

@@ -1,8 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using MotorDepot.DAL.Entities;
 
 namespace MotorDepot.DAL.Context
@@ -15,6 +12,12 @@ namespace MotorDepot.DAL.Context
             context.Roles.Add(new IdentityRole("dispatcher"));
             context.Roles.Add(new IdentityRole("driver"));
             context.Roles.Add(new IdentityRole("root"));
+
+            context.AutoBrands.Add(new AutoBrand { Name = "Chevrolet"});
+            context.AutoBrands.Add(new AutoBrand { Name = "Volkswagen" });
+            context.AutoBrands.Add(new AutoBrand { Name = "Tesla" });
+            context.AutoBrands.Add(new AutoBrand { Name = "Toyota" });
+            context.AutoBrands.Add(new AutoBrand { Name = "Mercedes-Benz" });
 
             base.InitializeDatabase(context);
         }

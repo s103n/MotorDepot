@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MotorDepot.DAL.Entities.Abstract
 {
-    public abstract class BaseEnumEntity<T> where T : Enum
+    public abstract class BaseEnumEntity<TEnum> 
+        where TEnum : Enum
     {
-        public T Id { get; set; }
+        public TEnum Id { get; set; }
         public string Name { get; set; }
     }
 }

@@ -60,7 +60,7 @@ namespace MotorDepot.BLL.Services
 
             await _database.FlightRequestRepository.AddAsync(flightRequest.ToEntity());
 
-            return new OperationStatus("", true);
+            return new OperationStatus("Flight request was sent", true);
         }
 
         public async Task<OperationStatus<UserDto>> GetDriverById(string id)

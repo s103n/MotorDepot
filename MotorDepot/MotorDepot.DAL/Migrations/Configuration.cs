@@ -1,5 +1,7 @@
-﻿using MotorDepot.DAL.Entities;
-using MotorDepot.DAL.Entities.Enums;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using MotorDepot.DAL.Entities;
+using MotorDepot.DAL.Entities.Lookup;
+using MotorDepot.Shared.Enums;
 
 namespace MotorDepot.DAL.Migrations
 {
@@ -13,7 +15,6 @@ namespace MotorDepot.DAL.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            ContextKey = "MotorDepot.DAL.Context.ApplicationContext";
         }
 
         protected override void Seed(MotorDepot.DAL.Context.ApplicationContext context)
@@ -23,33 +24,44 @@ namespace MotorDepot.DAL.Migrations
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method
             //  to avoid creating duplicate seed data.
 
-            //context.AutoStatuses.AddOrUpdate(
+            //context.AutoStatusLookups.AddOrUpdate(
             //    x => x.Id,
-            //    Enum.GetValues(typeof(AutoStatusEnum))
-            //        .OfType<AutoStatusEnum>()
-            //        .Select(x => new AutoStatus() { Id = x, Name = x.ToString() })
+            //    Enum.GetValues(typeof(AutoStatus))
+            //        .OfType<AutoStatus>()
+            //        .Select(x => new AutoStatusLookup() { Id = x, Name = x.ToString() })
             //        .ToArray());
 
-            //context.AutoTypes.AddOrUpdate(
+            //context.AutoTypeLookups.AddOrUpdate(
             //    x => x.Id,
-            //    Enum.GetValues(typeof(AutoTypeEnum))
-            //        .OfType<AutoTypeEnum>()
-            //        .Select(x => new AutoType() { Id = x, Name = x.ToString() })
+            //    Enum.GetValues(typeof(AutoType))
+            //        .OfType<AutoType>()
+            //        .Select(x => new AutoTypeLookup() { Id = x, Name = x.ToString() })
             //        .ToArray());
 
-            //context.FlightStatuses.AddOrUpdate(
+            //context.FlightStatusLookups.AddOrUpdate(
             //    x => x.Id,
-            //    Enum.GetValues(typeof(FlightStatusEnum))
-            //        .OfType<FlightStatusEnum>()
-            //        .Select(x => new FlightStatus() { Id = x, Name = x.ToString() })
+            //    Enum.GetValues(typeof(FlightStatus))
+            //        .OfType<FlightStatus>()
+            //        .Select(x => new FlightStatusLookup() { Id = x, Name = x.ToString() })
             //        .ToArray());
 
-            //context.FlightRequestStatuses.AddOrUpdate(
+            //context.FlightRequestStatusLookups.AddOrUpdate(
             //    x => x.Id,
-            //    Enum.GetValues(typeof(FlightRequestStatusEnum))
-            //        .OfType<FlightRequestStatusEnum>()
-            //        .Select(x => new FlightRequestStatus() { Id = x, Name = x.ToString() })
+            //    Enum.GetValues(typeof(FlightRequestStatus))
+            //        .OfType<FlightRequestStatus>()
+            //        .Select(x => new FlightRequestStatusLookup() { Id = x, Name = x.ToString() })
             //        .ToArray());
+
+            context.Roles.AddOrUpdate(new IdentityRole("admin"));
+            context.Roles.AddOrUpdate(new IdentityRole("dispatcher"));
+            context.Roles.AddOrUpdate(new IdentityRole("driver"));
+            context.Roles.AddOrUpdate(new IdentityRole("root"));
+
+            context.AutoBrands.AddOrUpdate(new AutoBrand { Name = "Chevrolet" });
+            context.AutoBrands.AddOrUpdate(new AutoBrand { Name = "Volkswagen" });
+            context.AutoBrands.AddOrUpdate(new AutoBrand { Name = "Tesla" });
+            context.AutoBrands.AddOrUpdate(new AutoBrand { Name = "Toyota" });
+            context.AutoBrands.AddOrUpdate(new AutoBrand { Name = "Mercedes-Benz" });
         }
     }
 }

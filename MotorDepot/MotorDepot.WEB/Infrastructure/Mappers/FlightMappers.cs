@@ -3,6 +3,7 @@ using MotorDepot.BLL.Models;
 using MotorDepot.WEB.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 
 namespace MotorDepot.WEB.Infrastructure.Mappers
 {
@@ -59,6 +60,34 @@ namespace MotorDepot.WEB.Infrastructure.Mappers
                     .ForMember("DriverName", opt => opt.MapFrom(x => $"{x.Driver.FirstName} {x.Driver.LastName}"))
                     .ForMember("DriverEmail", opt => opt.MapFrom(x => x.Driver.Email));
             }).CreateMapper().Map<FlightRequestDto, FlightRequestDetailsViewModel>(model);
+        }
+
+        public static FlightDto ToDto(this FlightCreateViewModel model)
+        {
+            return new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<FlightCreateViewModel, FlightDto>()
+                    .ForMember("DispatcherCreator",
+                        opt => opt.MapFrom(x => new DispatcherDto {Id = x.DispatcherCreatorId}));
+            }).CreateMapper().Map<FlightCreateViewModel, FlightDto>(model);
+        }
+
+        public static FlightDto ToDto(this FlightEditViewModel model)
+        {
+            return new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<FlightEditViewModel, FlightDto>();
+
+            }).CreateMapper().Map<FlightEditViewModel, FlightDto>(model);
+        }
+
+        public static FlightEditViewModel ToEditViewModel(this FlightDto model)
+        {
+            return new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<FlightDto, FlightEditViewModel>();
+
+            }).CreateMapper().Map<FlightDto, FlightEditViewModel>(model);
         }
     }
 }

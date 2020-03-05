@@ -1,9 +1,9 @@
 ﻿using MotorDepot.BLL.Infrastructure;
-using MotorDepot.BLL.Infrastructure.Enums;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MotorDepot.BLL.Models;
+using MotorDepot.Shared.Enums;
 
 namespace MotorDepot.BLL.Interfaces
 {
@@ -11,6 +11,6 @@ namespace MotorDepot.BLL.Interfaces
     {
         Task<OperationStatus> ConfirmRequest(int requestId, string creatorId, FlightRequestStatus status);
         Task<OperationStatus<FlightRequestDto>> GetRequestByIdAsync(int? requestId);
-        Task<OperationStatus<IEnumerable<FlightRequestDto>>> GetFlightRequestsAsync();
+        Task<OperationStatus<IEnumerable<FlightRequestDto>>> GetFlightRequestsAsync(FlightRequestStatus status);
     }
 }

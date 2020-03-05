@@ -184,12 +184,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\HttpOperationResult.cs" />
     <Compile Include="Infrastructure\Mappers\AccountMappers.cs" />
     <Compile Include="Infrastructure\Mappers\AutoMappers.cs" />
     <Compile Include="Infrastructure\Mappers\FlightMappers.cs" />
     <Compile Include="Models\AlertViewModel.cs" />
     <Compile Include="Models\AutoCreateViewModel.cs" />
     <Compile Include="Models\AutoSetViewModel.cs" />
+    <Compile Include="Models\FlightCreateViewModel.cs" />
+    <Compile Include="Models\FlightEditViewModel.cs" />
     <Compile Include="Models\FlightRequestAcceptViewModel.cs" />
     <Compile Include="Models\FlightRequestDetailsViewModel.cs" />
     <Compile Include="Models\FlightRequestDisplayViewModel.cs" />
@@ -357,10 +360,12 @@
     <Content Include="Views\Flight\Requests.cshtml" />
     <Content Include="Views\Flight\ConfirmRequest.cshtml" />
     <Content Include="Views\Auto\Create.cshtml" />
+    <Content Include="Views\Flight\Create.cshtml" />
+    <Content Include="Views\Flight\Edit.cshtml" />
+    <Content Include="Views\Flight\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Util\" />
     <Folder Include="Views\Dispatcher\" />
   </ItemGroup>
   <ItemGroup>
@@ -378,6 +383,10 @@
     <ProjectReference Include="..\MotorDepot.BLL\MotorDepot.BLL.csproj">
       <Project>{b71728f0-2666-49c8-8850-f7ce9951da53}</Project>
       <Name>MotorDepot.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MotorDepot.Shared\MotorDepot.Shared.csproj">
+      <Project>{0279c9ee-e4ec-4443-b4dd-661a6c424060}</Project>
+      <Name>MotorDepot.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

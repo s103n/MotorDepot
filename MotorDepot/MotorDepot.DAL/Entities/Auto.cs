@@ -1,5 +1,6 @@
-﻿using MotorDepot.DAL.Entities.Enums;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using MotorDepot.DAL.Entities.Lookup;
+using MotorDepot.Shared.Enums;
 
 namespace MotorDepot.DAL.Entities
 {
@@ -13,10 +14,10 @@ namespace MotorDepot.DAL.Entities
         public double BootVolumeMax { get; set; } // in liters
         public int AutoBrandId { get; set; }
         public virtual AutoBrand Brand { get; set; }
-        public AutoTypeEnum AutoTypeId { get; set; }
-        public virtual AutoType Type { get; set; }
-        public AutoStatusEnum StatusId { get; set; }
-        public virtual AutoStatus Status { get; set; }
+        public AutoType AutoTypeLookupId { get; set; }
+        public virtual AutoTypeLookup Type { get; set; }
+        public AutoStatus AutoStatusLookupId { get; set; }
+        public virtual AutoStatusLookup Status { get; set; }
         public virtual ICollection<Flight> Flights { get; set; }
     }
 }

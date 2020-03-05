@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNet.Identity;
-using MotorDepot.BLL.Infrastructure.Enums;
 using MotorDepot.BLL.Interfaces;
 using MotorDepot.WEB.Infrastructure.Mappers;
 using MotorDepot.WEB.Models;
 using MotorDepot.WEB.Models.Enums;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using MotorDepot.Shared.Enums;
+using MotorDepot.WEB.Infrastructure;
 
 namespace MotorDepot.WEB.Controllers
 {
@@ -53,37 +53,40 @@ namespace MotorDepot.WEB.Controllers
         [Authorize(Roles = "dispatcher, admin")]
         public async Task<ActionResult> Requests()
         {
-            var flightOperation = await _flightRequestService.GetFlightRequestsAsync();
+            var flightOperation = await _flightRequestService.GetFlightRequestsAsync(FlightRequestStatus.InQueue);
 
             if (flightOperation.Success)
             {
                 return View(flightOperation.Value.ToDisplayViewModels());
             }
 
-            return new HttpNotFoundResult();
+            return new HttpOperationStatusResult(flightOperation);
         }
 
         [Authorize(Roles = "dispatcher, admin")]
         public async Task<ActionResult> ConfirmRequest(int? requestId)
         {
             var requestOperation = await _flightRequestService.GetRequestByIdAsync(requestId);
-            var autoOperation = await _autoService.GetAutosByTypeAsync(requestOperation.Value.AutoType);
 
-            if (requestOperation.Success && autoOperation.Success)
+            if (requestOperation.Success)
             {
-                var acceptViewModel = new FlightRequestAcceptViewModel
-                {
-                    Request = requestOperation.Value.ToDetailsViewModel(),
-                    Auto = autoOperation.Value.ToSetViewModels()
-                };
+                var autoOperation = await _autoService.GetAutosByTypeAsync(requestOperation.Value.AutoType);
 
-                return View(acceptViewModel);
+                if (autoOperation.Success)
+                {
+                    var acceptViewModel = new FlightRequestAcceptViewModel
+                    {
+                        Request = requestOperation.Value.ToDetailsViewModel(),
+                        Auto = autoOperation.Value.ToSetViewModels()
+                    };
+
+                    return View(acceptViewModel);
+                }
+
+                return new HttpOperationStatusResult(autoOperation);
             }
 
-            if (!requestOperation.Success)
-                return new HttpStatusCodeResult(requestOperation.Code, requestOperation.Message);
-
-            return new HttpStatusCodeResult(autoOperation.Code, autoOperation.Message);
+            return new HttpOperationStatusResult(requestOperation);
         }
 
         [HttpPost]
@@ -117,19 +120,66 @@ namespace MotorDepot.WEB.Controllers
                 return View("~/Views/Home/Index.cshtml", _alerts);
             }
 
-            if(!requestOperation.Success)
-                return new HttpStatusCodeResult(requestOperation.Code, requestOperation.Message);
+            return new HttpOperationStatusResult(flightOperation, requestOperation);
+        }
 
-            return new HttpStatusCodeResult(flightOperation.Code, flightOperation.Message);
+        public ActionResult Create()
+        {
+            return View();
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(FlightViewModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(FlightCreateViewModel model)
         {
-            return null;
+            var createOperation = await _flightService.CreateAsync(model.ToDto());
+
+            if (createOperation.Success)
+            {
+                _alerts.Clear();
+                _alerts.Add(new AlertViewModel("Flight was created successful", AlertType.Success));
+
+                return View("~/Views/Home/Index.cshtml", _alerts);
+            }
+
+            return new HttpOperationStatusResult(createOperation);
         }
 
-        public async Task<ActionResult> Display(int? id)
+        public async Task<ActionResult> Edit(int? flightId)
+        {
+            var operation = await _flightService.GetByIdAsync(flightId);
+
+            if (operation.Success)
+            {
+                //изменять если статус Free
+                //заблокировать кнопку при добавление машины)0выф
+                var operationStatus = _flightService.GetFlightStatuses();
+                ViewBag.FlightStatuses = new SelectList(operationStatus.Value, "Id", "Name");
+
+                return View(operation.Value.ToEditViewModel());
+            }
+
+            return new HttpOperationStatusResult(operation);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(FlightEditViewModel model)
+        {
+            var operation = await _flightService.EditAsync(model.ToDto());
+
+            if (operation.Success)
+            {
+                _alerts.Clear();
+                _alerts.Add(new AlertViewModel("Flight was updated", AlertType.Success));
+
+                return View("~/Views/Home/Index.cshtml", _alerts);
+            }
+
+            return new HttpOperationStatusResult(operation);
+        }
+
+        public async Task<ActionResult> Details(int? id)
         {
             return null;
         }
@@ -138,14 +188,16 @@ namespace MotorDepot.WEB.Controllers
         public async Task<ActionResult> RequestFor(int? flightId)
         {
             var operation = await _flightService.GetByIdAsync(flightId);
-            //add autoType in viewBag
+            var operationAuto = _autoService.GetAutoTypes();
+
+            ViewBag.AutoTypes = new SelectList(operationAuto.Value, "Id", "Name");
 
             if (operation.Success)
             {
                 return View(new FlightRequestCreateViewModel {RequestedFlightId = (int) flightId});
             }
 
-            return new HttpStatusCodeResult(operation.Code, operation.Message);
+            return new HttpOperationStatusResult(operation, operationAuto);
         }
 
         [HttpPost]
@@ -155,6 +207,7 @@ namespace MotorDepot.WEB.Controllers
             var driverOperation = await _driverService.GetDriverById(User.Identity.GetUserId());
             var requestedFlightOperation = await _flightService.GetByIdAsync(model.RequestedFlightId);
 
+            model.DriverId = User.Identity.GetUserId();
             model.Status = FlightRequestStatus.InQueue;
 
             if (driverOperation.Success && requestedFlightOperation.Success)
@@ -169,13 +222,10 @@ namespace MotorDepot.WEB.Controllers
                     return View("~/Views/Home/Index.cshtml", _alerts);
                 }
 
-                return new HttpStatusCodeResult(operation.Code, operation.Message);
+                return new HttpOperationStatusResult(operation);
             }
 
-            if(!driverOperation.Success)
-                return new HttpStatusCodeResult(driverOperation.Code, driverOperation.Message);
-
-            return new HttpStatusCodeResult(requestedFlightOperation.Code, requestedFlightOperation.Message);
+            return new HttpOperationStatusResult(driverOperation, requestedFlightOperation);
         }
 
         protected override void Dispose(bool disposing)

@@ -1,4 +1,4 @@
-﻿using MotorDepot.BLL.Infrastructure.Enums;
+﻿using MotorDepot.Shared.Enums;
 using System;
 
 namespace MotorDepot.WEB.Models

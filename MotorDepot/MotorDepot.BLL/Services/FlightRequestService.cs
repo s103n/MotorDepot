@@ -1,14 +1,14 @@
 ﻿using MotorDepot.BLL.Infrastructure;
-using MotorDepot.BLL.Infrastructure.Enums;
 using MotorDepot.BLL.Infrastructure.Mappers;
 using MotorDepot.BLL.Interfaces;
 using MotorDepot.BLL.Models;
-using MotorDepot.DAL.Entities.Enums;
 using MotorDepot.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using MotorDepot.Shared.Enums;
 
 namespace MotorDepot.BLL.Services
 {
@@ -37,12 +37,28 @@ namespace MotorDepot.BLL.Services
             if (request == null || dispatcher == null)
                 return new OperationStatus("Request or dispatcher doesn't exist", HttpStatusCode.NotFound, false);
 
-            request.FlightRequestStatusId = (FlightRequestStatusEnum)status;
+            //if dispatcher set status of request like accepted, then other requests
+            //that refer on the same flight will be canceled
+            if (status == FlightRequestStatus.Accepted)
+            {
+                var requests = (await _database.FlightRequestRepository.GetAllAsync())
+                    .ToList()
+                    .Where(req => req.RequestedFlight.Id == request.FlightId);
+
+                foreach (var req in requests)
+                {
+                    req.FlightRequestStatusLookupId = FlightRequestStatus.Canceled;
+
+                    await _database.FlightRequestRepository.UpdateAsync(req);
+                }
+            }
+
+            request.FlightRequestStatusLookupId = status;
             request.DispatcherId = creatorId;
 
             await _database.FlightRequestRepository.UpdateAsync(request);
 
-            return new OperationStatus("", true);
+            return new OperationStatus("Request(s) was updated", true);
         }
 
         public async Task<OperationStatus<FlightRequestDto>> GetRequestByIdAsync(int? requestId)
@@ -55,12 +71,20 @@ namespace MotorDepot.BLL.Services
             if (request == null)
                 return new OperationStatus<FlightRequestDto>("Request doesn't exist", HttpStatusCode.NotFound, false);
 
+            if (request.Status.Id != (int)FlightRequestStatus.InQueue)
+                return new OperationStatus<FlightRequestDto>("Requests can be accepted if they are in queue",
+                    HttpStatusCode.BadRequest,
+                    false);
+
             return new OperationStatus<FlightRequestDto>("", request.ToDto(), true);
         }
 
-        public async Task<OperationStatus<IEnumerable<FlightRequestDto>>> GetFlightRequestsAsync()
+        public async Task<OperationStatus<IEnumerable<FlightRequestDto>>> GetFlightRequestsAsync(FlightRequestStatus status)
         {
-            var requests = await _database.FlightRequestRepository.GetAllAsync();
+            var requests = (await _database.FlightRequestRepository.GetAllAsync())
+                .ToList()
+                .Where(req => (int)req.Status.Id == (int)status
+                              && req.RequestedFlight.FlightStatusLookupId == FlightStatus.Free);
 
             return new OperationStatus<IEnumerable<FlightRequestDto>>("", requests.ToDto(), true);
         }

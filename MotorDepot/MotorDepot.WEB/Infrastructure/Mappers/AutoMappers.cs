@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using MotorDepot.BLL.Infrastructure.Enums;
 using MotorDepot.BLL.Models;
+using MotorDepot.Shared.Enums;
 using MotorDepot.WEB.Models;
 
 namespace MotorDepot.WEB.Infrastructure.Mappers

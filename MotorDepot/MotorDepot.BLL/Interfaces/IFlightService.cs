@@ -1,9 +1,10 @@
-﻿using MotorDepot.BLL.Infrastructure.Enums;
-using MotorDepot.BLL.Models;
+﻿using MotorDepot.BLL.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MotorDepot.BLL.Infrastructure;
+using MotorDepot.Shared.Enums;
 
 namespace MotorDepot.BLL.Interfaces
 {
@@ -14,8 +15,8 @@ namespace MotorDepot.BLL.Interfaces
         Task<OperationStatus> RemoveAsync(int? id);
         Task<OperationStatus> EditAsync(FlightDto flightDto);
         Task<OperationStatus<FlightDto>> GetByIdAsync(int? id);
-        Task<OperationStatus<FlightDto>> GetAsync(object property);
         Task<OperationStatus> SetStatus(FlightStatus status, int? flightId);
         Task<OperationStatus> SetDriverWithAuto(int flightId, int autoId, string driverId);
+        OperationStatus<IEnumerable> GetFlightStatuses();
     }
 }

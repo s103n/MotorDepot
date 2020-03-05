@@ -102,58 +102,22 @@
     <Compile Include="Entities\AppUser.cs" />
     <Compile Include="Entities\Auto.cs" />
     <Compile Include="Entities\AutoBrand.cs" />
-    <Compile Include="Entities\AutoType.cs" />
+    <Compile Include="Entities\Lookup\AutoTypeLookup.cs" />
     <Compile Include="Entities\Abstract\BaseEnumEntity.cs" />
-    <Compile Include="Entities\Enums\AutoStatusEnum.cs" />
-    <Compile Include="Entities\Enums\AutoTypeEnum.cs" />
-    <Compile Include="Entities\Enums\FlightRequestStatusEnum.cs" />
     <Compile Include="Entities\Flight.cs" />
-    <Compile Include="Entities\AutoStatus.cs" />
+    <Compile Include="Entities\Lookup\AutoStatusLookup.cs" />
     <Compile Include="Entities\FlightRequest.cs" />
-    <Compile Include="Entities\FlightRequestStatus.cs" />
-    <Compile Include="Entities\FlightStatus.cs" />
-    <Compile Include="Entities\Enums\FlightStatusEnum.cs" />
+    <Compile Include="Entities\Lookup\FlightRequestStatusLookup.cs" />
+    <Compile Include="Entities\Lookup\FlightStatusLookup.cs" />
     <Compile Include="Identity\RoleManager.cs" />
     <Compile Include="Identity\UserManager.cs" />
     <Compile Include="Infrastructure\ValidationErrors.cs" />
     <Compile Include="Infrastructure\ValidationResult.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
-    <Compile Include="Migrations\202002251817296_InitialCreate.cs" />
-    <Compile Include="Migrations\202002251817296_InitialCreate.designer.cs">
-      <DependentUpon>202002251817296_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202002262101419_adding brand and type.cs" />
-    <Compile Include="Migrations\202002262101419_adding brand and type.designer.cs">
-      <DependentUpon>202002262101419_adding brand and type.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202002271312536_DateTime.cs" />
-    <Compile Include="Migrations\202002271312536_DateTime.designer.cs">
-      <DependentUpon>202002271312536_DateTime.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202002271438433_Fixes.cs" />
-    <Compile Include="Migrations\202002271438433_Fixes.designer.cs">
-      <DependentUpon>202002271438433_Fixes.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202002291023418_StringId.cs" />
-    <Compile Include="Migrations\202002291023418_StringId.designer.cs">
-      <DependentUpon>202002291023418_StringId.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202002292204098_MaybeFinalEntity.cs" />
-    <Compile Include="Migrations\202002292204098_MaybeFinalEntity.designer.cs">
-      <DependentUpon>202002292204098_MaybeFinalEntity.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202003011038541_LookupTables.cs" />
-    <Compile Include="Migrations\202003011038541_LookupTables.designer.cs">
-      <DependentUpon>202003011038541_LookupTables.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202003021513271_DeleteColor.cs" />
-    <Compile Include="Migrations\202003021513271_DeleteColor.designer.cs">
-      <DependentUpon>202003021513271_DeleteColor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202003022329030_Migration#10.cs" />
-    <Compile Include="Migrations\202003022329030_Migration#10.designer.cs">
-      <DependentUpon>202003022329030_Migration#10.cs</DependentUpon>
+    <Compile Include="Migrations\202003051930598_init after refact.cs" />
+    <Compile Include="Migrations\202003051930598_init after refact.designer.cs">
+      <DependentUpon>202003051930598_init after refact.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -167,34 +131,15 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202002251817296_InitialCreate.resx">
-      <DependentUpon>202002251817296_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202002262101419_adding brand and type.resx">
-      <DependentUpon>202002262101419_adding brand and type.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202002271312536_DateTime.resx">
-      <DependentUpon>202002271312536_DateTime.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202002271438433_Fixes.resx">
-      <DependentUpon>202002271438433_Fixes.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202002291023418_StringId.resx">
-      <DependentUpon>202002291023418_StringId.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202002292204098_MaybeFinalEntity.resx">
-      <DependentUpon>202002292204098_MaybeFinalEntity.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202003011038541_LookupTables.resx">
-      <DependentUpon>202003011038541_LookupTables.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202003021513271_DeleteColor.resx">
-      <DependentUpon>202003021513271_DeleteColor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202003022329030_Migration#10.resx">
-      <DependentUpon>202003022329030_Migration#10.cs</DependentUpon>
+    <ProjectReference Include="..\MotorDepot.Shared\MotorDepot.Shared.csproj">
+      <Project>{0279c9ee-e4ec-4443-b4dd-661a6c424060}</Project>
+      <Name>MotorDepot.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202003051930598_init after refact.resx">
+      <DependentUpon>202003051930598_init after refact.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

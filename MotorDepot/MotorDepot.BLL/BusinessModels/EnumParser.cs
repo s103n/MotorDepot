@@ -6,8 +6,8 @@ namespace MotorDepot.BLL.BusinessModels
     public class EnumParser<T> where T : Enum
     {
         /// <summary>
-        /// Retrieves ienumerable object of enum type. IEnumerable contains anonymous object
-        /// with 2 properties, int Id and string Name
+        /// Returns IEnumerable object of enum type. IEnumerable contains anonymous object
+        /// with 2 properties: int Id and string Name.
         /// </summary>
         /// <returns></returns>
         public IEnumerable Parse()

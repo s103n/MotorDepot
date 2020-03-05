@@ -3,6 +3,7 @@ using MotorDepot.DAL.Entities;
 using MotorDepot.DAL.Interfaces;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Threading.Tasks;
 
 namespace MotorDepot.DAL.Repositories
@@ -32,7 +33,7 @@ namespace MotorDepot.DAL.Repositories
 
         public async Task UpdateAsync(Flight item)
         {
-            _context.Entry(item).State = EntityState.Modified;
+            _context.Set<Flight>().AddOrUpdate(item);
 
             await _context.SaveChangesAsync();
         }

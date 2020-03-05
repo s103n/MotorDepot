@@ -46,6 +46,10 @@
         </div>
     </div>
 
+    <div>
+        @Html.DropDownListFor(model => model.AutoType, ViewBag.AutoTypes as SelectList)
+    </div>
+
     <div class="form-group">
         <div class="col-md-10">
             <input type="submit" value="Send" class="btn btn-primary" />

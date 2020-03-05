@@ -1,5 +1,4 @@
 ﻿using MotorDepot.BLL.Infrastructure;
-using MotorDepot.BLL.Infrastructure.Enums;
 using MotorDepot.BLL.Infrastructure.Mappers;
 using MotorDepot.BLL.Interfaces;
 using MotorDepot.BLL.Models;
@@ -8,10 +7,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using MotorDepot.BLL.BusinessModels;
-using MotorDepot.DAL.Entities.Enums;
+using MotorDepot.Shared.Enums;
 
 namespace MotorDepot.BLL.Services
 {
@@ -50,7 +48,7 @@ namespace MotorDepot.BLL.Services
         {
             var items = (await _database.AutoRepository.GetAllAsync())
                 .ToList()
-                .Where(x => x.AutoTypeId == (AutoTypeEnum)type)
+                .Where(x => x.AutoTypeLookupId == type)
                 .ToDto();
 
             return new OperationStatus<IEnumerable<AutoDto>>("", items, true);
