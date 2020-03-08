@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
-using MotorDepot.BLL.Interfaces;
+﻿using MotorDepot.BLL.Interfaces;
 using MotorDepot.WEB.Infrastructure;
 using MotorDepot.WEB.Infrastructure.Mappers;
 using MotorDepot.WEB.Models;
+using MotorDepot.WEB.Models.Auto;
+using MotorDepot.WEB.Models.Enums;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using MotorDepot.WEB.Models.Enums;
 
 namespace MotorDepot.WEB.Controllers
 {
-    //[Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin")]
     public class AdminController : Controller
     {
         private readonly IDispatcherService _dispatcherService;
@@ -34,11 +34,9 @@ namespace MotorDepot.WEB.Controllers
 
                 if (operation.Success)
                 {
-                    var alerts = new List<AlertViewModel>
-                    {
-                        new AlertViewModel("Dispatcher was created", AlertType.Success)
-                    };
-                    return View("~/Views/Home/Index.cshtml", alerts);
+                    Session["Create"] = new AlertViewModel(operation.Message, AlertType.Success);
+
+                    return RedirectToAction("Index", "Home");
                 }
 
                 return new HttpOperationStatusResult(operation);
@@ -74,11 +72,9 @@ namespace MotorDepot.WEB.Controllers
 
                 if (operation.Success)
                 {
-                    var alerts = new List<AlertViewModel>
-                    {
-                        new AlertViewModel("Driver was created", AlertType.Success)
-                    };
-                    return View("~/Views/Home/Index.cshtml", alerts);
+                    Session["Create"] = new AlertViewModel(operation.Message, AlertType.Success);
+
+                    return RedirectToAction("Index", "Home");
                 }
 
                 return new HttpOperationStatusResult(operation);
@@ -86,6 +82,7 @@ namespace MotorDepot.WEB.Controllers
 
             return View("AddUser", model);
         }
+
 
         protected override void Dispose(bool disposing)
         {

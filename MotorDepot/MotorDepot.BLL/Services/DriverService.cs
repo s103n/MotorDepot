@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using MotorDepot.Shared.Enums;
 
 namespace MotorDepot.BLL.Services
 {
@@ -40,7 +41,7 @@ namespace MotorDepot.BLL.Services
             await _database.UserManager.AddToRoleAsync(user.Id, userDto.Role);
             await _database.SaveAsync();
 
-            return new OperationStatus("Registration was being successful", HttpStatusCode.OK, true);
+            return new OperationStatus("Driver was successfully created", true);
         }
 
         public OperationStatus<IEnumerable<UserDto>> GetDrivers()
@@ -74,6 +75,35 @@ namespace MotorDepot.BLL.Services
                 return new OperationStatus<UserDto>("Driver doesn't exist.", HttpStatusCode.BadRequest, false);
 
             return new OperationStatus<UserDto>("", user.ToUserDto(), true);
+        }
+
+        public async Task<OperationStatus<IEnumerable<FlightDto>>> GetFlightsByDriver(string driverId)
+        {
+            if(driverId == null)
+                throw new ArgumentNullException(nameof(driverId));
+
+            var flights = (await _database.FlightRepository.GetAllAsync())
+                .Where(flight => flight.Driver != null
+                    && flight.Driver.Id == driverId);
+
+            return new OperationStatus<IEnumerable<FlightDto>>("", flights.ToDto(), true);
+        }
+
+        public async Task<OperationStatus<FlightDto>> CurrentFlight(string driverId)
+        {
+            if(driverId == null)
+                throw new ArgumentNullException(nameof(driverId));
+
+            var currentFlight = (await _database.FlightRepository.GetAllAsync())
+                .FirstOrDefault(flight => flight.DriverId != null 
+                                          && flight.Driver.Id == driverId 
+                                          && flight.Status.Id == FlightStatus.Occupied
+                                          || flight.Status.Id == FlightStatus.Performed);/////
+
+            if(currentFlight == null)
+                return new OperationStatus<FlightDto>("", null, true);
+
+            return new OperationStatus<FlightDto>("", currentFlight.ToDto(), true);
         }
 
         public void Dispose()

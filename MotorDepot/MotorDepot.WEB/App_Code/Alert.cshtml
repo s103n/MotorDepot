@@ -1,15 +1,20 @@
 ﻿@using MotorDepot.WEB.Models
 @using MotorDepot.WEB.Models.Enums
 
-@helper RenderAll(IEnumerable<AlertViewModel> alerts)
+@helper RenderAll()
 {
-    foreach (var alert in alerts)
+    for (var i = 0; i < Session.Keys.Count; i++)
     {
+        var sessionKey = Session.Keys.Get(i);
+        var alert = (AlertViewModel)Session[sessionKey];
+        if (alert == null) { return; }
+
         switch (alert.Type)
         {
             case AlertType.Success:
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     @alert.Text
+                    <p class="session-key d-none">@sessionKey</p>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -18,6 +23,7 @@
             case AlertType.Error:
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     @alert.Text
+                    <p class="session-key d-none">@sessionKey</p>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -26,6 +32,7 @@
             case AlertType.Warning:
                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
                     @alert.Text
+                    <p class="session-key d-none">@sessionKey</p>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

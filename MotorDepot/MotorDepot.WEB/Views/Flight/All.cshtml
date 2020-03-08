@@ -1,8 +1,10 @@
-﻿@model IEnumerable<MotorDepot.WEB.Models.FlightViewModel>
+﻿@model IEnumerable<MotorDepot.WEB.Models.Flight.FlightViewModel>
 
 @{
     ViewBag.Title = "All flights";
 }
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
 @if (User.IsInRole("driver"))
 {
@@ -24,28 +26,40 @@ else
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.DeparturePlace)
+            <a class="fa fa-sort" style="cursor: pointer"
+               href="/Flight/All?sortProperty=DeparturePlace"></a>
         </th>
         <th>
             @Html.DisplayNameFor(model => model.ArrivalPlace)
+            <a class="fa fa-sort" style="cursor: pointer" href="/Flight/All?sortProperty=ArrivalPlace"></a>
         </th>
         <th>
             @Html.DisplayNameFor(model => model.CreateDate)
+            <a class="fa fa-sort" style="cursor: pointer" href="/Flight/All?sortProperty=CreateDate"></a>
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Status)
+            @Html.DisplayNameFor(model => model.Distance)
+            <a class="fa fa-sort" style="cursor: pointer" href="/Flight/All?sortProperty=Distance"></a>
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AutoName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AutoNumbers)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DriverEmail)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DriverName)
-        </th>
+
+        @if (!User.IsInRole("driver"))
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AutoName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AutoNumbers)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DriverEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DriverName)
+            </th>
+        }
         <th></th>
     </tr>
     @foreach (var item in Model)
@@ -61,21 +75,26 @@ else
                 @Html.DisplayFor(modelItem => item.CreateDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status)
-
+                @Html.DisplayFor(modelItem => item.Distance)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AutoName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AutoNumbers)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DriverEmail)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DriverName)
-            </td>
+            @if (!User.IsInRole("driver"))
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AutoName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AutoNumbers)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DriverEmail)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DriverName)
+                </td>
+            }
             <td>
                 @if (User.IsInRole("driver"))
                 {
@@ -85,10 +104,16 @@ else
                 {
                     @Html.ActionLink("Edit", "Edit", new { flightId = item.Id }) <i>|</i>
                     @Html.ActionLink("Details", "Details", new { flightId = item.Id }) <i>|</i>
-                    @Html.ActionLink("Delete", "Delete", new { flightId = item.Id })
+                    @Html.ActionLink("Delete driver and auto", "DeleteDriver", new { flightId = item.Id })
                 }
             </td>
         </tr>
     }
 
 </table>
+
+@section scripts
+{
+    <script>
+    </script>
+}

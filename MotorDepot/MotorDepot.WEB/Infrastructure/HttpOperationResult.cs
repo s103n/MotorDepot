@@ -8,6 +8,10 @@ namespace MotorDepot.WEB.Infrastructure
     {
         private readonly IOperationStatus _unsuccessfulOperation;
 
+        /// <summary>
+        /// Instance new HttpOperationStatusResult object for checking code error of the first of unsuccess operations
+        /// </summary>
+        /// <param name="operations">List of operation that will be checked for http status codes errors</param>
         public HttpOperationStatusResult(params IOperationStatus[] operations)
         {
             foreach (var operation in operations)

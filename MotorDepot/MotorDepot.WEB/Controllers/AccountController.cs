@@ -1,10 +1,12 @@
 ﻿using Microsoft.Owin.Security;
 using MotorDepot.BLL.Interfaces;
 using MotorDepot.WEB.Infrastructure.Mappers;
-using MotorDepot.WEB.Models;
+using MotorDepot.WEB.Models.Auto;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using MotorDepot.WEB.Models;
+using MotorDepot.WEB.Models.Enums;
 
 namespace MotorDepot.WEB.Controllers
 {
@@ -33,20 +35,22 @@ namespace MotorDepot.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                var claim = await _userService.Authenticate(model.ToUserDto());
+                var claimOperation = await _userService.Authenticate(model.ToUserDto());
 
-                if (claim != null)
+                if (claimOperation.Success)
                 {
                     AuthenticationManager.SignOut();
                     AuthenticationManager.SignIn(new AuthenticationProperties
                     {
                         IsPersistent = true //todo
-                    }, claim);
+                    }, claimOperation.Value);
+
+                    Session["Authenticate"] = new AlertViewModel(claimOperation.Message, AlertType.Success);
 
                     return RedirectToAction("Index", "Home");
                 }
 
-                ModelState.AddModelError("", "E-mail or password are not correct.");
+                ModelState.AddModelError("", claimOperation.Message);
             }
 
             return View(model);
@@ -55,6 +59,7 @@ namespace MotorDepot.WEB.Controllers
         public ActionResult Logout()
         {
             AuthenticationManager.SignOut();
+            Session.Clear();
 
             return RedirectToAction("Login");
         }

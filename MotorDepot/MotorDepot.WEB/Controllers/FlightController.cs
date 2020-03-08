@@ -1,13 +1,17 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using System;
+using System.Net;
+using Microsoft.AspNet.Identity;
 using MotorDepot.BLL.Interfaces;
+using MotorDepot.Shared.Enums;
+using MotorDepot.WEB.Infrastructure;
 using MotorDepot.WEB.Infrastructure.Mappers;
 using MotorDepot.WEB.Models;
 using MotorDepot.WEB.Models.Enums;
-using System.Collections.Generic;
+using MotorDepot.WEB.Models.Flight;
+using MotorDepot.WEB.Models.FlightRequest;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using MotorDepot.Shared.Enums;
-using MotorDepot.WEB.Infrastructure;
+using MotorDepot.BLL.BusinessModels;
 
 namespace MotorDepot.WEB.Controllers
 {
@@ -20,7 +24,6 @@ namespace MotorDepot.WEB.Controllers
         private readonly IDispatcherService _dispatcherService;
         private readonly IFlightRequestService _flightRequestService;
         private readonly IAutoService _autoService;
-        private readonly List<AlertViewModel> _alerts = new List<AlertViewModel>();
 
         public FlightController(IFlightService flightService,
             IDriverService driverService,
@@ -43,9 +46,31 @@ namespace MotorDepot.WEB.Controllers
         }
 
         [Authorize(Roles = "driver, dispatcher, admin")]
-        public async Task<ActionResult> All()
+        public async Task<ActionResult> All(string sortProperty = null) //todo asc
         {
+            if(User.IsInRole("driver"))
+            {
+                var flights= await _flightService.GetAllAsync(onlyFree: true);
+
+                return View(flights.Value.ToDisplayViewModel());
+            }
+
             var flightOperation = await _flightService.GetAllAsync();
+
+            if (sortProperty != null)
+            {
+                try
+                {
+                    var items = ReflectionSort<FlightViewModel>
+                        .Sort(flightOperation.Value.ToDisplayViewModel(), sortProperty);
+
+                    return View(items);
+                }
+                catch (Exception ex)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, ex.Message);
+                }
+            }
 
             return View(flightOperation.Value.ToDisplayViewModel());
         }
@@ -109,15 +134,10 @@ namespace MotorDepot.WEB.Controllers
 
             if (requestOperation.Success && flightOperation.Success)
             {
-                _alerts.Clear();
-                _alerts.Add(new AlertViewModel(
-                    $"Request #{requestId} was {status.ToString().ToLower()}",
-                    AlertType.Success));
-                _alerts.Add(new AlertViewModel(
-                    $"Flight #{flightId} was occupied by driver {driverEmail} with auto #{autoId}",
-                    AlertType.Success));
+                Session["Edit"] = new AlertViewModel(requestOperation.Message, AlertType.Success);
+                Session["FlightStatus"] = new AlertViewModel(flightOperation.Message, AlertType.Success);
 
-                return View("~/Views/Home/Index.cshtml", _alerts);
+                return RedirectToAction("Index", "Home");
             }
 
             return new HttpOperationStatusResult(flightOperation, requestOperation);
@@ -136,10 +156,9 @@ namespace MotorDepot.WEB.Controllers
 
             if (createOperation.Success)
             {
-                _alerts.Clear();
-                _alerts.Add(new AlertViewModel("Flight was created successful", AlertType.Success));
+                Session["Create"] = new AlertViewModel(createOperation.Message, AlertType.Success);
 
-                return View("~/Views/Home/Index.cshtml", _alerts);
+                return RedirectToAction("Index", "Home");
             }
 
             return new HttpOperationStatusResult(createOperation);
@@ -151,8 +170,6 @@ namespace MotorDepot.WEB.Controllers
 
             if (operation.Success)
             {
-                //изменять если статус Free
-                //заблокировать кнопку при добавление машины)0выф
                 var operationStatus = _flightService.GetFlightStatuses();
                 ViewBag.FlightStatuses = new SelectList(operationStatus.Value, "Id", "Name");
 
@@ -170,10 +187,9 @@ namespace MotorDepot.WEB.Controllers
 
             if (operation.Success)
             {
-                _alerts.Clear();
-                _alerts.Add(new AlertViewModel("Flight was updated", AlertType.Success));
+                Session["Edit"] = new AlertViewModel(operation.Message, AlertType.Success);
 
-                return View("~/Views/Home/Index.cshtml", _alerts);
+                return RedirectToAction("Index", "Home");
             }
 
             return new HttpOperationStatusResult(operation);
@@ -194,7 +210,7 @@ namespace MotorDepot.WEB.Controllers
 
             if (operation.Success)
             {
-                return View(new FlightRequestCreateViewModel {RequestedFlightId = (int) flightId});
+                return View(new FlightRequestCreateViewModel { RequestedFlightId = (int)flightId });
             }
 
             return new HttpOperationStatusResult(operation, operationAuto);
@@ -216,16 +232,37 @@ namespace MotorDepot.WEB.Controllers
 
                 if (operation.Success)
                 {
-                    _alerts.Clear();
-                    _alerts.Add(new AlertViewModel(operation.Message, AlertType.Success));
+                    Session["RequestForFlight"] = new AlertViewModel(operation.Message, AlertType.Success);
 
-                    return View("~/Views/Home/Index.cshtml", _alerts);
+                    return RedirectToAction("Index", "Home");
                 }
 
                 return new HttpOperationStatusResult(operation);
             }
 
             return new HttpOperationStatusResult(driverOperation, requestedFlightOperation);
+        }
+
+        [HttpGet] //todo delete confirm
+        public async Task<ActionResult> DeleteDriver(int? flightId)
+        {
+            var deleteOperation = await _flightService.DeleteDriverAndAuto(flightId);
+
+            if (deleteOperation.Success)
+            {
+                Session["Delete"] = new AlertViewModel(deleteOperation.Message, AlertType.Success);
+
+                return RedirectToAction("All");
+            }
+
+            if (deleteOperation.Code == HttpStatusCode.BadRequest) // need to check for error
+            {
+                ModelState.AddModelError("", deleteOperation.Message);
+
+                return RedirectToAction("All");
+            }
+
+            return new HttpOperationStatusResult(deleteOperation);
         }
 
         protected override void Dispose(bool disposing)

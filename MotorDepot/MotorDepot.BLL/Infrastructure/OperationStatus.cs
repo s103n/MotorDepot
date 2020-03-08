@@ -10,12 +10,12 @@ namespace MotorDepot.BLL.Infrastructure
     }
     //IOperationStatus
     public sealed class OperationStatus<T> : IOperationStatus
-        where T : class
     {
         public T Value { get; }
         public string Message { get; }
         public HttpStatusCode Code { get; }
         public bool Success { get; }
+
         public OperationStatus(string message, HttpStatusCode code, T value, bool success)
         {
             Message = message;

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -35,21 +36,21 @@
                         @if (User.IsInRole("admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link active text-muted font-weight-bold" href="/Admin/Dispatchers">
+                                <a class="nav-link text-muted font-weight-bold" href="/Admin/Dispatchers">
                                     <span class="fa fa-user"></span>
                                     Dispatchers <span class="sr-only">(current)</span>
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link active text-muted font-weight-bold" href="#">
+                                <a class="nav-link text-muted font-weight-bold" href="/Admin/Drivers">
                                     <span class="fa fa-truck"></span>
                                     Drivers
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link active text-muted font-weight-bold" href="#">
+                                <a class="nav-link text-muted font-weight-bold" href="/Auto/All">
                                     <span class="fa fa-automobile"></span>
                                     Automobiles
                                 </a>
@@ -57,7 +58,7 @@
                         }
 
                         <li class="nav-item">
-                            <a class="nav-link active text-muted font-weight-bold" href="/Flight/All">
+                            <a class="nav-link text-muted font-weight-bold" href="/Flight/All">
                                 <span class="fa fa-location-arrow"></span>
                                 Flights
                             </a>
@@ -66,7 +67,7 @@
                         @if (User.IsInRole("dispatcher") || User.IsInRole("admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link active text-muted font-weight-bold" href="/Flight/Requests">
+                                <a class="nav-link text-muted font-weight-bold" href="/Flight/Requests">
                                     <span class="fa fa-location-arrow"></span>
                                     Requests for flight
                                 </a>
@@ -76,7 +77,8 @@
                         @if (User.IsInRole("driver"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link active text-muted font-weight-bold" href="#">
+                                <a class="nav-link text-muted font-weight-bold" 
+                                   href="/Driver/MyFlights/">
                                     <span class="fa fa-location-arrow"></span>
                                     My flights
                                 </a>

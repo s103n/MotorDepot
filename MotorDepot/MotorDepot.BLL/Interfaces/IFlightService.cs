@@ -10,7 +10,7 @@ namespace MotorDepot.BLL.Interfaces
 {
     public interface IFlightService : IDisposable
     {
-        Task<OperationStatus<IEnumerable<FlightDto>>> GetAllAsync(bool deleted = false);
+        Task<OperationStatus<IEnumerable<FlightDto>>> GetAllAsync(bool deleted = false, bool onlyFree = false);
         Task<OperationStatus> CreateAsync(FlightDto flightDto);
         Task<OperationStatus> RemoveAsync(int? id);
         Task<OperationStatus> EditAsync(FlightDto flightDto);
@@ -18,5 +18,6 @@ namespace MotorDepot.BLL.Interfaces
         Task<OperationStatus> SetStatus(FlightStatus status, int? flightId);
         Task<OperationStatus> SetDriverWithAuto(int flightId, int autoId, string driverId);
         OperationStatus<IEnumerable> GetFlightStatuses();
+        Task<OperationStatus> DeleteDriverAndAuto(int? flightId);
     }
 }

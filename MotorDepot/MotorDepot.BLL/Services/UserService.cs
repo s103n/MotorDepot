@@ -5,6 +5,7 @@ using MotorDepot.DAL.Interfaces;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using MotorDepot.BLL.Infrastructure;
 
 namespace MotorDepot.BLL.Services
 {
@@ -17,7 +18,7 @@ namespace MotorDepot.BLL.Services
             _database = unitOfWork;
         }
 
-        public async Task<ClaimsIdentity> Authenticate(UserDto userDto)
+        public async Task<OperationStatus<ClaimsIdentity>> Authenticate(UserDto userDto)
         {
             if (userDto == null)
                 throw new ArgumentNullException(nameof(userDto));
@@ -25,10 +26,14 @@ namespace MotorDepot.BLL.Services
             var user = await _database.UserManager.FindAsync(userDto.Email, userDto.Password);
 
             if (user != null)
-                return await _database.UserManager.CreateIdentityAsync(user,
+            {
+                var claims = await _database.UserManager.CreateIdentityAsync(user,
                     DefaultAuthenticationTypes.ApplicationCookie);
 
-            return null;
+                return new OperationStatus<ClaimsIdentity>("You have been authenticated", claims, true);
+            }
+
+            return new OperationStatus<ClaimsIdentity>("E-mail or password are not correct", false);
         }
 
         public void Dispose()

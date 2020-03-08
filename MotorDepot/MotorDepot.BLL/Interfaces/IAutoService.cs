@@ -15,5 +15,9 @@ namespace MotorDepot.BLL.Interfaces
         Task<OperationStatus<IEnumerable<AutoDto>>> GetAutosByTypeAsync(AutoType type);
         Task<OperationStatus<IEnumerable<AutoBrandDto>>> GetBrandsAsync();
         OperationStatus<IEnumerable> GetAutoTypes();
+        Task<OperationStatus<IEnumerable<AutoDto>>> GetAutosAsync();
+        Task<OperationStatus<AutoDto>> GetAutoById(int? autoId);
+        Task<OperationStatus> SetStatus(AutoStatus status, int autoId);
+        OperationStatus<IEnumerable> GetAutoStatuses();
     }
 }

@@ -33,7 +33,7 @@ namespace MotorDepot.BLL.Services
 
             await _database.FlightRepository.AddAsync(flight);
 
-            return new OperationStatus("", true);
+            return new OperationStatus("New flight was successfully created", true);
         }
 
         public async Task<OperationStatus> EditAsync(FlightDto flightDto)
@@ -47,7 +47,7 @@ namespace MotorDepot.BLL.Services
     
             await _database.FlightRepository.UpdateAsync(flight.ToEntity());
 
-            return new OperationStatus("", true);
+            return new OperationStatus($"Flight #{flightDto.Id} was updated", true);
         }
 
         public async Task<OperationStatus> SetStatus(FlightStatus status, int? flightId)
@@ -64,7 +64,7 @@ namespace MotorDepot.BLL.Services
 
             await _database.FlightRepository.UpdateAsync(flight);
 
-            return new OperationStatus("", true);
+            return new OperationStatus("Flight's status was updated", true);
         }
 
         public async Task<OperationStatus> SetDriverWithAuto(int flightId, int autoId, string driverEmail)
@@ -82,7 +82,8 @@ namespace MotorDepot.BLL.Services
 
             await _database.FlightRepository.UpdateAsync(flight);
 
-            return new OperationStatus("", true);
+            return new OperationStatus($"Driver #{driver.Id} was set to flight " +
+                                       $"#{flight.Id} with car #{autoId} successfully", true);
         }
 
         public OperationStatus<IEnumerable> GetFlightStatuses()
@@ -92,16 +93,52 @@ namespace MotorDepot.BLL.Services
             return new OperationStatus<IEnumerable>("", statuses, true);
         }
 
-        public async Task<OperationStatus<IEnumerable<FlightDto>>> GetAllAsync(bool deleted = false)
+        public async Task<OperationStatus> DeleteDriverAndAuto(int? flightId)
+        {
+            if(flightId == null)
+                throw new ArgumentNullException(nameof(flightId));
+
+            var flight = await _database.FlightRepository.FindAsync(flightId);
+
+            if(flight == null)
+                return new OperationStatus("Flight doesn't exist", HttpStatusCode.NotFound, false);
+
+            if(flight.FlightStatusLookupId != FlightStatus.Occupied)
+                return new OperationStatus(
+                    $"Driver and auto cannot be deleted because flight is {flight.Status.Name}",
+                    HttpStatusCode.BadRequest,
+                    false);
+
+            flight.DriverId = null;
+            flight.AutoId = null;
+            flight.FlightStatusLookupId = FlightStatus.Free;
+
+            await _database.FlightRepository.UpdateAsync(flight);
+
+            return new OperationStatus($"Driver and auto was successfully delete from flight #{flightId}", true);
+        }
+
+        public async Task<OperationStatus<IEnumerable<FlightDto>>> GetAllAsync(
+            bool deleted = false,
+            bool onlyFree = false)
         {
             var flights = (await _database.FlightRepository.GetAllAsync()).ToList();
 
             if (deleted)
+            {
                 return new OperationStatus<IEnumerable<FlightDto>>("", flights.ToDto(), true);
+            }
+
+            if (onlyFree)
+            {
+                var freeFlights = flights.Where(f => f.FlightStatusLookupId == FlightStatus.Free);
+
+                return new OperationStatus<IEnumerable<FlightDto>>("", freeFlights.ToDto(), true);
+            }
 
             var items = flights.Where(flight => flight.FlightStatusLookupId != FlightStatus.Deleted)
-            .ToList()
-            .ToDto();
+                .ToList()
+                .ToDto();
 
             return new OperationStatus<IEnumerable<FlightDto>>("", items, true);
         }
@@ -133,7 +170,7 @@ namespace MotorDepot.BLL.Services
 
             await _database.FlightRepository.UpdateAsync(flight);
 
-            return new OperationStatus("", true);
+            return new OperationStatus("Flight was removed", true);
         }
 
         public void Dispose()

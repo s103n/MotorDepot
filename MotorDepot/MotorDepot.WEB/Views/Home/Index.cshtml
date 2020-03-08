@@ -1,6 +1,20 @@
-﻿@model IEnumerable<MotorDepot.WEB.Models.AlertViewModel>
-@{
+﻿@{
     ViewBag.Title = "Home Page";
 }
 
-@Alert.RenderAll(Model)
+@Alert.RenderAll()
+
+@section scripts
+{
+    <script>
+        $('.alert-dismissible').click(function() {
+
+            var key = $(this).find('.session-key').text();
+
+            $.ajax({
+                type: "POST",
+                url: `/Home/SessionAlertDeny?sessionKey=${key}`
+            });
+        });
+    </script>
+}

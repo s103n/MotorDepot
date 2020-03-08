@@ -78,6 +78,12 @@ namespace MotorDepot.BLL.Infrastructure.Mappers
             return requests.Select(x => x.ToDto());
         }
 
+        /// <summary>
+        /// Extension method for mapping one model to another with assignment all properties
+        /// </summary>
+        /// <param name="model">The model to which to assign</param>
+        /// <param name="other">The model to be assigned</param>
+        /// <returns></returns>
         public static FlightDto ToEditWith(this FlightDto model, FlightDto other)
         {
             model.Description = other.Description;

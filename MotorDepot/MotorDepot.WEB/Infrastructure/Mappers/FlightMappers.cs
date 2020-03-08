@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using MotorDepot.BLL.Models;
-using MotorDepot.WEB.Models;
+using MotorDepot.WEB.Models.Flight;
+using MotorDepot.WEB.Models.FlightRequest;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
 
 namespace MotorDepot.WEB.Infrastructure.Mappers
 {
@@ -17,7 +17,8 @@ namespace MotorDepot.WEB.Infrastructure.Mappers
                     .ForMember("AutoName", opt => opt.MapFrom(x => x.Auto.Model))
                     .ForMember("AutoNumbers", opt => opt.MapFrom(x => x.Auto.Numbers))
                     .ForMember("DriverEmail", opt => opt.MapFrom(x => x.Driver.Email))
-                    .ForMember("DriverName", opt => opt.MapFrom(x => $"{x.Driver.FirstName} {x.Driver.LastName}"));
+                    .ForMember("DriverName", opt => opt.MapFrom(x => $"{x.Driver.FirstName} {x.Driver.LastName}"))
+                    .ForMember("AutoId", opt => opt.MapFrom(x => x.Auto.Id));
             }).CreateMapper().Map<FlightDto, FlightViewModel>(model);
         }
 
@@ -68,7 +69,7 @@ namespace MotorDepot.WEB.Infrastructure.Mappers
             {
                 cfg.CreateMap<FlightCreateViewModel, FlightDto>()
                     .ForMember("DispatcherCreator",
-                        opt => opt.MapFrom(x => new DispatcherDto {Id = x.DispatcherCreatorId}));
+                        opt => opt.MapFrom(x => new DispatcherDto { Id = x.DispatcherCreatorId }));
             }).CreateMapper().Map<FlightCreateViewModel, FlightDto>(model);
         }
 

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MotorDepot.BLL.Models;
-using MotorDepot.WEB.Models;
+using MotorDepot.WEB.Models.Auto;
 
 namespace MotorDepot.WEB.Infrastructure.Mappers
 {
