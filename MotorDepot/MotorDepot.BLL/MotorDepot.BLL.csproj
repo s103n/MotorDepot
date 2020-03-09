@@ -103,6 +103,7 @@
     <Compile Include="BusinessModels\ReflectionSort.cs" />
     <Compile Include="Infrastructure\Mappers\AutoMappers.cs" />
     <Compile Include="Infrastructure\Mappers\FlightMappers.cs" />
+    <Compile Include="Infrastructure\Mappers\LogMappers.cs" />
     <Compile Include="Infrastructure\Mappers\UserMappers.cs" />
     <Compile Include="Infrastructure\OperationStatus.cs" />
     <Compile Include="Infrastructure\ValidationStatus.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Models\AutoDto.cs" />
     <Compile Include="Models\DispatcherDto.cs" />
     <Compile Include="Models\DriverDto.cs" />
+    <Compile Include="Models\ExceptionDto.cs" />
     <Compile Include="Models\FlightDto.cs" />
     <Compile Include="Models\FlightRequestDto.cs" />
     <Compile Include="Models\UserDto.cs" />
@@ -125,6 +127,8 @@
     <Compile Include="Services\DriverService.cs" />
     <Compile Include="Services\FlightRequestService.cs" />
     <Compile Include="Services\FlightService.cs" />
+    <Compile Include="Interfaces\ILoggerService.cs" />
+    <Compile Include="Services\LogService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Util\UnitOfWorkModule.cs" />
   </ItemGroup>

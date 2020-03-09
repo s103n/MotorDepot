@@ -31,7 +31,7 @@ namespace MotorDepot.BLL.Services
                 return new OperationStatus("Dispatcher with same e-mail address is already exists", false);
 
             var user = userDto.ToEntity();
-            var status = await _database.UserManager.CreateAsync(user, userDto.Password);
+            var status = await _database.UserManager.CreateAsync(userDto.ToEntity(), userDto.Password);
 
             if (!status.Succeeded)
                 return new OperationStatus(status.Errors.First(), false);
@@ -42,13 +42,14 @@ namespace MotorDepot.BLL.Services
             return new OperationStatus("Registration was being successful", true);
         }
 
-        public OperationStatus<IEnumerable<UserDto>> GetDispatchers()
+        public IEnumerable<UserDto> GetDispatchers()
         {
             var dispatchers = _database.UserManager.Users
                 .Where(user => _database.UserManager.IsInRole(user.Id, "dispatcher"))
                 .AsEnumerable()
                 .ToDto();
-            return new OperationStatus<IEnumerable<UserDto>>("", dispatchers, true);
+
+            return dispatchers;
         }
 
         public void Dispose()

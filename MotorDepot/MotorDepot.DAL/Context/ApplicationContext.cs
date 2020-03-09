@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
 using MotorDepot.DAL.Entities;
+using MotorDepot.DAL.Entities.Lookup;
+using MotorDepot.DAL.Infrastructure;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Threading.Tasks;
-using MotorDepot.DAL.Entities.Lookup;
-using MotorDepot.DAL.Infrastructure;
+using MotorDepot.DAL.Entities.Logging;
 
 namespace MotorDepot.DAL.Context
 {
@@ -32,6 +33,7 @@ namespace MotorDepot.DAL.Context
         public DbSet<AutoBrand> AutoBrands { get; set; }
         public DbSet<FlightRequest> FlightRequests { get; set; }
         public DbSet<FlightRequestStatusLookup> FlightRequestStatusLookups { get; set; }
+        public DbSet<LogException> LogExceptions { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

@@ -24,18 +24,13 @@ namespace MotorDepot.WEB.Controllers
 
         public async Task<ActionResult> Create()
         {
-            var brandOperation = await _autoService.GetBrandsAsync();
-            var typesOperation = _autoService.GetAutoTypes();
+            var brands = await _autoService.GetBrandsAsync();
+            var types = _autoService.GetAutoTypes();
 
-            ViewBag.AutoBrands = new SelectList(brandOperation.Value, "Id", "Name");
-            ViewBag.AutoTypes = new SelectList(typesOperation.Value, "Id", "Name");
+            ViewBag.AutoBrands = new SelectList(brands, "Id", "Name");
+            ViewBag.AutoTypes = new SelectList(types, "Id", "Name");
 
-            if (brandOperation.Success && typesOperation.Success)
-            {
-                return View();
-            }
-
-            return new HttpOperationStatusResult(brandOperation, typesOperation);
+            return View();
         }
 
         [HttpPost]
@@ -61,15 +56,10 @@ namespace MotorDepot.WEB.Controllers
 
         public async Task<ActionResult> All()
         {
-            var operationAuto = await _autoService.GetAutosAsync();
+            var autos = await _autoService.GetAutosAsync();
             var flights = await _flightService.GetAllAsync();
 
-            if (operationAuto.Success)
-            {
-                return View(operationAuto.Value.ToDisplayViewModel(flights.Value));
-            }
-
-            return new HttpOperationStatusResult(operationAuto);
+            return View(autos.ToDisplayViewModel(flights.Value));
         }
 
         public async Task<ActionResult> Edit(int? autoId)
@@ -78,8 +68,8 @@ namespace MotorDepot.WEB.Controllers
 
             if (operation.Success)
             {
-                ViewBag.AutoTypes = new SelectList(_autoService.GetAutoTypes().Value, "Id", "Name");
-                ViewBag.AutoBrands = new SelectList((await _autoService.GetBrandsAsync()).Value, "Id", "Name");
+                ViewBag.AutoTypes = new SelectList(_autoService.GetAutoTypes(), "Id", "Name");
+                ViewBag.AutoBrands = new SelectList(await _autoService.GetBrandsAsync(), "Id", "Name");
 
                 return View(operation.Value.ToEditViewModel());
             }

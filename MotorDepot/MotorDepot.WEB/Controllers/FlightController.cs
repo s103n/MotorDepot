@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using Microsoft.AspNet.Identity;
 using MotorDepot.BLL.Interfaces;
@@ -46,13 +47,17 @@ namespace MotorDepot.WEB.Controllers
         }
 
         [Authorize(Roles = "driver, dispatcher, admin")]
-        public async Task<ActionResult> All(string sortProperty = null) //todo asc
+        public async Task<ActionResult> All(string sortProperty = null, bool asc = true) //todo asc
+        //разделить под водителя
+        //todo сортировку на яксе лучше сделать, так как при обновлении страницы будет теряться состояние
         {
-            if(User.IsInRole("driver"))
-            {
-                var flights= await _flightService.GetAllAsync(onlyFree: true);
+            IEnumerable<FlightViewModel> flightItems;
 
-                return View(flights.Value.ToDisplayViewModel());
+            if (User.IsInRole("driver"))
+            {
+                flightItems = (await _flightService.GetAllAsync(onlyFree: true)).ToDisplayViewModel();
+
+                return View(flightItems);
             }
 
             var flightOperation = await _flightService.GetAllAsync();
@@ -62,7 +67,7 @@ namespace MotorDepot.WEB.Controllers
                 try
                 {
                     var items = ReflectionSort<FlightViewModel>
-                        .Sort(flightOperation.Value.ToDisplayViewModel(), sortProperty);
+                        .Sort(flightOperation.ToDisplayViewModel(), sortProperty, asc);
 
                     return View(items);
                 }
@@ -72,7 +77,7 @@ namespace MotorDepot.WEB.Controllers
                 }
             }
 
-            return View(flightOperation.Value.ToDisplayViewModel());
+            return View(flightOperation.ToDisplayViewModel());
         }
 
         [Authorize(Roles = "dispatcher, admin")]
@@ -80,12 +85,7 @@ namespace MotorDepot.WEB.Controllers
         {
             var flightOperation = await _flightRequestService.GetFlightRequestsAsync(FlightRequestStatus.InQueue);
 
-            if (flightOperation.Success)
-            {
-                return View(flightOperation.Value.ToDisplayViewModels());
-            }
-
-            return new HttpOperationStatusResult(flightOperation);
+            return View(flightOperation.ToDisplayViewModels());
         }
 
         [Authorize(Roles = "dispatcher, admin")]
@@ -95,20 +95,15 @@ namespace MotorDepot.WEB.Controllers
 
             if (requestOperation.Success)
             {
-                var autoOperation = await _autoService.GetAutosByTypeAsync(requestOperation.Value.AutoType);
+                var autos = await _autoService.GetAutosByTypeAsync(requestOperation.Value.AutoType);
 
-                if (autoOperation.Success)
+                var acceptViewModel = new FlightRequestAcceptViewModel
                 {
-                    var acceptViewModel = new FlightRequestAcceptViewModel
-                    {
-                        Request = requestOperation.Value.ToDetailsViewModel(),
-                        Auto = autoOperation.Value.ToSetViewModels()
-                    };
+                    Request = requestOperation.Value.ToDetailsViewModel(),
+                    Auto = autos.ToSetViewModels()
+                };
 
-                    return View(acceptViewModel);
-                }
-
-                return new HttpOperationStatusResult(autoOperation);
+                return View(acceptViewModel);
             }
 
             return new HttpOperationStatusResult(requestOperation);
@@ -119,18 +114,18 @@ namespace MotorDepot.WEB.Controllers
         public async Task<ActionResult> ConfirmRequest(
             int requestId,
             int flightId,
-            int? autoId,
+            int autoId,
             string driverEmail,
             bool isAccepted)
         {
             var status = isAccepted ? FlightRequestStatus.Accepted : FlightRequestStatus.Canceled;
 
-            var requestOperation = await _flightRequestService.ConfirmRequest(
+            var requestOperation = await _flightRequestService.ConfirmRequestAsync(
                 requestId,
                 User.Identity.GetUserId(),
                 status);
 
-            var flightOperation = await _flightService.SetDriverWithAuto(flightId, (int)autoId, driverEmail);
+            var flightOperation = await _flightService.SetDriverWithAuto(flightId, autoId, driverEmail);
 
             if (requestOperation.Success && flightOperation.Success)
             {
@@ -204,16 +199,16 @@ namespace MotorDepot.WEB.Controllers
         public async Task<ActionResult> RequestFor(int? flightId)
         {
             var operation = await _flightService.GetByIdAsync(flightId);
-            var operationAuto = _autoService.GetAutoTypes();
+            var autoTypes = _autoService.GetAutoTypes();
 
-            ViewBag.AutoTypes = new SelectList(operationAuto.Value, "Id", "Name");
+            ViewBag.AutoTypes = new SelectList(autoTypes, "Id", "Name");
 
             if (operation.Success)
             {
                 return View(new FlightRequestCreateViewModel { RequestedFlightId = (int)flightId });
             }
 
-            return new HttpOperationStatusResult(operation, operationAuto);
+            return new HttpOperationStatusResult(operation);
         }
 
         [HttpPost]
@@ -256,6 +251,7 @@ namespace MotorDepot.WEB.Controllers
             }
 
             if (deleteOperation.Code == HttpStatusCode.BadRequest) // need to check for error
+            //add model error in service or maybe do it in view on rendering
             {
                 ModelState.AddModelError("", deleteOperation.Message);
 

@@ -45,35 +45,35 @@ namespace MotorDepot.BLL.Services
             return new OperationStatus($"Auto #{autoDto.Id} was updated", true);
         }
 
-        public async Task<OperationStatus<IEnumerable<AutoDto>>> GetAutosByTypeAsync(AutoType type)
+        public async Task<IEnumerable<AutoDto>> GetAutosByTypeAsync(AutoType type)
         {
             var items = (await _database.AutoRepository.GetAllAsync())
                 .ToList()
                 .Where(x => x.AutoTypeLookupId == type && x.AutoStatusLookupId == AutoStatus.Usable)
                 .ToDto();
 
-            return new OperationStatus<IEnumerable<AutoDto>>("", items, true);
+            return items;
         }
 
-        public async Task<OperationStatus<IEnumerable<AutoBrandDto>>> GetBrandsAsync()
+        public async Task<IEnumerable<AutoBrandDto>> GetBrandsAsync()
         {
             var brands = await _database.AutoBrandRepository.GetAllAsync();
 
-            return new OperationStatus<IEnumerable<AutoBrandDto>>("Ok", brands.ToDto(), true);
+            return brands.ToDto();
         }
 
-        public OperationStatus<IEnumerable> GetAutoTypes()
+        public IEnumerable GetAutoTypes()
         {
             var parser = new EnumParser<AutoType>().Parse();
 
-            return new OperationStatus<IEnumerable>("", parser, true);
+            return parser;
         }
 
-        public async Task<OperationStatus<IEnumerable<AutoDto>>> GetAutosAsync()
+        public async Task<IEnumerable<AutoDto>> GetAutosAsync()
         {
             var autos = await _database.AutoRepository.GetAllAsync();
 
-            return new OperationStatus<IEnumerable<AutoDto>>("", autos.ToDto(), true);
+            return autos.ToDto();
         }
 
         public async Task<bool> IsInFlightAsync(int autoId)
@@ -86,12 +86,12 @@ namespace MotorDepot.BLL.Services
 
         public async Task<OperationStatus<AutoDto>> GetAutoById(int? autoId)
         {
-            if(autoId == null)
+            if (autoId == null)
                 throw new ArgumentNullException(nameof(autoId));
 
             var auto = await _database.AutoRepository.FindAsync(autoId);
 
-            if(auto == null)
+            if (auto == null)
                 return new OperationStatus<AutoDto>("Auto doesn't exist", HttpStatusCode.NotFound, false);
 
             return new OperationStatus<AutoDto>("", auto.ToDto(), true);
@@ -101,7 +101,7 @@ namespace MotorDepot.BLL.Services
         {
             var auto = await _database.AutoRepository.FindAsync(autoId);
 
-            if(auto == null)
+            if (auto == null)
                 return new OperationStatus("Auto doesn't exist", HttpStatusCode.NotFound, false);
 
             auto.AutoStatusLookupId = status;
@@ -111,11 +111,11 @@ namespace MotorDepot.BLL.Services
             return new OperationStatus("Auto was updated", true);
         }
 
-        public OperationStatus<IEnumerable> GetAutoStatuses()
+        public IEnumerable GetAutoStatuses()
         {
             var parser = new EnumParser<AutoStatus>().Parse();
 
-            return new OperationStatus<IEnumerable>("", parser, true);
+            return parser;
         }
 
         public void Dispose()

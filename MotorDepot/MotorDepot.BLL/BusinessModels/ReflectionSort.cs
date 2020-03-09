@@ -17,10 +17,13 @@ namespace MotorDepot.BLL.BusinessModels
             if (string.IsNullOrEmpty(property))
                 throw new ArgumentException("Property cannot be empty");
 
-            if (entityProps.All(x => x.Name != property))
+            if (entityProps.All(x => x.GetType().GetProperty(property) == null))
                 throw new ArgumentException("Property doesn't exist");
 
-            return entities.OrderBy(x => x.GetType().GetProperty(property).GetValue(x, null));
+            if (asc)
+                return entities.OrderBy(x => x.GetType().GetProperty(property).GetValue(x, null));
+            else
+                return entities.OrderByDescending(x => x.GetType().GetProperty(property).GetValue(x, null));
         }
     }
 }

@@ -26,11 +26,14 @@ namespace MotorDepot.BLL.Services
             _database.Dispose();
         }
 
-        public async Task<OperationStatus> ConfirmRequest(
+        public async Task<OperationStatus> ConfirmRequestAsync(
             int requestId,
             string creatorId,
             FlightRequestStatus status)
         {
+            if(status == FlightRequestStatus.InQueue)
+                throw new ArgumentException("Status can not be in queue");
+
             var request = await _database.FlightRequestRepository.FindAsync(requestId);
             var dispatcher = await _database.UserManager.FindByIdAsync(creatorId);
 
@@ -79,14 +82,14 @@ namespace MotorDepot.BLL.Services
             return new OperationStatus<FlightRequestDto>("", request.ToDto(), true);
         }
 
-        public async Task<OperationStatus<IEnumerable<FlightRequestDto>>> GetFlightRequestsAsync(FlightRequestStatus status)
+        public async Task<IEnumerable<FlightRequestDto>> GetFlightRequestsAsync(FlightRequestStatus status)
         {
             var requests = (await _database.FlightRequestRepository.GetAllAsync())
                 .ToList()
                 .Where(req => (int)req.Status.Id == (int)status
                               && req.RequestedFlight.FlightStatusLookupId == FlightStatus.Free);
 
-            return new OperationStatus<IEnumerable<FlightRequestDto>>("", requests.ToDto(), true);
+            return requests.ToDto();
         }
     }
 }

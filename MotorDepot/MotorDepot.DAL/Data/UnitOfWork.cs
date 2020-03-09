@@ -7,6 +7,7 @@ using MotorDepot.DAL.Interfaces;
 using MotorDepot.DAL.Repositories;
 using System;
 using System.Threading.Tasks;
+using MotorDepot.DAL.Entities.Logging;
 
 namespace MotorDepot.DAL.Data
 {
@@ -25,7 +26,7 @@ namespace MotorDepot.DAL.Data
         public IRepository<FlightRequest> FlightRequestRepository => new FlightRequestRepository(_context);
         public UserManager UserManager => new UserManager(new UserStore<AppUser>(_context));
         public RoleManager RoleManager => new RoleManager(new RoleStore<IdentityRole>(_context));
-
+        public IRepository<LogException> LogExceptionRepository => new LogExceptionRepository(_context);
         public async Task<ValidationErrors> SaveAsync()
         {
             return await _context.SaveChangesAsync();

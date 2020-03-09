@@ -26,20 +26,23 @@ else
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.DeparturePlace)
-            <a class="fa fa-sort" style="cursor: pointer"
-               href="/Flight/All?sortProperty=DeparturePlace"></a>
+            <a class="fa fa-sort sort" style="cursor: pointer" 
+               href="/Flight/All?sortProperty=DeparturePlace&asc=true"></a>
         </th>
         <th>
             @Html.DisplayNameFor(model => model.ArrivalPlace)
-            <a class="fa fa-sort" style="cursor: pointer" href="/Flight/All?sortProperty=ArrivalPlace"></a>
+            <a class="fa fa-sort sort" style="cursor: pointer" 
+               href="/Flight/All?sortProperty=ArrivalPlace&asc=true"></a>
         </th>
         <th>
             @Html.DisplayNameFor(model => model.CreateDate)
-            <a class="fa fa-sort" style="cursor: pointer" href="/Flight/All?sortProperty=CreateDate"></a>
+            <a class="fa fa-sort sort" style="cursor: pointer" 
+               href="/Flight/All?sortProperty=CreateDate&asc=true"></a>
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Distance)
-            <a class="fa fa-sort" style="cursor: pointer" href="/Flight/All?sortProperty=Distance"></a>
+            <a class="fa fa-sort sort" style="cursor: pointer" 
+               href="/Flight/All?sortProperty=Distance&asc=true"></a>
         </th>
 
         @if (!User.IsInRole("driver"))
@@ -115,5 +118,8 @@ else
 @section scripts
 {
     <script>
+        $('.sort').onclick(function() {
+            $(this).attr("href");
+        });
     </script>
 }

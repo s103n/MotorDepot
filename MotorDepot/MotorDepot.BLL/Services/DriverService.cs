@@ -44,14 +44,14 @@ namespace MotorDepot.BLL.Services
             return new OperationStatus("Driver was successfully created", true);
         }
 
-        public OperationStatus<IEnumerable<UserDto>> GetDrivers()
+        public IEnumerable<UserDto> GetDrivers()
         {
             var users = _database.UserManager.Users
                 .Where(user => _database.UserManager.IsInRole(user.Id, "driver"))
                 .AsEnumerable()
                 .ToDto();
 
-            return new OperationStatus<IEnumerable<UserDto>>("", users, true);
+            return users;
         }
 
         public async Task<OperationStatus> SendFlightRequest(FlightRequestDto flightRequest)
@@ -82,9 +82,13 @@ namespace MotorDepot.BLL.Services
             if(driverId == null)
                 throw new ArgumentNullException(nameof(driverId));
 
+            var driver = await _database.UserManager.FindByIdAsync(driverId);
+
+            if(driver == null)
+                return new OperationStatus<IEnumerable<FlightDto>>("Driver doesn't exist", HttpStatusCode.NotFound, false);
+
             var flights = (await _database.FlightRepository.GetAllAsync())
-                .Where(flight => flight.Driver != null
-                    && flight.Driver.Id == driverId);
+                .Where(flight => flight.Driver != null && flight.Driver.Id == driverId);
 
             return new OperationStatus<IEnumerable<FlightDto>>("", flights.ToDto(), true);
         }
@@ -93,6 +97,11 @@ namespace MotorDepot.BLL.Services
         {
             if(driverId == null)
                 throw new ArgumentNullException(nameof(driverId));
+
+            var driver = await _database.UserManager.FindByIdAsync(driverId);
+
+            if(driver == null)
+                return new OperationStatus<FlightDto>("Driver doesn't exist", HttpStatusCode.NotFound, false);
 
             var currentFlight = (await _database.FlightRepository.GetAllAsync())
                 .FirstOrDefault(flight => flight.DriverId != null 

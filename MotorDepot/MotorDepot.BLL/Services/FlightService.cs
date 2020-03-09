@@ -115,32 +115,29 @@ namespace MotorDepot.BLL.Services
 
             await _database.FlightRepository.UpdateAsync(flight);
 
-            return new OperationStatus($"Driver and auto was successfully delete from flight #{flightId}", true);
+            return new OperationStatus($"Driver and auto was successfully deleted from flight #{flightId}", true);
         }
 
-        public async Task<OperationStatus<IEnumerable<FlightDto>>> GetAllAsync(
+        public async Task<IEnumerable<FlightDto>> GetAllAsync(
             bool deleted = false,
             bool onlyFree = false)
         {
+            if(deleted && onlyFree)
+                throw new ArgumentException("Can not use deleted and only free parameters together");
+
             var flights = (await _database.FlightRepository.GetAllAsync()).ToList();
 
             if (deleted)
             {
-                return new OperationStatus<IEnumerable<FlightDto>>("", flights.ToDto(), true);
+                return flights.ToDto();
             }
 
             if (onlyFree)
             {
-                var freeFlights = flights.Where(f => f.FlightStatusLookupId == FlightStatus.Free);
-
-                return new OperationStatus<IEnumerable<FlightDto>>("", freeFlights.ToDto(), true);
+                return flights.Where(f => f.FlightStatusLookupId == FlightStatus.Free).ToDto();
             }
 
-            var items = flights.Where(flight => flight.FlightStatusLookupId != FlightStatus.Deleted)
-                .ToList()
-                .ToDto();
-
-            return new OperationStatus<IEnumerable<FlightDto>>("", items, true);
+            return flights.Where(flight => flight.FlightStatusLookupId != FlightStatus.Deleted).ToDto();
         }
 
         public async Task<OperationStatus<FlightDto>> GetByIdAsync(int? id)
