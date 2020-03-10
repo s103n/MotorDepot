@@ -26,7 +26,8 @@ namespace MotorDepot.DAL.Data
         public IRepository<FlightRequest> FlightRequestRepository => new FlightRequestRepository(_context);
         public UserManager UserManager => new UserManager(new UserStore<AppUser>(_context));
         public RoleManager RoleManager => new RoleManager(new RoleStore<IdentityRole>(_context));
-        public IRepository<LogException> LogExceptionRepository => new LogExceptionRepository(_context);
+        public ILogger<LogEvent> LoggerDb => new LoggerDb(_context); 
+
         public async Task<ValidationErrors> SaveAsync()
         {
             return await _context.SaveChangesAsync();

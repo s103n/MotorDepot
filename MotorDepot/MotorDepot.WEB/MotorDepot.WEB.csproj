@@ -182,14 +182,17 @@
     <Compile Include="Controllers\DriverController.cs" />
     <Compile Include="Controllers\FlightController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Filters\ActionLoggerAttribute.cs" />
     <Compile Include="Filters\ExceptionLoggerAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\HttpOperationResult.cs" />
+    <Compile Include="Infrastructure\LoggerCreator.cs" />
     <Compile Include="Infrastructure\Mappers\AccountMappers.cs" />
     <Compile Include="Infrastructure\Mappers\AutoMappers.cs" />
     <Compile Include="Infrastructure\Mappers\FlightMappers.cs" />
+    <Compile Include="Infrastructure\Mappers\LogMappers.cs" />
     <Compile Include="Infrastructure\SessionAlertHandler.cs" />
     <Compile Include="Models\AlertViewModel.cs" />
     <Compile Include="Models\Auto\AutoCreateViewModel.cs" />
@@ -202,6 +205,9 @@
     <Compile Include="Models\FlightRequest\FlightRequestAcceptViewModel.cs" />
     <Compile Include="Models\FlightRequest\FlightRequestDetailsViewModel.cs" />
     <Compile Include="Models\FlightRequest\FlightRequestDisplayViewModel.cs" />
+    <Compile Include="Models\Logging\LogActionDetailsViewModel.cs" />
+    <Compile Include="Models\Logging\LogExceptionDetailsViewModel.cs" />
+    <Compile Include="Models\Logging\LogViewModel.cs" />
     <Compile Include="Models\User\UserRegisterViewModel.cs" />
     <Compile Include="Models\Enums\AlertType.cs" />
     <Compile Include="Models\FlightRequest\FlightRequestCreateViewModel.cs" />
@@ -371,10 +377,12 @@
     <Content Include="Views\Auto\All.cshtml" />
     <Content Include="Views\Auto\Edit.cshtml" />
     <Content Include="Views\Driver\MyFlights.cshtml" />
+    <Content Include="Views\Admin\Log.cshtml" />
+    <Content Include="Views\Admin\LogAction.cshtml" />
+    <Content Include="Views\Admin\LogException.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Dispatcher\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

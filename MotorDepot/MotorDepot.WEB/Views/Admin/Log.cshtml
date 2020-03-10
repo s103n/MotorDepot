@@ -1,0 +1,53 @@
+﻿@model IEnumerable<MotorDepot.WEB.Models.Logging.LogViewModel>
+
+@{
+    ViewBag.Title = "Log";
+}
+
+<h2>Exception logs</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Controller)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Action)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Time)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LogType)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) 
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Controller)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Action)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Time)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LogType)
+        </td>
+        <td>
+            @Html.ActionLink("Log details", "LogDetails", new { logId = @item.Id})
+        </td>
+    </tr>
+}
+
+</table>

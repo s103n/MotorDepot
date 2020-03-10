@@ -102,7 +102,7 @@
     <Compile Include="Entities\AppUser.cs" />
     <Compile Include="Entities\Auto.cs" />
     <Compile Include="Entities\AutoBrand.cs" />
-    <Compile Include="Entities\Logging\LogException.cs" />
+    <Compile Include="Entities\Logging\LogEvent.cs" />
     <Compile Include="Entities\Lookup\AutoTypeLookup.cs" />
     <Compile Include="Entities\Abstract\BaseEnumEntity.cs" />
     <Compile Include="Entities\Flight.cs" />
@@ -110,15 +110,25 @@
     <Compile Include="Entities\FlightRequest.cs" />
     <Compile Include="Entities\Lookup\FlightRequestStatusLookup.cs" />
     <Compile Include="Entities\Lookup\FlightStatusLookup.cs" />
+    <Compile Include="Entities\Lookup\LogTypeLookup.cs" />
     <Compile Include="Identity\RoleManager.cs" />
     <Compile Include="Identity\UserManager.cs" />
     <Compile Include="Infrastructure\ValidationErrors.cs" />
     <Compile Include="Infrastructure\ValidationResult.cs" />
+    <Compile Include="Interfaces\ILogger.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="Migrations\202003051930598_init after refact.cs" />
     <Compile Include="Migrations\202003051930598_init after refact.designer.cs">
       <DependentUpon>202003051930598_init after refact.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202003101815494_AddLogExceptionIdProperty.cs" />
+    <Compile Include="Migrations\202003101815494_AddLogExceptionIdProperty.designer.cs">
+      <DependentUpon>202003101815494_AddLogExceptionIdProperty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202003102219451_LogEventEntityMigration.cs" />
+    <Compile Include="Migrations\202003102219451_LogEventEntityMigration.designer.cs">
+      <DependentUpon>202003102219451_LogEventEntityMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -127,7 +137,7 @@
     <Compile Include="Repositories\FlightRepository.cs" />
     <Compile Include="Repositories\FlightRequestRepository.cs" />
     <Compile Include="Repositories\GenericRepository.cs" />
-    <Compile Include="Repositories\LogExceptionRepository.cs" />
+    <Compile Include="Repositories\LoggerDb.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -142,6 +152,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202003051930598_init after refact.resx">
       <DependentUpon>202003051930598_init after refact.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003101815494_AddLogExceptionIdProperty.resx">
+      <DependentUpon>202003101815494_AddLogExceptionIdProperty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003102219451_LogEventEntityMigration.resx">
+      <DependentUpon>202003102219451_LogEventEntityMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

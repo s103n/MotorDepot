@@ -52,16 +52,16 @@ namespace MotorDepot.DAL.Migrations
             //        .Select(x => new FlightRequestStatusLookup() { Id = x, Name = x.ToString() })
             //        .ToArray());
 
-            context.Roles.AddOrUpdate(new IdentityRole("admin"));
-            context.Roles.AddOrUpdate(new IdentityRole("dispatcher"));
-            context.Roles.AddOrUpdate(new IdentityRole("driver"));
-            context.Roles.AddOrUpdate(new IdentityRole("root"));
+            //context.Roles.AddOrUpdate(new IdentityRole("admin"));
+            //context.Roles.AddOrUpdate(new IdentityRole("dispatcher"));
+            //context.Roles.AddOrUpdate(new IdentityRole("driver"));
+            //context.Roles.AddOrUpdate(new IdentityRole("root"));
 
-            context.AutoBrands.AddOrUpdate(new AutoBrand { Name = "Chevrolet" });
-            context.AutoBrands.AddOrUpdate(new AutoBrand { Name = "Volkswagen" });
-            context.AutoBrands.AddOrUpdate(new AutoBrand { Name = "Tesla" });
-            context.AutoBrands.AddOrUpdate(new AutoBrand { Name = "Toyota" });
-            context.AutoBrands.AddOrUpdate(new AutoBrand { Name = "Mercedes-Benz" });
+            //context.AutoBrands.AddOrUpdate(new AutoBrand { Name = "Chevrolet" });
+            //context.AutoBrands.AddOrUpdate(new AutoBrand { Name = "Volkswagen" });
+            //context.AutoBrands.AddOrUpdate(new AutoBrand { Name = "Tesla" });
+            //context.AutoBrands.AddOrUpdate(new AutoBrand { Name = "Toyota" });
+            //context.AutoBrands.AddOrUpdate(new AutoBrand { Name = "Mercedes-Benz" });
         }
     }
 }

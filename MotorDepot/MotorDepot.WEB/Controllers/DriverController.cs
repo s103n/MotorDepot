@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using MotorDepot.BLL.Interfaces;
 using MotorDepot.Shared.Enums;
+using MotorDepot.WEB.Filters;
 using MotorDepot.WEB.Infrastructure;
 using MotorDepot.WEB.Infrastructure.Mappers;
 using MotorDepot.WEB.Models;
@@ -12,6 +13,8 @@ using MotorDepot.WEB.Models.Flight;
 namespace MotorDepot.WEB.Controllers
 {
     [Authorize(Roles = "driver")]
+    [ExceptionLogger]
+    [ActionLogger]
     public class DriverController : Controller
     {
         private readonly IFlightService _flightService;
@@ -44,7 +47,7 @@ namespace MotorDepot.WEB.Controllers
                 {
                     driverFlightVm.CurrentFlight = currentFlightOperation.Value.ToDisplayViewModel();
 
-                    ViewBag.AutoStatuses = new SelectList(_autoService.GetAutoStatuses().Value, "Id", "Name");
+                    ViewBag.AutoStatuses = new SelectList(_autoService.GetAutoStatuses(), "Id", "Name");
                 }
 
                 return View(driverFlightVm);

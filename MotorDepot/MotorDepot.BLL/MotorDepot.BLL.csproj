@@ -104,6 +104,7 @@
     <Compile Include="Infrastructure\Mappers\AutoMappers.cs" />
     <Compile Include="Infrastructure\Mappers\FlightMappers.cs" />
     <Compile Include="Infrastructure\Mappers\LogMappers.cs" />
+    <Compile Include="Infrastructure\Mappers\MapperProfile.cs" />
     <Compile Include="Infrastructure\Mappers\UserMappers.cs" />
     <Compile Include="Infrastructure\OperationStatus.cs" />
     <Compile Include="Infrastructure\ValidationStatus.cs" />
@@ -117,7 +118,7 @@
     <Compile Include="Models\AutoDto.cs" />
     <Compile Include="Models\DispatcherDto.cs" />
     <Compile Include="Models\DriverDto.cs" />
-    <Compile Include="Models\ExceptionDto.cs" />
+    <Compile Include="Models\LogEventDto.cs" />
     <Compile Include="Models\FlightDto.cs" />
     <Compile Include="Models\FlightRequestDto.cs" />
     <Compile Include="Models\UserDto.cs" />

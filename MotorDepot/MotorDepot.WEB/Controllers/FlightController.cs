@@ -13,10 +13,13 @@ using MotorDepot.WEB.Models.FlightRequest;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using MotorDepot.BLL.BusinessModels;
+using MotorDepot.WEB.Filters;
 
 namespace MotorDepot.WEB.Controllers
 {
     [Authorize]
+    [ExceptionLogger]
+    [ActionLogger]
     public class FlightController : Controller
     {
         private readonly IFlightService _flightService;

@@ -1,0 +1,53 @@
+﻿@model MotorDepot.WEB.Models.Logging.LogExceptionDetailsViewModel
+
+@{
+    ViewBag.Title = "LogException";
+}
+
+<h2>LogException</h2>
+
+<div>
+    <hr />
+    <dl>
+        <dt>
+            @Html.DisplayNameFor(model => model.Message)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Message)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StackTrace)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StackTrace)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Controller)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Controller)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Action)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Action)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Time)
+        </dd>
+
+    </dl>
+</div>

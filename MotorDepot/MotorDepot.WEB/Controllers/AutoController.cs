@@ -6,10 +6,13 @@ using MotorDepot.WEB.Models.Auto;
 using MotorDepot.WEB.Models.Enums;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using MotorDepot.WEB.Filters;
 
 namespace MotorDepot.WEB.Controllers
 {
     [Authorize(Roles = "admin")]
+    [ExceptionLogger]
+    [ActionLogger]
     public class AutoController : Controller
     {
         private readonly IAutoService _autoService;
@@ -59,7 +62,7 @@ namespace MotorDepot.WEB.Controllers
             var autos = await _autoService.GetAutosAsync();
             var flights = await _flightService.GetAllAsync();
 
-            return View(autos.ToDisplayViewModel(flights.Value));
+            return View(autos.ToDisplayViewModel(flights));
         }
 
         public async Task<ActionResult> Edit(int? autoId)

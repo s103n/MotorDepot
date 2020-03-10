@@ -1,0 +1,53 @@
+﻿@model MotorDepot.WEB.Models.Logging.LogActionDetailsViewModel
+
+@{
+    ViewBag.Title = "LogAction";
+}
+
+<h2>LogAction</h2>
+
+<div>
+    <hr />
+    <dl>
+        <dt>
+            @Html.DisplayNameFor(model => model.Controller)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Controller)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Action)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Action)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ip)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ip)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RouteValues)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RouteValues)
+        </dd>
+
+    </dl>
+</div>

@@ -5,12 +5,15 @@ using MotorDepot.WEB.Models.Auto;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using MotorDepot.WEB.Filters;
 using MotorDepot.WEB.Models;
 using MotorDepot.WEB.Models.Enums;
 
 namespace MotorDepot.WEB.Controllers
 {
     [Authorize]
+    [ExceptionLogger]
+    [ActionLogger]
     public class AccountController : Controller
     {
         private readonly IUserService _userService;

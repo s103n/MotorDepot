@@ -6,16 +6,25 @@ using MotorDepot.WEB.Models.Auto;
 using MotorDepot.WEB.Models.Enums;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using MotorDepot.Shared.Enums;
+using MotorDepot.WEB.Filters;
 
 namespace MotorDepot.WEB.Controllers
 {
     [Authorize(Roles = "admin")]
+    [ExceptionLogger]
+    [ActionLogger]
     public class AdminController : Controller
     {
         private readonly IDispatcherService _dispatcherService;
         private readonly IDriverService _driverService;
-        public AdminController(IDispatcherService dispatcherService, IDriverService driverService)
+        private readonly ILoggerService _loggerService;
+
+        public AdminController(IDispatcherService dispatcherService, 
+            IDriverService driverService,
+            ILoggerService loggerService)
         {
+            _loggerService = loggerService;
             _driverService = driverService;
             _dispatcherService = dispatcherService;
         }
@@ -47,14 +56,9 @@ namespace MotorDepot.WEB.Controllers
 
         public ActionResult Dispatchers()
         {
-            var operation = _dispatcherService.GetDispatchers();
+            var dispatchers = _dispatcherService.GetDispatchers();
 
-            if (operation.Success)
-            {
-                return View(operation.Value);
-            }
-
-            return new HttpOperationStatusResult(operation);
+            return View(dispatchers);
         }
 
         public ActionResult AddDriver()
@@ -83,6 +87,34 @@ namespace MotorDepot.WEB.Controllers
             return View("AddUser", model);
         }
 
+        public ActionResult Log(LogType logType = LogType.Action)
+        {
+            var logs = _loggerService.GetLogs(logType);
+
+            return View(logs.ToViewModel());
+        }
+
+        public ActionResult LogDetails(int? logId)
+        {
+            var log = _loggerService.GetLogById(logId);
+
+            if (log.Success)
+            {
+                switch (log.Value.LogType)
+                {
+                    case LogType.Action:
+                        return View("LogAction", log.Value.ToDetailsAction()); //to action view model
+                    case LogType.Exception:
+                        return View("LogException", log.Value.ToDetailsException()); //to exception view model
+                    case LogType.Warning:
+                        return View(log.Value); //to warning view model
+                    default:
+                        return HttpNotFound();
+                }
+            }
+
+            return new HttpOperationStatusResult(log);
+        }
 
         protected override void Dispose(bool disposing)
         {

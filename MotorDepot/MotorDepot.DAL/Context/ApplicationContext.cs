@@ -33,7 +33,7 @@ namespace MotorDepot.DAL.Context
         public DbSet<AutoBrand> AutoBrands { get; set; }
         public DbSet<FlightRequest> FlightRequests { get; set; }
         public DbSet<FlightRequestStatusLookup> FlightRequestStatusLookups { get; set; }
-        public DbSet<LogException> LogExceptions { get; set; }
+        public DbSet<LogEvent> LogEvents { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

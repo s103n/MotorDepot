@@ -55,6 +55,13 @@
                                     Automobiles
                                 </a>
                             </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-muted font-weight-bold" href="/Admin/Log">
+                                    <span class="fa fa-book"></span>
+                                    Log
+                                </a>
+                            </li>
                         }
 
                         <li class="nav-item">
@@ -77,7 +84,7 @@
                         @if (User.IsInRole("driver"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-muted font-weight-bold" 
+                                <a class="nav-link text-muted font-weight-bold"
                                    href="/Driver/MyFlights/">
                                     <span class="fa fa-location-arrow"></span>
                                     My flights

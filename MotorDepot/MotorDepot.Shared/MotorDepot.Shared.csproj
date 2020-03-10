@@ -46,6 +46,7 @@
     <Compile Include="Enums\AutoType.cs" />
     <Compile Include="Enums\FlightRequestStatus.cs" />
     <Compile Include="Enums\FlightStatus.cs" />
+    <Compile Include="Enums\LogType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -15,7 +15,7 @@ namespace MotorDepot.DAL.Interfaces
         IRepository<FlightRequest> FlightRequestRepository { get; }
         UserManager UserManager { get; }
         RoleManager RoleManager { get; }
-        IRepository<LogException> LogExceptionRepository { get; }
+        ILogger<LogEvent> LoggerDb { get; }
         Task<ValidationErrors> SaveAsync();
     }
 }

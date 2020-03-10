@@ -1,5 +1,5 @@
-﻿using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using MotorDepot.WEB.Filters;
 
 namespace MotorDepot.WEB
 {
@@ -7,7 +7,7 @@ namespace MotorDepot.WEB
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            //filters.Add(new HandleErrorAttribute());
         }
     }
 }
