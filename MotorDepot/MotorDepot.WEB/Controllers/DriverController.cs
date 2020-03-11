@@ -68,7 +68,7 @@ namespace MotorDepot.WEB.Controllers
 
             if (flightOperation.Success)
             {
-                Session["Update"] = new AlertViewModel($"{flightOperation.Message}", AlertType.Success);
+                Session["Update"] = new AlertViewModel(flightOperation.Message, AlertType.Success);
 
                 return RedirectToAction("MyFlights");
             }

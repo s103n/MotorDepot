@@ -89,9 +89,18 @@ namespace MotorDepot.WEB.Controllers
 
         public ActionResult Log(LogType logType = LogType.Action)
         {
-            var logs = _loggerService.GetLogs(logType);
+            var logs = _loggerService.GetLogs(logType).ToViewModel();
 
-            return View(logs.ToViewModel());
+            ViewBag.LogTypes = new SelectList(_loggerService.GetLogTypes(), "Id", "Name");
+
+            return View(logs);
+        }
+
+        public ActionResult LogAjax(LogType logType)
+        {
+            var logs = _loggerService.GetLogs(logType).ToViewModel();
+
+            return PartialView("LogTable", logs);
         }
 
         public ActionResult LogDetails(int? logId)

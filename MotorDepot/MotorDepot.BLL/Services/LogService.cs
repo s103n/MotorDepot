@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using MotorDepot.BLL.BusinessModels;
 using MotorDepot.BLL.Infrastructure;
 using MotorDepot.BLL.Infrastructure.Mappers;
 using MotorDepot.BLL.Interfaces;
@@ -45,6 +47,13 @@ namespace MotorDepot.BLL.Services
                 return new OperationStatus<LogEventDto>("Log doesn't exist", HttpStatusCode.NotFound, false);
 
             return new OperationStatus<LogEventDto>("Ok", log.ToDto(), true);
+        }
+
+        public IEnumerable GetLogTypes()
+        {
+            var parser = new EnumParser<LogType>().Parse();
+
+            return parser;
         }
     }
 }

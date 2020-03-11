@@ -4,50 +4,77 @@
     ViewBag.Title = "Log";
 }
 
-<h2>Exception logs</h2>
+<h2>Logs</h2>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Controller)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Action)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Time)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LogType)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) 
-{
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Controller)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Action)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Time)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LogType)
-        </td>
-        <td>
-            @Html.ActionLink("Log details", "LogDetails", new { logId = @item.Id})
-        </td>
-    </tr>
-}
-
+<table class="table" id="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Controller)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Action)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Time)
+            </th>
+            <th>
+                @Html.DropDownList("logType", ViewBag.LogTypes as SelectList, new
+                {
+                    id = "LogTypeDropDown"
+                })
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    @Html.Partial("LogTable", Model)
 </table>
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable({
+                initComplete: function () {
+                    this.api().columns().every(function () {
+                        var column = this;
+                        var select = $('<select><option value=""></option></select>')
+                            .appendTo($(column.footer()).empty())
+                            .on('change',
+                                function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                    );
+
+                                    column
+                                        .search(val ? '^' + val + '$' : '', true, false)
+                                        .draw();
+                                });
+
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    });
+                }
+            });
+
+            $('#LogTypeDropDown').change(function () {
+                var val = $(this).children("option:selected").val();
+
+                $.ajax({
+                    type: 'Get',
+                    url: `/Admin/LogAjax/?logType=${val}`,
+                    async: true,
+                    success: text => {
+                        $('.item-row').remove();
+                        $('#table').append(text);
+                    }
+                });
+            });
+        });
+    </script>
+}

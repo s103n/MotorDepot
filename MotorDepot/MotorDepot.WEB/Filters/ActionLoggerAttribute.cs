@@ -21,10 +21,9 @@ namespace MotorDepot.WEB.Filters
 
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var url = filterContext.RouteData.Values["id"] + filterContext.HttpContext.Request.Url.Query;
             _logger.Log(new LogEventDto
             {
-                RouteValues = url,
+                RouteValues = filterContext.HttpContext.Request.RawUrl,
                 Action = filterContext.RouteData.Values["action"].ToString(),
                 Controller = filterContext.RouteData.Values["controller"].ToString(),
                 Message = "",

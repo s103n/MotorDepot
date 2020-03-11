@@ -22,27 +22,20 @@ else
     </div>
 }
 
-<table class="table">
+<table class="table table-striped table-bordered" id="example">
+    <thead>
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.DeparturePlace)
-            <a class="fa fa-sort sort" style="cursor: pointer" 
-               href="/Flight/All?sortProperty=DeparturePlace&asc=true"></a>
         </th>
         <th>
             @Html.DisplayNameFor(model => model.ArrivalPlace)
-            <a class="fa fa-sort sort" style="cursor: pointer" 
-               href="/Flight/All?sortProperty=ArrivalPlace&asc=true"></a>
         </th>
         <th>
             @Html.DisplayNameFor(model => model.CreateDate)
-            <a class="fa fa-sort sort" style="cursor: pointer" 
-               href="/Flight/All?sortProperty=CreateDate&asc=true"></a>
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Distance)
-            <a class="fa fa-sort sort" style="cursor: pointer" 
-               href="/Flight/All?sortProperty=Distance&asc=true"></a>
         </th>
 
         @if (!User.IsInRole("driver"))
@@ -51,20 +44,16 @@ else
                 @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AutoName)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.AutoNumbers)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DriverEmail)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DriverName)
-            </th>
         }
         <th></th>
     </tr>
+    </thead>
+    <tbody>
     @foreach (var item in Model)
     {
         <tr>
@@ -86,16 +75,10 @@ else
                     @Html.DisplayFor(modelItem => item.Status)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.AutoName)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.AutoNumbers)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DriverEmail)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DriverName)
                 </td>
             }
             <td>
@@ -105,21 +88,51 @@ else
                 }
                 else
                 {
-                    @Html.ActionLink("Edit", "Edit", new { flightId = item.Id }) <i>|</i>
-                    @Html.ActionLink("Details", "Details", new { flightId = item.Id }) <i>|</i>
-                    @Html.ActionLink("Delete driver and auto", "DeleteDriver", new { flightId = item.Id })
+                    @Html.ActionLink(" ", "Edit", new { flightId = item.Id }, new { @class = "fa fa-edit fa-2x text-decoration-none"}) <i> </i>
+                    @Html.ActionLink(" ", "Details", new { flightId = item.Id }, new { @class="fa fa-info fa-2x text-decoration-none"}) <i> </i>
+                    if (item.Status.ToString() == "Occupied")
+                    {
+                        <a class="btn btn-danger" data-toggle="modal" data-target="#exampleModal"
+                           href="@Url.Action("DeleteDriver", new { flightId = item.Id})">
+                            Delete driver
+                        </a>
+                    }
                 }
             </td>
         </tr>
     }
-
+    </tbody>
 </table>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure to want delete driver and car from this flight? (Flight status will be automatically on free)
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a class="btn btn-primary" id="del-btn" href="">Delete driver and auto</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section scripts
 {
     <script>
-        $('.sort').onclick(function() {
-            $(this).attr("href");
+        $(document).ready(function () {
+            $('#example').DataTable();
+
+            $('.btn-danger').click(function() {
+                $('#del-btn').attr('href', $(this).attr('href'));
+            });
         });
     </script>
 }

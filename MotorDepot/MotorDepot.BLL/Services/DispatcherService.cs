@@ -45,8 +45,8 @@ namespace MotorDepot.BLL.Services
         public IEnumerable<UserDto> GetDispatchers()
         {
             var dispatchers = _database.UserManager.Users
+                .ToList()
                 .Where(user => _database.UserManager.IsInRole(user.Id, "dispatcher"))
-                .AsEnumerable()
                 .ToDto();
 
             return dispatchers;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MotorDepot.BLL.Infrastructure;
 using MotorDepot.BLL.Models;
@@ -11,5 +12,6 @@ namespace MotorDepot.BLL.Interfaces
         void Log(LogEventDto logEvent);
         IEnumerable<LogEventDto> GetLogs(LogType logType);
         OperationStatus<LogEventDto> GetLogById(int? id);
+        IEnumerable GetLogTypes();
     }
 }

@@ -8,21 +8,26 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/font-awesome.min.css")
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css"
+          rel="stylesheet"
+          type="text/css" />
+    <link href="//cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css"
+          rel="stylesheet"
+          type="text/css" />
 </head>
 <body>
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/Home/Index">Motor Depot</a>
-        <input class="form-control w-100" type="text" placeholder="Search" aria-label="Search">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="@Url.Action("Index", "Home")">Motor Depot</a>
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
                 @if (User.Identity.IsAuthenticated)
                 {
                     <p class="text-light d-inline">You are authorized as @User.Identity.Name</p>
-                    <a class="btn btn-light border border-dark d-inline" href="/Account/Logout">Sign out</a>
+                    <a class="btn btn-light border border-dark d-inline" href="@Url.Action("Logout", "Account")">Sign out</a>
                 }
                 else
                 {
-                    <a class="btn btn-light border border-dark" href="/Account/Login">Sign in</a>
+                    <a class="btn btn-light border border-dark" href="@Url.Action("Login", "Account")">Sign in</a>
                 }
             </li>
         </ul>
@@ -30,81 +35,95 @@
 
     <div class="container-fluid">
         <div class="row">
-            <nav class="col-md-2 d-none d-md-block bg-light">
-                <div class="position-fixed">
-                    <ul class="nav flex-column">
-                        @if (User.IsInRole("admin"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-muted font-weight-bold" href="/Admin/Dispatchers">
-                                    <span class="fa fa-user"></span>
-                                    Dispatchers <span class="sr-only">(current)</span>
-                                </a>
-                            </li>
+            @if (User.Identity.IsAuthenticated)
+            {
+
+                <nav class="col-md-2 d-none d-md-block bg-light">
+                    <div class="position-fixed">
+                        <ul class="nav flex-column">
+                            @if (User.IsInRole("admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-muted font-weight-bold" href="@Url.Action("Dispatchers", "Admin")">
+                                        <span class="fa fa-user"></span>
+                                        Dispatchers <span class="sr-only">(current)</span>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-muted font-weight-bold" href="@Url.Action("Drivers", "Admin")">
+                                        <span class="fa fa-truck"></span>
+                                        Drivers
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-muted font-weight-bold" href="@Url.Action("All", "Auto")">
+                                        <span class="fa fa-automobile"></span>
+                                        Automobiles
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-muted font-weight-bold" href="@Url.Action("Log", "Admin")">
+                                        <span class="fa fa-book"></span>
+                                        Log
+                                    </a>
+                                </li>
+                            }
 
                             <li class="nav-item">
-                                <a class="nav-link text-muted font-weight-bold" href="/Admin/Drivers">
-                                    <span class="fa fa-truck"></span>
-                                    Drivers
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link text-muted font-weight-bold" href="/Auto/All">
-                                    <span class="fa fa-automobile"></span>
-                                    Automobiles
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link text-muted font-weight-bold" href="/Admin/Log">
-                                    <span class="fa fa-book"></span>
-                                    Log
-                                </a>
-                            </li>
-                        }
-
-                        <li class="nav-item">
-                            <a class="nav-link text-muted font-weight-bold" href="/Flight/All">
-                                <span class="fa fa-location-arrow"></span>
-                                Flights
-                            </a>
-                        </li>
-
-                        @if (User.IsInRole("dispatcher") || User.IsInRole("admin"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-muted font-weight-bold" href="/Flight/Requests">
+                                <a class="nav-link text-muted font-weight-bold" href="@Url.Action("All", "Flight")">
                                     <span class="fa fa-location-arrow"></span>
-                                    Requests for flight
+                                    Flights
                                 </a>
                             </li>
-                        }
 
-                        @if (User.IsInRole("driver"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-muted font-weight-bold"
-                                   href="/Driver/MyFlights/">
-                                    <span class="fa fa-location-arrow"></span>
-                                    My flights
-                                </a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </nav>
+                            @if (User.IsInRole("dispatcher") || User.IsInRole("admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-muted font-weight-bold" href="@Url.Action("Requests", "Flight")">
+                                        <span class="fa fa-address-book"></span>
+                                        Requests for flight
+                                    </a>
+                                </li>
+                            }
 
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-                @RenderBody()
-            </main>
+                            @if (User.IsInRole("driver"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-muted font-weight-bold"
+                                       href="@Url.Action("MyFlights", "Driver")">
+                                        <span class="fa fa-location-arrow"></span>
+                                        My flights
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </nav>
+            }
 
+            @if (User.Identity.IsAuthenticated)
+            {
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                    @RenderBody()
+                </main>
+            }
+            else
+            {
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-12 pt-3 px-4">
+                    @RenderBody()
+                </main>
+            }
         </div>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/jqueryval")
-    @RenderSection("scripts", required: false)
+    <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+@RenderSection("scripts", required: false)
 </body>
 </html>

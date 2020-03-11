@@ -20,15 +20,6 @@ namespace MotorDepot.WEB.Filters
 
         public void OnException(ExceptionContext filterContext)
         {
-            if (new HttpException(null, filterContext.Exception).GetHttpCode() == 500)
-            {
-                return;
-            }
-
-            filterContext.ExceptionHandled = true;
-            filterContext.HttpContext.Response.Clear();
-            filterContext.HttpContext.Response.StatusCode = 500;
-
             _logger.Log(new LogEventDto
             {
                 Message = filterContext.Exception.Message,
@@ -40,6 +31,15 @@ namespace MotorDepot.WEB.Filters
                 LogType = LogType.Exception,
                 Time = DateTime.Now
             });
+
+            if (new HttpException(null, filterContext.Exception).GetHttpCode() == 500)
+            {
+                return;
+            }
+
+            filterContext.ExceptionHandled = true;
+            filterContext.HttpContext.Response.Clear();
+            filterContext.HttpContext.Response.StatusCode = 500;
         }
     }
 }
