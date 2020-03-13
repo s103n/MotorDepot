@@ -115,9 +115,18 @@
     <Compile Include="Identity\UserManager.cs" />
     <Compile Include="Infrastructure\ValidationErrors.cs" />
     <Compile Include="Infrastructure\ValidationResult.cs" />
+    <Compile Include="Interfaces\DbLogger\ILoggerDb.cs" />
+    <Compile Include="Interfaces\DbLogger\ILoggerDbLog.cs" />
+    <Compile Include="Interfaces\DbLogger\ILoggerDbReader.cs" />
+    <Compile Include="Interfaces\DbLogger\ILoggerDbSaver.cs" />
+    <Compile Include="Interfaces\IApplicationContext.cs" />
     <Compile Include="Interfaces\ILogger.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
+    <Compile Include="Loggers\DbLogger.cs" />
+    <Compile Include="Loggers\LoggerDbLog.cs" />
+    <Compile Include="Loggers\LoggerDbReader.cs" />
+    <Compile Include="Loggers\LoggerDbSaver.cs" />
     <Compile Include="Migrations\202003051930598_init after refact.cs" />
     <Compile Include="Migrations\202003051930598_init after refact.designer.cs">
       <DependentUpon>202003051930598_init after refact.cs</DependentUpon>
@@ -137,7 +146,6 @@
     <Compile Include="Repositories\FlightRepository.cs" />
     <Compile Include="Repositories\FlightRequestRepository.cs" />
     <Compile Include="Repositories\GenericRepository.cs" />
-    <Compile Include="Repositories\LoggerDb.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

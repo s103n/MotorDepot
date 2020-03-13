@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MotorDepot.DAL.Entities.Logging;
 using MotorDepot.DAL.Identity;
 using MotorDepot.DAL.Infrastructure;
+using MotorDepot.DAL.Interfaces.DbLogger;
 
 namespace MotorDepot.DAL.Interfaces
 {
@@ -15,7 +16,7 @@ namespace MotorDepot.DAL.Interfaces
         IRepository<FlightRequest> FlightRequestRepository { get; }
         UserManager UserManager { get; }
         RoleManager RoleManager { get; }
-        ILogger<LogEvent> LoggerDb { get; }
-        Task<ValidationErrors> SaveAsync();
+        ILoggerDb<LogEvent> Logger { get; }
+        Task SaveAsync();
     }
 }

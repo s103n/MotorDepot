@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections;
+using MotorDepot.Shared.Interfaces;
 
-namespace MotorDepot.BLL.BusinessModels
+namespace MotorDepot.Shared
 {
-    public class EnumParser<T> where T : Enum
+    public class EnumParser<T> : IEnumParser<T> where T : Enum
     {
-        /// <summary>
-        /// Returns IEnumerable object of enum type. IEnumerable contains anonymous object
-        /// with 2 properties: int Id and string Name.
-        /// </summary>
-        /// <returns></returns>
         public IEnumerable Parse()
         {
             foreach (var item in Enum.GetNames(typeof(T)))

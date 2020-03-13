@@ -1,16 +1,15 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using MotorDepot.DAL.Entities;
+using MotorDepot.DAL.Entities.Logging;
 using MotorDepot.DAL.Entities.Lookup;
-using MotorDepot.DAL.Infrastructure;
+using MotorDepot.DAL.Interfaces;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
-using System.Data.Entity.Validation;
 using System.Threading.Tasks;
-using MotorDepot.DAL.Entities.Logging;
 
 namespace MotorDepot.DAL.Context
 {
-    public class ApplicationContext : IdentityDbContext<AppUser>
+    public class ApplicationContext : IdentityDbContext<AppUser>, IApplicationContext
     {
         public ApplicationContext() : base("MotorDepot")
         {
@@ -56,18 +55,28 @@ namespace MotorDepot.DAL.Context
             base.OnModelCreating(modelBuilder);
         }
 
-        public new async Task<ValidationErrors> SaveChangesAsync()
+        public void Save()
         {
-            try
-            {
-                await base.SaveChangesAsync();
-
-                return new ValidationErrors();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                return new ValidationErrors(ex.EntityValidationErrors);
-            }
+            base.SaveChanges();
         }
+
+        public new async Task SaveChangesAsync()
+        {
+            await base.SaveChangesAsync();
+        }
+
+        //public new async Task<ValidationErrors> SaveChangesAsync()
+        //{
+        //    try
+        //    {
+        //        await base.SaveChangesAsync();
+
+        //        return new ValidationErrors();
+        //    }
+        //    catch (DbEntityValidationException ex)
+        //    {
+        //        return new ValidationErrors(ex.EntityValidationErrors);
+        //    }
+        //}
     }
 }

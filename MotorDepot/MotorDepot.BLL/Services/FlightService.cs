@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MotorDepot.BLL.BusinessModels;
+using MotorDepot.Shared;
 using MotorDepot.Shared.Enums;
 
 namespace MotorDepot.BLL.Services

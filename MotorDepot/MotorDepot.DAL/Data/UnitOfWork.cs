@@ -8,6 +8,8 @@ using MotorDepot.DAL.Repositories;
 using System;
 using System.Threading.Tasks;
 using MotorDepot.DAL.Entities.Logging;
+using MotorDepot.DAL.Interfaces.DbLogger;
+using MotorDepot.DAL.Loggers;
 
 namespace MotorDepot.DAL.Data
 {
@@ -26,11 +28,16 @@ namespace MotorDepot.DAL.Data
         public IRepository<FlightRequest> FlightRequestRepository => new FlightRequestRepository(_context);
         public UserManager UserManager => new UserManager(new UserStore<AppUser>(_context));
         public RoleManager RoleManager => new RoleManager(new RoleStore<IdentityRole>(_context));
-        public ILogger<LogEvent> LoggerDb => new LoggerDb(_context); 
 
-        public async Task<ValidationErrors> SaveAsync()
+        public ILoggerDb<LogEvent> Logger =>
+            new DbLogger<LogEvent>(
+                new LoggerDbSaver(_context), 
+                new LoggerDbLog(_context), 
+                new LoggerDbReader(_context));
+
+        public async Task SaveAsync()
         {
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         #region DisposedPattern
@@ -49,7 +56,7 @@ namespace MotorDepot.DAL.Data
                     FlightRequestRepository.Dispose();
                     UserManager.Dispose();
                     RoleManager.Dispose();
-                    _context.Dispose();
+                    Logger.Dispose();
                 }
             }
             disposed = true;

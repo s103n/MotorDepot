@@ -12,7 +12,7 @@
     @Html.AntiForgeryToken()
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <input type="hidden" name="RequestedFlightId" value="@Model.RequestedFlightId"/>
+    <input type="hidden" name="RequestedFlightId" value="@Model.RequestedFlightId" />
 
     <div class="form-group">
         <h6>Engine power in horsepower* (e.x. 132)</h6>
@@ -46,8 +46,11 @@
         </div>
     </div>
 
-    <div>
-        @Html.DropDownListFor(model => model.AutoType, ViewBag.AutoTypes as SelectList)
+    <div class="form-group">
+        <h6>Auto type:</h6>
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.AutoType, ViewBag.AutoTypes as SelectList, new {@class="form-control"})
+        </div>
     </div>
 
     <div class="form-group">

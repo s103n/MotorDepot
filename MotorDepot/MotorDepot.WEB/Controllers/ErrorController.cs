@@ -10,16 +10,16 @@ namespace MotorDepot.WEB.Controllers
             return View();
         }
 
-        public ActionResult NotFound()
-        {
+        public ActionResult NotFound(string message)
+        { 
             Response.StatusCode = 404;
-            return View();
+            return View(message);
         }
 
-        public ActionResult Oops()
+        public ActionResult Oops(string message)
         {
             Response.StatusCode = 500;
-            return View();
+            return View(message);
         }
     }
 }

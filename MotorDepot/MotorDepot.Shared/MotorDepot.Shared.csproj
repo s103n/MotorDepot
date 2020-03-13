@@ -47,6 +47,7 @@
     <Compile Include="Enums\FlightRequestStatus.cs" />
     <Compile Include="Enums\FlightStatus.cs" />
     <Compile Include="Enums\LogType.cs" />
+    <Compile Include="Interfaces\IEnumParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -9,51 +9,58 @@
 {
     <h2>Current flight</h2>
 
-    <div class="row">
-        <div class="container">
-            <div class="col-lg-6"></div>
-            <div>
-                <h6 class="d-inline">Departure place:</h6>
-                @Model.CurrentFlight.DeparturePlace
-            </div>
-            <div>
-                <h6 class="d-inline">Arrival place:</h6>
-                @Model.CurrentFlight.ArrivalPlace
-            </div>
-            <div>
-                <h6 class="d-inline">Distance:</h6>
-                @Model.CurrentFlight.Distance
-            </div>
-            <div>
-                <h6 class="d-inline">Status:</h6>
-                @Model.CurrentFlight.Status
-            </div>
-            <div>
-                <h6 class="d-inline">Auto:</h6>
-                @Model.CurrentFlight.AutoName
-            </div>
-            <div>
-                <h6 class="d-inline">Auto numbers:</h6>
-                @Model.CurrentFlight.AutoNumbers
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div>
+                    <h6 class="d-inline">Departure place:</h6>
+                    @Model.CurrentFlight.DeparturePlace
+                </div>
+                <div>
+                    <h6 class="d-inline">Arrival place:</h6>
+                    @Model.CurrentFlight.ArrivalPlace
+                </div>
+                <div>
+                    <h6 class="d-inline">Distance:</h6>
+                    @Model.CurrentFlight.Distance
+                </div>
+                <div>
+                    <h6 class="d-inline">Status:</h6>
+                    @Model.CurrentFlight.Status
+                </div>
+                <div>
+                    <h6 class="d-inline">Auto:</h6>
+                    @Model.CurrentFlight.AutoName
+                </div>
+                <div>
+                    <h6 class="d-inline">Auto numbers:</h6>
+                    @Model.CurrentFlight.AutoNumbers
+                </div>
             </div>
             <div class="col-lg-6">
                 @using (Html.BeginForm("ChangeStatus", "Driver", FormMethod.Post))
                 {
                     <input type="hidden" name="status" value="@((int)Model.CurrentFlight.Status)" />
                     <input type="hidden" name="flightId" value="@Model.CurrentFlight.Id" />
+
                     if (Model.CurrentFlight.Status == FlightStatus.Occupied)
                     {
                         <button class="btn btn-outline-primary">Start performing</button>
                     }
                     else if (Model.CurrentFlight.Status == FlightStatus.Performed)
                     {
-                        <input type="hidden" name="autoId" value="@Model.CurrentFlight.AutoId"/>
-                        <h6>Auto status:</h6>
-                        @Html.DropDownList("autoStatus", ViewBag.AutoStatuses as SelectList)
-                        <button class="btn btn-outline-success">Complete the flight</button>
+                        <input type="hidden" name="autoId" value="@Model.CurrentFlight.AutoId" />
+                        <div class="form-group">
+                            <h6>Auto status:</h6>
+                            <div class="col-md-6">
+                                @Html.DropDownList("autoStatus", ViewBag.AutoStatuses as SelectList, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-success ml-2">Complete the flight</button>
                     }
                 }
-                @using (Html.BeginForm("CancelFlight", "Driver", FormMethod.Post))
+
+                @using (Html.BeginForm("CancelFlight", "Driver", FormMethod.Post, new {@class="mt-1 ml-2"}))
                 {
                     <input type="hidden" name="flightId" value="@Model.CurrentFlight.Id" />
                     <button class="btn btn-outline-danger">Cancel the flight</button>

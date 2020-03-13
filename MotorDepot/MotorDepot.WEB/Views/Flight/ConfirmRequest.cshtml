@@ -44,57 +44,59 @@
                 <input type="hidden" name="autoId" />
             </div>
             <h5>All automobiles with auto type: [@Model.Request.AutoType]</h5>
-            <table class="table">
-                <tr>
-                    <th>
-                        Model
-                    </th>
-                    <th>
-                        Numbers
-                    </th>
-                    <th>
-                        Auto Brand
-                    </th>
-                    <th>
-                        Engine capacity
-                    </th>
-                    <th>
-                        Boot volume max
-                    </th>
-                    <th>
-                        Engine power
-                    </th>
-                    <th></th>
-                </tr>
-
-                @foreach (var item in Model.Auto)
-                {
+            <table class="table" id="table">
+                <thead>
                     <tr>
-                        <td class="model">
-                            @item.Model
-                        </td>
-                        <td class="numbers">
-                            @item.Numbers
-                        </td>
-                        <td class="brand">
-                            @item.AutoBrand
-                        </td>
-                        <td>
-                            @item.EngineCapacity
-                        </td>
-                        <td>
-                            @item.BootVolumeMax
-                        </td>
-                        <td>
-                            @item.EnginePower
-                        </td>
-                        <td>
-                            <i style="visibility:hidden">@item.Id</i>
-                            <a class="btn btn-success btn-auto">Add auto to request</a>
-                        </td>
+                        <th>
+                            Model
+                        </th>
+                        <th>
+                            Numbers
+                        </th>
+                        <th>
+                            Auto Brand
+                        </th>
+                        <th>
+                            Engine capacity
+                        </th>
+                        <th>
+                            Boot volume max
+                        </th>
+                        <th>
+                            Engine power
+                        </th>
+                        <th></th>
                     </tr>
-                }
-
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Auto)
+                    {
+                        <tr>
+                            <td class="model">
+                                @item.Model
+                            </td>
+                            <td class="numbers">
+                                @item.Numbers
+                            </td>
+                            <td class="brand">
+                                @item.AutoBrand
+                            </td>
+                            <td>
+                                @item.EngineCapacity
+                            </td>
+                            <td>
+                                @item.BootVolumeMax
+                            </td>
+                            <td>
+                                @item.EnginePower
+                            </td>
+                            <td>
+                                <i style="visibility: hidden">@item.Id</i>
+                                <a class="btn btn-success btn-auto">Add auto to request</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
             </table>
         </fieldset>
         @using (Html.BeginForm())
@@ -122,8 +124,10 @@
 @section scripts
 {
     <script>
-        $(function() {
-            $('.btn-auto').click(function() {
+        $(document).ready(function () {
+            $('#table').DataTable();
+
+            $('.btn-auto').click(function () {
                 var trow = $(this).closest('tr');
                 var id = $(this).prev().text();
                 var model = trow.find('.model').text();
@@ -132,7 +136,7 @@
 
                 $('#idResult').val(id);
 
-                $('#Auto').text(function() {
+                $('#Auto').text(function () {
                     return `${brand} ${model}, numbers: ${numbers}`;
                 });
 
