@@ -197,11 +197,13 @@
     <Compile Include="Infrastructure\SessionAlertHandler.cs" />
     <Compile Include="Models\AlertViewModel.cs" />
     <Compile Include="Models\Auto\AutoCreateViewModel.cs" />
+    <Compile Include="Models\Auto\AutoDetailsViewModel.cs" />
     <Compile Include="Models\Auto\AutoDisplayViewModel.cs" />
     <Compile Include="Models\Auto\AutoEditViewModel.cs" />
     <Compile Include="Models\Auto\AutoSetViewModel.cs" />
     <Compile Include="Models\Flight\DriverFlightViewModel.cs" />
     <Compile Include="Models\Flight\FlightCreateViewModel.cs" />
+    <Compile Include="Models\Flight\FlightDetailsViewModel.cs" />
     <Compile Include="Models\Flight\FlightEditViewModel.cs" />
     <Compile Include="Models\FlightRequest\FlightRequestAcceptViewModel.cs" />
     <Compile Include="Models\FlightRequest\FlightRequestDetailsViewModel.cs" />
@@ -209,6 +211,10 @@
     <Compile Include="Models\Logging\LogActionDetailsViewModel.cs" />
     <Compile Include="Models\Logging\LogExceptionDetailsViewModel.cs" />
     <Compile Include="Models\Logging\LogViewModel.cs" />
+    <Compile Include="Models\User\DispatcherDetailsViewModel.cs" />
+    <Compile Include="Models\User\DispatcherViewModel.cs" />
+    <Compile Include="Models\User\DriverDetailsViewModel.cs" />
+    <Compile Include="Models\User\DriverViewModel.cs" />
     <Compile Include="Models\User\UserRegisterViewModel.cs" />
     <Compile Include="Models\Enums\AlertType.cs" />
     <Compile Include="Models\FlightRequest\FlightRequestCreateViewModel.cs" />
@@ -384,9 +390,14 @@
     <Content Include="Views\Admin\Log.cshtml" />
     <Content Include="Views\Admin\LogAction.cshtml" />
     <Content Include="Views\Admin\LogException.cshtml" />
-    <Content Include="Views\Admin\LogTable.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Error\Oops.cshtml" />
+    <Content Include="Views\Error\BadRequest.cshtml" />
+    <Content Include="Views\Auto\Details.cshtml" />
+    <Content Include="Views\Admin\Drivers.cshtml" />
+    <Content Include="Views\Admin\DriverDetails.cshtml" />
+    <Content Include="Views\Admin\DispatcherDetails.cshtml" />
+    <Content Include="Views\Flight\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

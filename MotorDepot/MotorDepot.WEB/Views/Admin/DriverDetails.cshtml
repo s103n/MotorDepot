@@ -1,0 +1,111 @@
+﻿@model MotorDepot.WEB.Models.User.DriverDetailsViewModel
+
+@{
+    ViewBag.Title = "DriverDetails";
+}
+
+<h2>Driver #@Model.Id Details</h2>
+
+<div>
+    <hr />
+    <dl>
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+
+    </dl>
+</div>
+
+<h5>Flights where driver was participated</h5>
+@if (Model.Flights.Any())
+{
+    <table class="table table-striped table-bordered" id="flight">
+        <thead>
+            <tr>
+                <th>
+                    Departure place
+                </th>
+                <th>
+                    Arrival place
+                </th>
+                <th>
+                    Create date
+                </th>
+                <th>
+                    Distance
+                </th>
+
+                <th>
+                    Status
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Flights)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DeparturePlace)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ArrivalPlace)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreateDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Distance)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Not found</p>
+}
+
+<p>
+    @Html.ActionLink("Back to List", "Drivers")
+</p>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function() {
+            $('#flight').DataTable();
+        });
+    </script>
+}

@@ -32,14 +32,17 @@ namespace MotorDepot.WEB.Filters
                 Time = DateTime.Now
             });
 
-            if (new HttpException(null, filterContext.Exception).GetHttpCode() == 500)
-            {
-                return;
-            }
-
             filterContext.ExceptionHandled = true;
             filterContext.HttpContext.Response.Clear();
-            filterContext.HttpContext.Response.StatusCode = 500;
+
+            if (filterContext.Exception is HttpException exception)
+            {
+                filterContext.HttpContext.Response.StatusCode = exception.GetHttpCode();
+            }
+            else
+            {
+                filterContext.HttpContext.Response.StatusCode = 500;
+            }
         }
     }
 }

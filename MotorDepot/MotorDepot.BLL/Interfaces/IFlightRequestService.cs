@@ -29,6 +29,6 @@ namespace MotorDepot.BLL.Interfaces
         /// </summary>
         /// <param name="status">Status of flight request</param>
         /// <returns>IEnumerable of flight requests objects</returns>
-        Task<IEnumerable<FlightRequestDto>> GetFlightRequestsAsync(FlightRequestStatus status);
+        Task<IEnumerable<FlightRequestDto>> GetFlightRequestsAsync(FlightRequestStatus? status = null);
     }
 }

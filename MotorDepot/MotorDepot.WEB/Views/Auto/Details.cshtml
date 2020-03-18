@@ -1,0 +1,141 @@
+﻿@model MotorDepot.WEB.Models.Auto.AutoDetailsViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details of auto #@Model.Id</h2>
+
+<div>
+    <hr />
+    <dl>
+        <dt>
+            @Html.DisplayNameFor(model => model.Model)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Model)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Numbers)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Numbers)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EnginePower)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EnginePower)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EngineCapacity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EngineCapacity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BootVolumeMax)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BootVolumeMax)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AutoBrand)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AutoBrand)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AutoType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AutoType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AutoStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AutoStatus)
+        </dd>
+
+    </dl>
+</div>
+
+<h5>Flights where auto was used</h5>
+@if (Model.Flights.Any())
+{
+    <table class="table table-striped table-bordered" id="example">
+        <thead>
+        <tr>
+            <th>
+                Departure place
+            </th>
+            <th>
+                Arrival place
+            </th>
+            <th>
+                Create date
+            </th>
+            <th>
+                Distance
+            </th>
+
+            <th>
+                Status
+            </th>
+            <th>
+                Driver email
+            </th>
+
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Flights)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeparturePlace)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ArrivalPlace)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreateDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Distance)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DriverEmail)
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Not found</p>
+}
+<p>
+    @Html.ActionLink("Back", "All", null, new {@class = "btn btn-primary"})
+    @Html.ActionLink("Edit auto", "Edit", new {id = Model.Id}, new {@class = "btn btn-success"})
+</p>

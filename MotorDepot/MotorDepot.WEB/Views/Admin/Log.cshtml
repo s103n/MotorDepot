@@ -1,4 +1,5 @@
-﻿@model IEnumerable<MotorDepot.WEB.Models.Logging.LogViewModel>
+﻿@using System.Collections
+@model IEnumerable<MotorDepot.WEB.Models.Logging.LogViewModel>
 
 @{
     ViewBag.Title = "Log";
@@ -22,15 +23,46 @@
                 @Html.DisplayNameFor(model => model.Time)
             </th>
             <th>
-                @Html.DropDownList("logType", ViewBag.LogTypes as SelectList, new
-                {
-                    id = "LogTypeDropDown"
-                })
+                <div class="dropdown show">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @Model.FirstOrDefault().LogType
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="@Url.Action("Log", new {logType = 0})">Action</a>
+                        <a class="dropdown-item" href="@Url.Action("Log", new {logType = 1})">Exception</a>
+                        <a class="dropdown-item" href="@Url.Action("Log", new {logType = 2})">Warning</a>
+                    </div>
+                </div>
             </th>
             <th></th>
         </tr>
     </thead>
-    @Html.Partial("LogTable", Model)
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Controller)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Action)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Time)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LogType)
+                </td>
+                <td>
+                    @Html.ActionLink("Log details", "LogDetails", new { logId = @item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
 
 
@@ -38,43 +70,7 @@
 {
     <script>
         $(document).ready(function () {
-            $('#table').DataTable({
-                initComplete: function () {
-                    this.api().columns().every(function () {
-                        var column = this;
-                        var select = $('<select><option value=""></option></select>')
-                            .appendTo($(column.footer()).empty())
-                            .on('change',
-                                function () {
-                                    var val = $.fn.dataTable.util.escapeRegex(
-                                        $(this).val()
-                                    );
-
-                                    column
-                                        .search(val ? '^' + val + '$' : '', true, false)
-                                        .draw();
-                                });
-
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d + '</option>')
-                        });
-                    });
-                }
-            });
-
-            $('#LogTypeDropDown').change(function () {
-                var val = $(this).children("option:selected").val();
-
-                $.ajax({
-                    type: 'Get',
-                    url: `/Admin/LogAjax/?logType=${val}`,
-                    async: true,
-                    success: text => {
-                        $('.item-row').remove();
-                        $('#table').append(text);
-                    }
-                });
-            });
+            $('#table').DataTable();
         });
     </script>
 }

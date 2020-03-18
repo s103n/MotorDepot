@@ -54,8 +54,19 @@
         </div>
     </div>
 
-    @Html.DropDownListFor(model => model.AutoTypeId, ViewBag.AutoTypes as SelectList)
-    @Html.DropDownListFor(model => model.AutoBrandId, ViewBag.AutoBrands as SelectList)
+    <div class="form-group">
+        <h6>Auto type:</h6>
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.AutoTypeId, ViewBag.AutoTypes as SelectList, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <h6>Auto brand:</h6>
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.AutoBrandId, ViewBag.AutoBrands as SelectList, new { @class = "form-control" })
+        </div>
+    </div>
 
     <div class="form-group">
         <div class="col-md-10">

@@ -4,6 +4,7 @@ using MotorDepot.Shared.Enums;
 using MotorDepot.WEB.Models.Auto;
 using System.Collections.Generic;
 using System.Linq;
+using MotorDepot.WEB.Models.Flight;
 
 namespace MotorDepot.WEB.Infrastructure.Mappers
 {
@@ -66,6 +67,17 @@ namespace MotorDepot.WEB.Infrastructure.Mappers
                     .ForMember("Status", opt => opt.MapFrom(x => x.Status.ToString()))
                     .ForMember("UsedInFlightNow", opt => opt.MapFrom(x => flights.IsInFlightByAutoId(x.Id)));
             }).CreateMapper().Map<IEnumerable<AutoDto>, IEnumerable<AutoDisplayViewModel>>(model);
+        }
+
+        public static AutoDetailsViewModel ToDetailsViewModel(this AutoDto model)
+        {
+            return new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<AutoDto, AutoDetailsViewModel>()
+                    .ForMember(x => x.AutoBrand, opt => opt.MapFrom(x => x.Brand.Name))
+                    .ForMember(x => x.AutoType, opt => opt.MapFrom(x => x.Type))
+                    .ForMember(x => x.AutoStatus, opt => opt.MapFrom(x => x.Status));
+            }).CreateMapper().Map<AutoDto, AutoDetailsViewModel>(model);
         }
 
         private static bool IsInFlightByAutoId(this IEnumerable<FlightDto> flights, int autoId)

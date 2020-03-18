@@ -20,13 +20,13 @@ namespace MotorDepot.WEB.Models.FlightRequest
 
         public DateTime Date { get; set; } = DateTime.Now;
 
-        [Required]
+        [Required, Range(20.5, 100.0)]
         public int EnginePower { get; set; }
 
         [Required, Range(20.5, 100.0)]
         public double EngineCapacity { get; set; }
 
-        [Required]
+        [Required, Range(20.5, 100.0)]
         public double BootVolume { get; set; }
 
         [Required]

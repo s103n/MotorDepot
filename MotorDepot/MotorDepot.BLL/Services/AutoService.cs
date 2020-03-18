@@ -70,11 +70,14 @@ namespace MotorDepot.BLL.Services
             return parser;
         }
 
-        public async Task<IEnumerable<AutoDto>> GetAutosAsync()
+        public async Task<IEnumerable<AutoDto>> GetAutosAsync(AutoStatus? status)
         {
             var autos = await _database.AutoRepository.GetAllAsync();
 
-            return autos.ToDto();
+            if(status == null)
+                return autos.ToDto();
+
+            return autos.Where(a => a.Status.Id == status).ToDto();
         }
 
         public async Task<bool> IsInFlightAsync(int autoId)
@@ -88,7 +91,7 @@ namespace MotorDepot.BLL.Services
         public async Task<OperationStatus<AutoDto>> GetAutoById(int? autoId)
         {
             if (autoId == null)
-                throw new ArgumentNullException(nameof(autoId));
+                return new OperationStatus<AutoDto>("", HttpStatusCode.NotFound, false);
 
             var auto = await _database.AutoRepository.FindAsync(autoId);
 
@@ -112,11 +115,24 @@ namespace MotorDepot.BLL.Services
             return new OperationStatus("Auto was updated", true);
         }
 
-        public IEnumerable GetAutoStatuses()
+        public IEnumerable GetAutoStatuses(bool deletedStatus = false)
         {
             var parser = new EnumParser<AutoStatus>().Parse();
 
-            return parser;
+            if (deletedStatus)
+            {
+                var p = typeof(AutoStatus).GetEnumNames().Where(name => name != "Deleted");
+                foreach (var status in p)
+                {
+                    yield return new
+                    {
+                        Name = status,
+                        Id = (int) Enum.Parse(typeof(AutoStatus), status)
+                    };
+                }
+            }
+            else 
+                yield return parser;
         }
 
         public void Dispose()

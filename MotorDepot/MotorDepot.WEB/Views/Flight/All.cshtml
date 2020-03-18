@@ -1,4 +1,5 @@
-﻿@model IEnumerable<MotorDepot.WEB.Models.Flight.FlightViewModel>
+﻿@using MotorDepot.Shared.Enums
+@model IEnumerable<MotorDepot.WEB.Models.Flight.FlightViewModel>
 
 @{
     ViewBag.Title = "All flights";
@@ -40,8 +41,13 @@ else
 
         @if (!User.IsInRole("driver"))
         {
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
+            <th class="no-sort">
+                @CustomHelper.DropDownMenuOfEnum(
+                    typeof(FlightStatus), 
+                    "status", 
+                    "All", 
+                    "Flight", 
+                    ViewBag.StatusTitle as string)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.AutoNumbers)
@@ -50,7 +56,7 @@ else
                 @Html.DisplayNameFor(model => model.DriverEmail)
             </th>
         }
-        <th></th>
+        <th class="no-sort"></th>
     </tr>
     </thead>
     <tbody>
@@ -84,16 +90,19 @@ else
             <td>
                 @if (User.IsInRole("driver"))
                 {
-                    @Html.ActionLink("Request this flight", "RequestFor", new { flightId = item.Id })
+                    @Html.ActionLink("Request this flight", "RequestFor", new { id = item.Id })
                 }
                 else
                 {
-                    @Html.ActionLink(" ", "Edit", new { flightId = item.Id }, new { @class = "fa fa-edit fa-2x text-decoration-none"}) <i> </i>
-                    @Html.ActionLink(" ", "Details", new { flightId = item.Id }, new { @class="fa fa-info fa-2x text-decoration-none"}) <i> </i>
+                    if (item.Status == FlightStatus.Free)
+                    {
+                        @Html.ActionLink(" ", "Edit", new { id = item.Id }, new { @class = "fa fa-edit fa-2x text-decoration-none"}) <i> </i>
+                    }
+                    @Html.ActionLink(" ", "Details", new { id = item.Id }, new { @class="fa fa-info fa-2x text-decoration-none"}) <i> </i>
                     if (item.Status.ToString() == "Occupied")
                     {
                         <a class="btn btn-danger" data-toggle="modal" data-target="#exampleModal"
-                           href="@Url.Action("DeleteDriver", new { flightId = item.Id})">
+                           href="@Url.Action("DeleteDriver", new { id = item.Id})">
                             Delete driver
                         </a>
                     }
@@ -108,7 +117,7 @@ else
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Confirm deleting</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -128,7 +137,12 @@ else
 {
     <script>
         $(document).ready(function () {
-            $('#example').DataTable();
+            $('#example').dataTable({
+                "columnDefs": [{
+                    "targets": 'no-sort',
+                    "orderable": false,
+                }]
+            });
 
             $('.btn-danger').click(function() {
                 $('#del-btn').attr('href', $(this).attr('href'));

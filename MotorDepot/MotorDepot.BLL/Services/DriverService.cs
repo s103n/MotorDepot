@@ -6,6 +6,7 @@ using MotorDepot.BLL.Models;
 using MotorDepot.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -44,11 +45,10 @@ namespace MotorDepot.BLL.Services
             return new OperationStatus("Driver was successfully created", true);
         }
 
-        public IEnumerable<UserDto> GetDrivers()
+        public async Task<IEnumerable<UserDto>> GetDriversAsync()
         {
-            var users = _database.UserManager.Users
+            var users = (await _database.UserManager.Users.ToListAsync())
                 .Where(user => _database.UserManager.IsInRole(user.Id, "driver"))
-                .AsEnumerable()
                 .ToDto();
 
             return users;

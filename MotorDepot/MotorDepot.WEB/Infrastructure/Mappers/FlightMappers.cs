@@ -4,6 +4,7 @@ using MotorDepot.WEB.Models.Flight;
 using MotorDepot.WEB.Models.FlightRequest;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.UI.WebControls;
 
 namespace MotorDepot.WEB.Infrastructure.Mappers
 {
@@ -89,6 +90,18 @@ namespace MotorDepot.WEB.Infrastructure.Mappers
                 cfg.CreateMap<FlightDto, FlightEditViewModel>();
 
             }).CreateMapper().Map<FlightDto, FlightEditViewModel>(model);
+        }
+
+        public static FlightDetailsViewModel ToDetailsViewModel(this FlightDto model)
+        {
+            return new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<FlightDto, FlightDetailsViewModel>()
+                    .ForMember(x => x.Status, o => o.MapFrom(x => x.Status.ToString()))
+                    .ForMember(x => x.AutoId, o => o.MapFrom(x => x.Auto == null ? (int?) null : x.Auto.Id))
+                    .ForMember(x => x.DriverEmail, o => o.MapFrom(x => x.Driver == null ? null : x.Driver.Id))
+                    .ForMember(x => x.DispatcherCreatorEmail, o => o.MapFrom(x => x.DispatcherCreator.Email));
+            }).CreateMapper().Map<FlightDto, FlightDetailsViewModel>(model);
         }
     }
 }

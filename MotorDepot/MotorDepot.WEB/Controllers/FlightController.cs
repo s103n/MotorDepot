@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using MotorDepot.BLL.Interfaces;
 using MotorDepot.Shared.Enums;
+using MotorDepot.WEB.Filters;
 using MotorDepot.WEB.Infrastructure;
 using MotorDepot.WEB.Infrastructure.Mappers;
 using MotorDepot.WEB.Models;
@@ -12,8 +10,6 @@ using MotorDepot.WEB.Models.Flight;
 using MotorDepot.WEB.Models.FlightRequest;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using MotorDepot.BLL.BusinessModels;
-using MotorDepot.WEB.Filters;
 
 namespace MotorDepot.WEB.Controllers
 {
@@ -50,43 +46,27 @@ namespace MotorDepot.WEB.Controllers
         }
 
         [Authorize(Roles = "driver, dispatcher, admin")]
-        public async Task<ActionResult> All(string sortProperty = null, bool asc = true) //todo asc
-        //разделить под водителя
-        //todo сортировку на яксе лучше сделать, так как при обновлении страницы будет теряться состояние
+        public async Task<ActionResult> All(FlightStatus? status = null)
         {
-            IEnumerable<FlightViewModel> flightItems;
-
             if (User.IsInRole("driver"))
             {
-                flightItems = (await _flightService.GetAllAsync(onlyFree: true)).ToDisplayViewModel();
+                var flightItems = (await _flightService.GetFlightsAsync(FlightStatus.Free)).ToDisplayViewModel();
 
                 return View(flightItems);
             }
 
-            var flightOperation = await _flightService.GetAllAsync();
+            var flightOperation = await _flightService.GetFlightsAsync(status);
 
-            if (sortProperty != null)
-            {
-                try
-                {
-                    var items = ReflectionSort<FlightViewModel>
-                        .Sort(flightOperation.ToDisplayViewModel(), sortProperty, asc);
-
-                    return View(items);
-                }
-                catch (Exception ex)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, ex.Message);
-                }
-            }
+            ViewBag.StatusTitle = status == null ? "All" : status.ToString();
 
             return View(flightOperation.ToDisplayViewModel());
         }
 
         [Authorize(Roles = "dispatcher, admin")]
-        public async Task<ActionResult> Requests()
+        public async Task<ActionResult> Requests(FlightRequestStatus? status)
         {
-            var flightOperation = await _flightRequestService.GetFlightRequestsAsync(FlightRequestStatus.InQueue);
+            var flightOperation = await _flightRequestService.GetFlightRequestsAsync(status);
+            ViewBag.StatusTitle = status == null ? "All" : status.ToString();
 
             return View(flightOperation.ToDisplayViewModels());
         }
@@ -117,7 +97,7 @@ namespace MotorDepot.WEB.Controllers
         public async Task<ActionResult> ConfirmRequest(
             int requestId,
             int flightId,
-            int autoId,
+            int? autoId,
             string driverEmail,
             bool isAccepted)
         {
@@ -150,7 +130,7 @@ namespace MotorDepot.WEB.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(FlightCreateViewModel model)
         {
-            var createOperation = await _flightService.CreateAsync(model.ToDto());
+            var createOperation = await _flightService.CreateFlightAsync(model.ToDto());
 
             if (createOperation.Success)
             {
@@ -162,12 +142,15 @@ namespace MotorDepot.WEB.Controllers
             return new HttpOperationStatusResult(createOperation);
         }
 
-        public async Task<ActionResult> Edit(int? flightId)
+        public async Task<ActionResult> Edit(int? id)
         {
-            var operation = await _flightService.GetByIdAsync(flightId);
+            var operation = await _flightService.GetFlightAsync(id);
 
             if (operation.Success)
             {
+                if (operation.Value.Status != FlightStatus.Free)
+                    return HttpNotFound();
+
                 var operationStatus = _flightService.GetFlightStatuses();
                 ViewBag.FlightStatuses = new SelectList(operationStatus.Value, "Id", "Name");
 
@@ -181,7 +164,7 @@ namespace MotorDepot.WEB.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(FlightEditViewModel model)
         {
-            var operation = await _flightService.EditAsync(model.ToDto());
+            var operation = await _flightService.EditFlightAsync(model.ToDto());
 
             if (operation.Success)
             {
@@ -195,20 +178,27 @@ namespace MotorDepot.WEB.Controllers
 
         public async Task<ActionResult> Details(int? id)
         {
-            return null;
+            var flightOperation = await _flightService.GetFlightAsync(id);
+
+            if (flightOperation.Success)
+            {
+                return View(flightOperation.Value.ToDetailsViewModel());
+            }
+
+            return new HttpOperationStatusResult(flightOperation);
         }
 
         [Authorize(Roles = "driver")]
-        public async Task<ActionResult> RequestFor(int? flightId)
+        public async Task<ActionResult> RequestFor(int? id)
         {
-            var operation = await _flightService.GetByIdAsync(flightId);
+            var operation = await _flightService.GetFlightAsync(id);
             var autoTypes = _autoService.GetAutoTypes();
 
             ViewBag.AutoTypes = new SelectList(autoTypes, "Id", "Name");
 
             if (operation.Success)
             {
-                return View(new FlightRequestCreateViewModel { RequestedFlightId = (int)flightId });
+                if (id != null) return View(new FlightRequestCreateViewModel {RequestedFlightId = (int) id});
             }
 
             return new HttpOperationStatusResult(operation);
@@ -219,7 +209,7 @@ namespace MotorDepot.WEB.Controllers
         public async Task<ActionResult> RequestFor(FlightRequestCreateViewModel model)
         {
             var driverOperation = await _driverService.GetDriverById(User.Identity.GetUserId());
-            var requestedFlightOperation = await _flightService.GetByIdAsync(model.RequestedFlightId);
+            var requestedFlightOperation = await _flightService.GetFlightAsync(model.RequestedFlightId);
 
             model.DriverId = User.Identity.GetUserId();
             model.Status = FlightRequestStatus.InQueue;
@@ -241,22 +231,14 @@ namespace MotorDepot.WEB.Controllers
             return new HttpOperationStatusResult(driverOperation, requestedFlightOperation);
         }
 
-        [HttpGet] //todo delete confirm
-        public async Task<ActionResult> DeleteDriver(int? flightId)
+        [HttpGet]
+        public async Task<ActionResult> DeleteDriver(int? id)
         {
-            var deleteOperation = await _flightService.DeleteDriverAndAuto(flightId);
+            var deleteOperation = await _flightService.DeleteDriverAndAuto(id);
 
             if (deleteOperation.Success)
             {
                 Session["Delete"] = new AlertViewModel(deleteOperation.Message, AlertType.Success);
-
-                return RedirectToAction("All");
-            }
-
-            if (deleteOperation.Code == HttpStatusCode.BadRequest) // need to check for error
-            //add model error in service or maybe do it in view on rendering
-            {
-                ModelState.AddModelError("", deleteOperation.Message);
 
                 return RedirectToAction("All");
             }

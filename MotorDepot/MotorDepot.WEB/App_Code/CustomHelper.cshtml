@@ -1,5 +1,4 @@
-﻿@using System.Web.Mvc
-@using MotorDepot.WEB.Models
+﻿@using MotorDepot.WEB.Models
 @using MotorDepot.WEB.Models.Enums
 
 @helper RenderAll()
@@ -43,4 +42,24 @@
                 throw new ArgumentOutOfRangeException();
         }
     }
+}
+
+@helper DropDownMenuOfEnum(Type statusEnum, string urlAttribute, string action, string controller, string menuTitle)
+{
+    var statuses = statusEnum.GetEnumNames();
+    if(!statuses.Any()) {throw new ArgumentException("Statuses count is 0");}
+    var i = 0;
+    <div class="dropdown show">
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            @menuTitle
+        </a>
+
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            @foreach (var status in statuses)
+            {
+                <a class="dropdown-item" href="/@controller/@action?@urlAttribute=@(i++)">@status</a>
+            }
+            <a class="dropdown-item" href="/@controller/@action">All</a>
+        </div>
+    </div>
 }

@@ -21,5 +21,11 @@ namespace MotorDepot.WEB.Controllers
             Response.StatusCode = 500;
             return View(message);
         }
+
+        public ActionResult BadRequest(string message)
+        {
+            Response.StatusCode = 400;
+            return View(message);
+        }
     }
 }

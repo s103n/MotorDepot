@@ -3,12 +3,12 @@ using MotorDepot.BLL.Infrastructure.Mappers;
 using MotorDepot.BLL.Interfaces;
 using MotorDepot.BLL.Models;
 using MotorDepot.DAL.Interfaces;
+using MotorDepot.Shared.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using MotorDepot.Shared.Enums;
 
 namespace MotorDepot.BLL.Services
 {
@@ -31,7 +31,7 @@ namespace MotorDepot.BLL.Services
             string creatorId,
             FlightRequestStatus status)
         {
-            if(status == FlightRequestStatus.InQueue)
+            if (status == FlightRequestStatus.InQueue)
                 throw new ArgumentException("Status can not be in queue");
 
             var request = await _database.FlightRequestRepository.FindAsync(requestId);
@@ -44,16 +44,7 @@ namespace MotorDepot.BLL.Services
             //that refer on the same flight will be canceled
             if (status == FlightRequestStatus.Accepted)
             {
-                var requests = (await _database.FlightRequestRepository.GetAllAsync())
-                    .ToList()
-                    .Where(req => req.RequestedFlight.Id == request.FlightId);
-
-                foreach (var req in requests)
-                {
-                    req.FlightRequestStatusLookupId = FlightRequestStatus.Canceled;
-
-                    await _database.FlightRequestRepository.UpdateAsync(req);
-                }
+                await CleanRequests(request.RequestedFlight.Id);
             }
 
             request.FlightRequestStatusLookupId = status;
@@ -82,14 +73,33 @@ namespace MotorDepot.BLL.Services
             return new OperationStatus<FlightRequestDto>("", request.ToDto(), true);
         }
 
-        public async Task<IEnumerable<FlightRequestDto>> GetFlightRequestsAsync(FlightRequestStatus status)
+        public async Task<IEnumerable<FlightRequestDto>> GetFlightRequestsAsync(FlightRequestStatus? status = null)
+        {
+            var requests = (await _database.FlightRequestRepository.GetAllAsync())
+                .ToList();
+
+            if (status == null)
+            {
+                return requests.ToDto();
+            }
+
+            return requests.Where(req => (int)req.Status.Id == (int)status
+                                         && req.RequestedFlight.FlightStatusLookupId == FlightStatus.Free)
+                .ToDto();
+        }
+
+        private async Task CleanRequests(int flightId)
         {
             var requests = (await _database.FlightRequestRepository.GetAllAsync())
                 .ToList()
-                .Where(req => (int)req.Status.Id == (int)status
-                              && req.RequestedFlight.FlightStatusLookupId == FlightStatus.Free);
+                .Where(req => req.RequestedFlight.Id == flightId);
 
-            return requests.ToDto();
+            foreach (var req in requests)
+            {
+                req.FlightRequestStatusLookupId = FlightRequestStatus.Canceled;
+
+                await _database.FlightRequestRepository.UpdateAsync(req);
+            }
         }
     }
 }

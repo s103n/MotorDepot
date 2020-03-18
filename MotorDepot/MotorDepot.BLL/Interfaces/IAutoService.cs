@@ -44,11 +44,12 @@ namespace MotorDepot.BLL.Interfaces
         /// IEnumerable object
         /// </returns>
         IEnumerable GetAutoTypes();
+
         /// <summary>
         /// Getting all auto dto objects
         /// </summary>
         /// <returns>IEnumerable object of auto dto objects</returns>
-        Task<IEnumerable<AutoDto>> GetAutosAsync();
+        Task<IEnumerable<AutoDto>> GetAutosAsync(AutoStatus? status);
         /// <summary>
         /// Getting an auto object by id property
         /// </summary>
@@ -63,11 +64,12 @@ namespace MotorDepot.BLL.Interfaces
         /// <param name="autoId">Id of auto</param>
         /// <returns>Result of operation</returns>
         Task<OperationStatus> SetStatus(AutoStatus status, int autoId);
+
         /// <summary>
         /// Getting all auto statuses (IEnumerable object of anonymous object which contains 2 properties
         /// Id - int, Name - string)
         /// </summary>
         /// <returns>IEnumerable object</returns>
-        IEnumerable GetAutoStatuses();
+        IEnumerable GetAutoStatuses(bool deletedStatus = false);
     }
 }

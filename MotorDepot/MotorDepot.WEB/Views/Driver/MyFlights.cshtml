@@ -60,7 +60,7 @@
                     }
                 }
 
-                @using (Html.BeginForm("CancelFlight", "Driver", FormMethod.Post, new {@class="mt-1 ml-2"}))
+                @using (Html.BeginForm("CancelFlight", "Driver", FormMethod.Post, new { @class = "mt-1 ml-2" }))
                 {
                     <input type="hidden" name="flightId" value="@Model.CurrentFlight.Id" />
                     <button class="btn btn-outline-danger">Cancel the flight</button>
@@ -72,44 +72,60 @@
 
 <h2>My Flights</h2>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.CurrentFlight.DeparturePlace)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CurrentFlight.ArrivalPlace)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CurrentFlight.Status)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CurrentFlight.AutoName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CurrentFlight.AutoNumbers)
-        </th>
-        <th></th>
-    </tr>
-    @foreach (var flight in Model.Flights)
-    {
+<table class="table" id="table">
+    <thead>
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => flight.DeparturePlace)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => flight.ArrivalPlace)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => flight.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => flight.AutoName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => flight.AutoNumbers)
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.CurrentFlight.DeparturePlace)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CurrentFlight.ArrivalPlace)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CurrentFlight.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CurrentFlight.AutoName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CurrentFlight.AutoNumbers)
+            </th>
         </tr>
-    }
-
+    </thead>
+    <tbody>
+        @foreach (var flight in Model.Flights)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => flight.DeparturePlace)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => flight.ArrivalPlace)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => flight.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => flight.AutoName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => flight.AutoNumbers)
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#table').dataTable({
+                "columnDefs": [{
+                    "targets": 'no-sort',
+                    "orderable": false,
+                }]
+            });
+        });
+    </script>
+}

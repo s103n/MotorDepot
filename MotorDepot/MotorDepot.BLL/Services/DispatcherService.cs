@@ -6,7 +6,9 @@ using MotorDepot.BLL.Models;
 using MotorDepot.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace MotorDepot.BLL.Services
@@ -42,14 +44,26 @@ namespace MotorDepot.BLL.Services
             return new OperationStatus("Registration was being successful", true);
         }
 
-        public IEnumerable<UserDto> GetDispatchers()
+        public async Task<IEnumerable<UserDto>> GetDispatchers()
         {
-            var dispatchers = _database.UserManager.Users
-                .ToList()
+            var dispatchers = (await _database.UserManager.Users.ToListAsync())
                 .Where(user => _database.UserManager.IsInRole(user.Id, "dispatcher"))
                 .ToDto();
 
             return dispatchers;
+        }
+
+        public async Task<OperationStatus<UserDto>> GetDispatcherAsync(string id)
+        {
+            if(string.IsNullOrEmpty(id))
+                return new OperationStatus<UserDto>("id is empty", HttpStatusCode.NotFound, false);
+
+            var dispatcher = (await GetDispatchers()).FirstOrDefault(dis => dis.Id == id);
+
+            if(dispatcher == null)
+                return new OperationStatus<UserDto>("Dispatcher does not exist", HttpStatusCode.NotFound, false);
+
+            return new OperationStatus<UserDto>("Ok", dispatcher, true);
         }
 
         public void Dispose()

@@ -19,6 +19,8 @@ namespace MotorDepot.BLL.Interfaces
         /// Getting all dispatchers
         /// </summary>
         /// <returns>IEnumerable object of user dto object where role is dispatcher</returns>
-        IEnumerable<UserDto> GetDispatchers();
+        Task<IEnumerable<UserDto>> GetDispatchers();
+
+        Task<OperationStatus<UserDto>> GetDispatcherAsync(string id);
     }
 }

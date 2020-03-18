@@ -1,0 +1,167 @@
+﻿@model MotorDepot.WEB.Models.User.DispatcherDetailsViewModel
+
+@{
+    ViewBag.Title = "DispatcherDetails";
+}
+
+<h2>Dispatcher #@Model.Id Details</h2>
+
+<div>
+    <hr />
+    <dl>
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+
+    </dl>
+</div>
+
+<h5>Flights which dispatcher #@Model.Id creates</h5>
+@if (Model.Flights.Any())
+{
+    <table class="table table-striped table-bordered" id="flightTable">
+        <thead>
+            <tr>
+                <th>
+                    Departure place
+                </th>
+                <th>
+                    Arrival place
+                </th>
+                <th>
+                    Create date
+                </th>
+                <th>
+                    Distance
+                </th>
+
+                <th>
+                    Status
+                </th>
+                <th>
+                    Driver email
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Flights)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DeparturePlace)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ArrivalPlace)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreateDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Distance)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DriverEmail)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Not found</p>
+}
+
+<h5>Flights request which dispatcher #@Model.Id accepts or cancels</h5>
+@if (Model.FlightRequests.Any())
+{
+
+    <table class="table table-striped table-bordered" id="flightRequestTable">
+        <thead>
+            <tr>
+                <th>
+                    Driver name
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Request flight #
+                </th>
+                <th>
+                    Date of requesting
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.FlightRequests)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DriverName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RequestedFlightId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+else
+{
+    <h4>Not found</h4>
+}
+
+<p>
+    @Html.ActionLink("Back to List", "Dispatchers")
+</p>
+
+
+@section scripts {
+    <script>
+        $(document).ready(function() {
+            $("#flightTable").DataTable();
+            $("#flightRequestTable").DataTable();
+        })
+    </script>
+}

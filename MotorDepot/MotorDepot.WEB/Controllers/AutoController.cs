@@ -1,4 +1,5 @@
-﻿using MotorDepot.BLL.Interfaces;
+﻿using System.Linq;
+using MotorDepot.BLL.Interfaces;
 using MotorDepot.WEB.Infrastructure;
 using MotorDepot.WEB.Infrastructure.Mappers;
 using MotorDepot.WEB.Models;
@@ -6,6 +7,7 @@ using MotorDepot.WEB.Models.Auto;
 using MotorDepot.WEB.Models.Enums;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using MotorDepot.Shared.Enums;
 using MotorDepot.WEB.Filters;
 
 namespace MotorDepot.WEB.Controllers
@@ -57,17 +59,18 @@ namespace MotorDepot.WEB.Controllers
             return View(auto);
         }
 
-        public async Task<ActionResult> All()
+        public async Task<ActionResult> All(AutoStatus? status)
         {
-            var autos = await _autoService.GetAutosAsync();
-            var flights = await _flightService.GetAllAsync();
+            var autos = await _autoService.GetAutosAsync(status);
+            var flights = await _flightService.GetFlightsAsync(null);
+            ViewBag.StatusTitle = status == null ? "All" : status.ToString();
 
             return View(autos.ToDisplayViewModel(flights));
         }
 
-        public async Task<ActionResult> Edit(int? autoId)
+        public async Task<ActionResult> Edit(int? id)
         {
-            var operation = await _autoService.GetAutoById(autoId);
+            var operation = await _autoService.GetAutoById(id);
 
             if (operation.Success)
             {
@@ -94,6 +97,24 @@ namespace MotorDepot.WEB.Controllers
             }
 
             return new HttpOperationStatusResult(operation);
+        }
+
+        public async Task<ActionResult> Details(int? id)
+        {
+            var autoOperation = await _autoService.GetAutoById(id);
+
+            if (autoOperation.Success)
+            {
+                var flights = await _flightService.GetFlightsAsync(null);
+                flights = flights.Where(x => x.Auto != null && x.Auto.Id == id);
+
+                var model = autoOperation.Value.ToDetailsViewModel();
+                model.Flights = flights.ToDisplayViewModel();
+
+                return View(model);
+            }
+
+            return new HttpOperationStatusResult(autoOperation);
         }
 
         protected override void Dispose(bool disposing)

@@ -1,0 +1,89 @@
+﻿@model MotorDepot.WEB.Models.Flight.FlightDetailsViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details for flight</h2>
+
+<div>
+    <hr />
+    <dl>
+        <dt>
+            @Html.DisplayNameFor(model => model.DeparturePlace)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DeparturePlace)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ArrivalPlace)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ArrivalPlace)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Distance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Distance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AutoId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AutoId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DriverEmail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DriverEmail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DispatcherCreatorEmail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DispatcherCreatorEmail)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "All")
+</p>

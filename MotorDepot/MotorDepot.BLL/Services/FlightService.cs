@@ -24,7 +24,7 @@ namespace MotorDepot.BLL.Services
             _database = unitOfWork;
         }
 
-        public async Task<OperationStatus> CreateAsync(FlightDto flightDto)
+        public async Task<OperationStatus> CreateFlightAsync(FlightDto flightDto)
         {
             if (flightDto == null)
                 throw new ArgumentNullException(nameof(flightDto));
@@ -37,7 +37,7 @@ namespace MotorDepot.BLL.Services
             return new OperationStatus("New flight was successfully created", true);
         }
 
-        public async Task<OperationStatus> EditAsync(FlightDto flightDto)
+        public async Task<OperationStatus> EditFlightAsync(FlightDto flightDto)
         {
             if (flightDto == null)
                 throw new ArgumentNullException(nameof(flightDto));
@@ -68,14 +68,13 @@ namespace MotorDepot.BLL.Services
             return new OperationStatus("Flight's status was updated", true);
         }
 
-        public async Task<OperationStatus> SetDriverWithAuto(int flightId, int autoId, string driverEmail)
+        public async Task<OperationStatus> SetDriverWithAuto(int flightId, int? autoId, string driverEmail)
         {
             var flight = await _database.FlightRepository.FindAsync(flightId);
-            var auto = await _database.AutoRepository.FindAsync(autoId);
             var driver = await _database.UserManager.FindByEmailAsync(driverEmail);
 
-            if (auto == null || flight == null || driver == null)
-                return new OperationStatus("Flight, auto or driver doesn't exist", HttpStatusCode.NotFound, false);
+            if (flight == null || driver == null)
+                return new OperationStatus("Flight or driver doesn't exist", HttpStatusCode.InternalServerError, false);
 
             flight.AutoId = autoId;
             flight.DriverId = driver.Id;
@@ -119,29 +118,19 @@ namespace MotorDepot.BLL.Services
             return new OperationStatus($"Driver and auto was successfully deleted from flight #{flightId}", true);
         }
 
-        public async Task<IEnumerable<FlightDto>> GetAllAsync(
-            bool deleted = false,
-            bool onlyFree = false)
+        public async Task<IEnumerable<FlightDto>> GetFlightsAsync(FlightStatus? status)
         {
-            if(deleted && onlyFree)
-                throw new ArgumentException("Can not use deleted and only free parameters together");
-
             var flights = (await _database.FlightRepository.GetAllAsync()).ToList();
 
-            if (deleted)
+            if (status == null)
             {
                 return flights.ToDto();
             }
 
-            if (onlyFree)
-            {
-                return flights.Where(f => f.FlightStatusLookupId == FlightStatus.Free).ToDto();
-            }
-
-            return flights.Where(flight => flight.FlightStatusLookupId != FlightStatus.Deleted).ToDto();
+            return flights.Where(f => f.Status.Id == status).ToDto();
         }
 
-        public async Task<OperationStatus<FlightDto>> GetByIdAsync(int? id)
+        public async Task<OperationStatus<FlightDto>> GetFlightAsync(int? id)
         {
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
@@ -154,7 +143,7 @@ namespace MotorDepot.BLL.Services
             return new OperationStatus<FlightDto>("", flight.ToDto(), true);
         }
 
-        public async Task<OperationStatus> RemoveAsync(int? id)
+        public async Task<OperationStatus> RemoveFlightAsync(int? id)
         {
             if (id == null)
                 throw new ArgumentNullException(nameof(id));

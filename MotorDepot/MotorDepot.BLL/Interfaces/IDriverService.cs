@@ -15,11 +15,12 @@ namespace MotorDepot.BLL.Interfaces
         /// <param name="driver">User dto object</param>
         /// <returns>Result of operation</returns>
         Task<OperationStatus> CreateDriver(UserDto driver);
+
         /// <summary>
         /// Getting all drivers
         /// </summary>
         /// <returns>IEnumerable of user dto objects where role is driver</returns>
-        IEnumerable<UserDto> GetDrivers();
+        Task<IEnumerable<UserDto>> GetDriversAsync();
         /// <summary>
         /// Creating new flight request object for flight by current driver
         /// </summary>

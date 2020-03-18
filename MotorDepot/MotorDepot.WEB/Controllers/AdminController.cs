@@ -1,4 +1,5 @@
-﻿using MotorDepot.BLL.Interfaces;
+﻿using System.Linq;
+using MotorDepot.BLL.Interfaces;
 using MotorDepot.WEB.Infrastructure;
 using MotorDepot.WEB.Infrastructure.Mappers;
 using MotorDepot.WEB.Models;
@@ -19,11 +20,17 @@ namespace MotorDepot.WEB.Controllers
         private readonly IDispatcherService _dispatcherService;
         private readonly IDriverService _driverService;
         private readonly ILoggerService _loggerService;
+        private readonly IFlightService _flightService;
+        private readonly IFlightRequestService _flightRequestService;
 
         public AdminController(IDispatcherService dispatcherService, 
             IDriverService driverService,
-            ILoggerService loggerService)
+            ILoggerService loggerService,
+            IFlightService flightService,
+            IFlightRequestService flightRequestService)
         {
+            _flightRequestService = flightRequestService;
+            _flightService = flightService;
             _loggerService = loggerService;
             _driverService = driverService;
             _dispatcherService = dispatcherService;
@@ -54,11 +61,11 @@ namespace MotorDepot.WEB.Controllers
             return View("AddUser", model);
         }
 
-        public ActionResult Dispatchers()
+        public async Task<ActionResult> Dispatchers()
         {
-            var dispatchers = _dispatcherService.GetDispatchers();
+            var dispatchers = await _dispatcherService.GetDispatchers();
 
-            return View(dispatchers);
+            return View(dispatchers.ToViewModelDispatcher());
         }
 
         public ActionResult AddDriver()
@@ -96,13 +103,6 @@ namespace MotorDepot.WEB.Controllers
             return View(logs);
         }
 
-        public ActionResult LogAjax(LogType logType)
-        {
-            var logs = _loggerService.GetLogs(logType).ToViewModel();
-
-            return PartialView("LogTable", logs);
-        }
-
         public ActionResult LogDetails(int? logId)
         {
             var log = _loggerService.GetLogById(logId);
@@ -115,14 +115,51 @@ namespace MotorDepot.WEB.Controllers
                         return View("LogAction", log.Value.ToDetailsAction()); //to action view model
                     case LogType.Exception:
                         return View("LogException", log.Value.ToDetailsException()); //to exception view model
-                    case LogType.Warning:
-                        return View(log.Value); //to warning view model
                     default:
                         return HttpNotFound();
                 }
             }
 
             return new HttpOperationStatusResult(log);
+        }
+
+        public async Task<ActionResult> Drivers()
+        {
+            var drivers = await _driverService.GetDriversAsync();
+
+            return View(drivers.ToViewModelDriver());
+        }
+
+        public async Task<ActionResult> DriverDetails(string id)
+        {
+            var driver = await _driverService.GetDriverById(id);
+            var flights = (await _flightService.GetFlightsAsync(null))
+                .Where(f => f.Driver != null && f.Driver.Id == id);
+
+            if (driver.Success)
+            {
+                return View(driver.Value.ToDriverDetailsViewModel(flights.ToDisplayViewModel()));
+            }
+
+            return new HttpOperationStatusResult(driver);
+        }
+
+        public async Task<ActionResult> DispatcherDetails(string id)
+        {
+            var dispatcher = await _dispatcherService.GetDispatcherAsync(id);
+            var flights = (await _flightService.GetFlightsAsync(null))
+                .Where(f => f.DispatcherCreator.Id == id).ToList();
+            var flightRequests = (await _flightRequestService.GetFlightRequestsAsync())
+                .Where(fr => fr.Dispatcher != null && fr.Dispatcher.Id == id).ToList();
+
+            if (dispatcher.Success)
+            {
+                return View(dispatcher.Value.ToDispatcherDetailsViewModel(
+                    flights.ToDisplayViewModel(),
+                    flightRequests.ToDisplayViewModels()));
+            }
+
+            return new HttpOperationStatusResult(dispatcher);
         }
 
         protected override void Dispose(bool disposing)

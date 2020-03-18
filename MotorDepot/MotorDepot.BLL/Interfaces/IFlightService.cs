@@ -14,38 +14,36 @@ namespace MotorDepot.BLL.Interfaces
         /// Getting all flights
         /// </summary>
         /// <exception cref="ArgumentException">Can not use delete and only free as true values together</exception>
-        /// <param name="deleted">If true, will be retrieving all flights also deleted</param>
-        /// <param name="onlyFree">If true, will be retrieving only free flights</param>
         /// <returns>IEnumerable object of flights</returns>
-        Task<IEnumerable<FlightDto>> GetAllAsync(bool deleted = false, bool onlyFree = false);
+        Task<IEnumerable<FlightDto>> GetFlightsAsync(FlightStatus? status);
         /// <summary>
         /// Creating new flight
         /// </summary>
         /// <param name="flightDto">Flight dto object</param>
         /// <exception cref="ArgumentNullException">Throwing if argument is null</exception>
         /// <returns>Result of operation</returns>
-        Task<OperationStatus> CreateAsync(FlightDto flightDto);
+        Task<OperationStatus> CreateFlightAsync(FlightDto flightDto);
         /// <summary>
         /// Removing flight (setting status to deleted)
         /// </summary>
         /// <exception cref="ArgumentNullException"></exception>
         /// <param name="id">Id of flight</param>
         /// <returns>Result of operation</returns>
-        Task<OperationStatus> RemoveAsync(int? id);
+        Task<OperationStatus> RemoveFlightAsync(int? id);
         /// <summary>
         /// Updating flight
         /// </summary>
         /// <exception cref="ArgumentNullException">Throwing if argument is null</exception>
         /// <param name="flightDto">Flight dto object</param>
         /// <returns>Result of operation</returns>
-        Task<OperationStatus> EditAsync(FlightDto flightDto);
+        Task<OperationStatus> EditFlightAsync(FlightDto flightDto);
         /// <summary>
         /// Getting flight by id property
         /// </summary>
         /// <exception cref="ArgumentNullException"></exception>
         /// <param name="id">Id of flight</param>
         /// <returns>Flight dto object</returns>
-        Task<OperationStatus<FlightDto>> GetByIdAsync(int? id);
+        Task<OperationStatus<FlightDto>> GetFlightAsync(int? id);
         /// <summary>
         /// Setting status for flight
         /// </summary>
@@ -61,7 +59,7 @@ namespace MotorDepot.BLL.Interfaces
         /// <param name="autoId">Id of auto</param>
         /// <param name="driverId">Id of driver</param>
         /// <returns>Result of operation</returns>
-        Task<OperationStatus> SetDriverWithAuto(int flightId, int autoId, string driverId);
+        Task<OperationStatus> SetDriverWithAuto(int flightId, int? autoId, string driverId);
         /// <summary>
         /// Getting all flight statuses (IEnumerable object of anonymous object which contains
         /// 2 properties Name - string and Id - int)

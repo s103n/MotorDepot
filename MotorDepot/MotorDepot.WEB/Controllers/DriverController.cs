@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using MotorDepot.BLL.Interfaces;
@@ -47,7 +48,7 @@ namespace MotorDepot.WEB.Controllers
                 {
                     driverFlightVm.CurrentFlight = currentFlightOperation.Value.ToDisplayViewModel();
 
-                    ViewBag.AutoStatuses = new SelectList(_autoService.GetAutoStatuses(), "Id", "Name");
+                    ViewBag.AutoStatuses = new SelectList(_autoService.GetAutoStatuses(deletedStatus: true), "Id", "Name");
                 }
 
                 return View(driverFlightVm);

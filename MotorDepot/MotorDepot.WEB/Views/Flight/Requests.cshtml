@@ -1,4 +1,5 @@
-﻿@model IEnumerable<MotorDepot.WEB.Models.FlightRequest.FlightRequestDisplayViewModel>
+﻿@using MotorDepot.Shared.Enums
+@model IEnumerable<MotorDepot.WEB.Models.FlightRequest.FlightRequestDisplayViewModel>
 
 @{
     ViewBag.Title = "Requests for flights";
@@ -6,10 +7,8 @@
 
 <h2>Requests</h2>
 
-@if (Model.Any())
-{
-
-    <table class="table table-striped table-bordered" id="example">
+<table class="table table-striped table-bordered" id="example">
+    <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Id)
@@ -17,8 +16,13 @@
             <th>
                 @Html.DisplayNameFor(model => model.DriverName)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
+            <th class="no-sort">
+                @CustomHelper.DropDownMenuOfEnum(
+                    typeof(FlightRequestStatus),
+                    "status",
+                    "Requests",
+                    "Flight",
+                    ViewBag.StatusTitle as string)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.RequestedFlightId)
@@ -26,9 +30,10 @@
             <th>
                 @Html.DisplayNameFor(model => model.Date)
             </th>
-            <th></th>
+            <th class="no-sort"></th>
         </tr>
-
+    </thead>
+    <tbody>
         @foreach (var item in Model)
         {
             <tr>
@@ -47,26 +52,32 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Date)
                 </td>
-                <td>
-                    @Html.ActionLink(" ", "ConfirmRequest", new { requestId = item.Id }, new {@class="fa fa-check"})
-                </td>
+                @if (item.Status == FlightRequestStatus.InQueue)
+                {
+                    <td>
+                        @Html.ActionLink(" ", "ConfirmRequest", new { requestId = item.Id }, new { @class = "fa fa-check" })
+                    </td>
+                }
+                else
+                {
+                    <td></td>
+                }
             </tr>
         }
-
-    </table>
-
-}
-else
-{
-    <h4>No more requests for flights for now.</h4>
-}
+    </tbody>
+</table>
 
 
 @section scripts
 {
     <script>
         $(document).ready(function () {
-            $('#example').DataTable();
+            $('#example').dataTable({
+                "columnDefs": [{
+                    "targets": 'no-sort',
+                    "orderable": false,
+                }]
+            });
         });
     </script>
 }
