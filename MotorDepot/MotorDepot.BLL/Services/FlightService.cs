@@ -51,7 +51,7 @@ namespace MotorDepot.BLL.Services
             return new OperationStatus($"Flight #{flightDto.Id} was updated", true);
         }
 
-        public async Task<OperationStatus> SetStatus(FlightStatus status, int? flightId)
+        public async Task<OperationStatus> SetStatus(FlightStatus status, int? flightId, bool cancelByDriver = false)
         {
             if (flightId == null)
                 throw new ArgumentNullException(nameof(flightId));
@@ -62,6 +62,12 @@ namespace MotorDepot.BLL.Services
                 return new OperationStatus("Flight doesn't exist", HttpStatusCode.NotFound, false);
 
             flight.FlightStatusLookupId = status;
+
+            if(cancelByDriver)
+            {
+                flight.AutoId = null;
+                flight.DriverId = null;
+            }
 
             await _database.FlightRepository.UpdateAsync(flight);
 

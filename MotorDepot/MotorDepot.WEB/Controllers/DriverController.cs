@@ -80,7 +80,7 @@ namespace MotorDepot.WEB.Controllers
         [HttpPost]
         public async Task<ActionResult> CancelFlight(int? flightId)
         {
-            var flightOperation = await _flightService.SetStatus(FlightStatus.Free, flightId);
+            var flightOperation = await _flightService.SetStatus(FlightStatus.Free, flightId, true);
 
             if (flightOperation.Success)
             {

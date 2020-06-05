@@ -1,3 +1,5 @@
+Technologies: ASP .NET MVC, MS SQL, Entity Framework, Bootstrap 3, JQuery, Ninject, Owin, AspNet.Indentity, AutoMapper
+
 Построить веб-приложение, поддерживающую заданную
 функциональность:
 1. На основе сущностей предметной области создать классы их

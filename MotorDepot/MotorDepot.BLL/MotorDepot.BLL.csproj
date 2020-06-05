@@ -101,11 +101,9 @@
   <ItemGroup>
     <Compile Include="BusinessModels\ReflectionGet.cs" />
     <Compile Include="BusinessModels\ReflectionSort.cs" />
-    <Compile Include="Infrastructure\Mappers\AutoMappers.cs" />
-    <Compile Include="Infrastructure\Mappers\FlightMappers.cs" />
-    <Compile Include="Infrastructure\Mappers\LogMappers.cs" />
-    <Compile Include="Infrastructure\Mappers\MapperProfile.cs" />
-    <Compile Include="Infrastructure\Mappers\UserMappers.cs" />
+    <Compile Include="Infrastructure\Extensions.cs" />
+    <Compile Include="Infrastructure\Mappers\Mapper.cs" />
+    <Compile Include="Infrastructure\Mappers\MapperExtensions.cs" />
     <Compile Include="Infrastructure\OperationStatus.cs" />
     <Compile Include="Infrastructure\ValidationStatus.cs" />
     <Compile Include="Interfaces\IAutoService.cs" />

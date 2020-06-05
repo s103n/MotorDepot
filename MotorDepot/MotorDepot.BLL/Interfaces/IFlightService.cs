@@ -51,7 +51,7 @@ namespace MotorDepot.BLL.Interfaces
         /// <param name="status">Status of flight</param>
         /// <param name="flightId">Id of flight</param>
         /// <returns>Result of operation</returns>
-        Task<OperationStatus> SetStatus(FlightStatus status, int? flightId);
+        Task<OperationStatus> SetStatus(FlightStatus status, int? flightId, bool cancelByDriver = false);
         /// <summary>
         /// Setting driver and auto to flight
         /// </summary>
