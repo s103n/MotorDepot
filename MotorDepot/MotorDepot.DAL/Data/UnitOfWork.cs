@@ -2,7 +2,6 @@
 using MotorDepot.DAL.Context;
 using MotorDepot.DAL.Entities;
 using MotorDepot.DAL.Identity;
-using MotorDepot.DAL.Infrastructure;
 using MotorDepot.DAL.Interfaces;
 using MotorDepot.DAL.Repositories;
 using System;
@@ -13,7 +12,7 @@ using MotorDepot.DAL.Loggers;
 
 namespace MotorDepot.DAL.Data
 {
-    public class UnitOfWork : IUnitOfWork
+    public sealed class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationContext _context;
 
@@ -43,7 +42,7 @@ namespace MotorDepot.DAL.Data
         #region DisposedPattern
         private bool disposed = false;
 
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (!disposed)
             {
